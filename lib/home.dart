@@ -342,6 +342,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             margin: EdgeInsets.all(2),
                             child:InkWell(
                               onTap: (){
+                                print(data.documentID);
                                 Navigator.of(context).push(_itemDetails(data.documentID,data['imgSrc'],data['title'],data['pricing']['price'],data['pricing']['price_compare'],data['description']));
                               },
                               child: Column(

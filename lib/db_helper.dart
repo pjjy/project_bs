@@ -17,12 +17,37 @@ class ProjectBs {
         });
   }
 
-  Future addToCart(deviceId) async {
-    fireStoreInstance.collection("user_cart").add(
+  Future addToCart(deviceId,productId) async {
+    fireStoreInstance.document("user_cart/$deviceId").setData(
         {
-          "device_id" : deviceId,
-          "product_id": 12,
-          "quatity" : 30
-        });
+//          "device_id" : deviceId,
+//          "product_id": productId,
+//          "quantity" : 320
+        }).then((value) {
+//      print(value.documentID);
+      fireStoreInstance
+          .collection("user_cart")
+          .document(deviceId)
+          .collection("cart_items")
+          .add({
+              "device_id" : deviceId,
+              "product_id": productId,
+              "quantity" : 320
+          });
+    });
+//    fireStoreInstance.collection("user_cart").add({
+//      "device_id": deviceId
+//    }).then((value) {
+////      print(value.documentID);
+//      fireStoreInstance
+//          .collection("user_cart")
+//          .document(value.documentID)
+//          .collection("cart_items")
+//          .add({""
+//                "petName": "blacky",
+//                "petType": "dog",
+//                "petAge": 1
+//              });
+//    });
   }
 }

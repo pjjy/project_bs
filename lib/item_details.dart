@@ -25,7 +25,7 @@ class ItemDetail extends StatefulWidget {
 class _ItemDetail extends State<ItemDetail>  {
   final db = ProjectBs();
   final oCcy = new NumberFormat("#,##0.00", "en_US");
-
+  final itemCount = TextEditingController();
 
 
   Future<String> _getId() async {
@@ -39,9 +39,9 @@ class _ItemDetail extends State<ItemDetail>  {
     }
   }
 
-  addToCart(deviceId)
+  addToCart(deviceId,productId)
   {
-    db.addToCart(deviceId);
+    db.addToCart(deviceId,productId);
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -177,31 +177,37 @@ class _ItemDetail extends State<ItemDetail>  {
                         ),
                         Container(
                           width: 80,
-                          child: new TextField(
-                            onChanged: (text) {
-//                                        itemCount.clear();
-                            },
-                            style: new TextStyle(
-                                color: Colors.red,
-//                                        fontSize: 18.0,
-                                fontWeight: FontWeight.bold
-                            ),
-
-//                            controller: itemCount,
-                            maxLength: 3,
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[.-]'))],
-                            cursorColor: Colors.blueGrey.withOpacity(0.8),
-                            decoration: InputDecoration(
-                              counterText: "",
-                              contentPadding: EdgeInsets.all(20.0),
-                              focusedBorder:OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blueGrey.withOpacity(0.8), width: 2.0),
-                              ),
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(3.0)),
-                            ),
+                          child:  StreamBuilder<QuerySnapshot>(
+                            stream: Firestore.instance.collection('user_cart').snapshots(),
+                            builder: (context, snapshot) {
+//                           itemCount.value = itemCount.value.copyWith(text: "${snapshot.data.documents[0]['quantity'].toString()}");
+                            return !snapshot.hasData ? Center(child: CircularProgressIndicator()) : TextField(
+                                onChanged: (text) {
+    //                          itemCount.clear();
+                                },
+                                style: new TextStyle(
+                                    color: Colors.green,
+    //                                        fontSize: 18.0,
+                                    fontWeight: FontWeight.bold
+                                ),
+                                controller: itemCount,
+                                maxLength: 3,
+                                textAlign: TextAlign.center,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[.-]'))],
+                                cursorColor: Colors.blueGrey.withOpacity(0.8),
+                                decoration: InputDecoration(
+                                  counterText: "",
+                                  contentPadding: EdgeInsets.all(20.0),
+                                  focusedBorder:OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blueGrey.withOpacity(0.8), width: 2.0),
+                                  ),
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(3.0)),
+                                ),
+                            );
+                           },
                           ),
+
                         ),
                         Padding(
                           padding: EdgeInsets.fromLTRB(5, 20, 5, 5),
@@ -219,7 +225,7 @@ class _ItemDetail extends State<ItemDetail>  {
                       child:SleekButton(
                         onTap: () async{
                          var deviceId = await _getId();
-                          addToCart(deviceId);
+                          addToCart(deviceId,widget.documentID);
                          },
                         style: SleekButtonStyle.flat(
                           color: Colors.green,
