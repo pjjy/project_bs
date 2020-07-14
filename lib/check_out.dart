@@ -6,6 +6,10 @@ import 'package:intl/intl.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info/device_info.dart';
+import 'user_cart.dart';
+
 class CheckOut extends StatefulWidget {
   @override
   _CheckOut createState() => _CheckOut();
@@ -13,6 +17,28 @@ class CheckOut extends StatefulWidget {
 
 class _CheckOut extends State<CheckOut> {
   var isLoading = false;
+  var deviceId;
+
+  Future _getId() async {
+    var dId;
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+      dId = iosDeviceInfo.identifierForVendor; // unique ID on iOS
+    } else{
+      AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
+      dId = androidDeviceInfo.androidId; //
+    }
+    return dId;
+  }
+
+  void _get1() async{
+    var q = await _getId();
+    setState(() {
+      deviceId = q;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -24,6 +50,7 @@ class _CheckOut extends State<CheckOut> {
   }
   @override
   Widget build(BuildContext context) {
+    _get1();
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context);
@@ -36,26 +63,45 @@ class _CheckOut extends State<CheckOut> {
           elevation: 1.0,
           iconTheme: new IconThemeData(color: Colors.black),
           leading: IconButton(
-            icon: Icon(Ionicons.ios_arrow_back, color: Colors.black),
+            icon: Icon(Ionicons.md_arrow_back, color: Colors.black),
             onPressed: () => Navigator.of(context).pop(),
           ),
           actions: <Widget>[
-            Badge(
-              showBadge: true,
-              elevation: 5.0,
-              position: BadgePosition.topRight(top: 5, right: 5),
-              badgeColor: Colors.green,
-              badgeContent: Text('3'),
-              child:  IconButton(
-                  icon: Icon(Ionicons.ios_cart,),
-                  onPressed: () async {
-
-                  }
-              ),
+            StreamBuilder<QuerySnapshot>(
+              stream: Firestore.instance.collection("user_cart").document(deviceId).collection('cart_items').snapshots(),
+              builder: (context, snapshot) {
+                return !snapshot.hasData ?
+                Center(
+                  child: Badge(
+                    animationType: BadgeAnimationType.fade,
+                    position: BadgePosition.topRight(top: 5, right: 5),
+                    badgeColor: Colors.green,
+                    badgeContent: Text('0',style: TextStyle(color: Colors.white,),),
+                    child:  IconButton(
+                        icon: Icon(Ionicons.ios_cart,),
+                        onPressed: () {
+                          Navigator.of(context).push(_viewCart());
+                        }
+                    ),
+                  ),
+                ):
+                Badge(
+                  animationType: BadgeAnimationType.fade,
+                  position: BadgePosition.topRight(top: 5, right: 5),
+                  badgeColor: Colors.green,
+                  badgeContent: Text('${snapshot.data.documents.length}',style: TextStyle(color: Colors.white,),),
+                  child:  IconButton(
+                      icon: Icon(Ionicons.ios_cart,),
+                      onPressed:(){
+                         Navigator.of(context).push(_viewCart());
+                      }
+                  ),
+                );
+              },
             ),
             IconButton(
                 icon: Icon(Ionicons.ios_search,),
-                onPressed: () async {
+                onPressed:() async {
 
                 }
             ),
@@ -204,38 +250,55 @@ class _CheckOut extends State<CheckOut> {
 //                        },
                       ),
                     ),
-                    Padding(
-                        padding:
-                        EdgeInsets.fromLTRB(30.0, 35.0, 30.0, 25.0),
-//                        padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-                        child: SleekButton(
-                          onTap: () {
-//                            _signInCheck();
-                          },
-                          style: SleekButtonStyle.flat(
-                            color: Colors.green,
-                            inverted: false,
-                            rounded: false,
-                            size: SleekButtonSize.big,
-                            context: context,
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Place order",
-                              style: GoogleFonts.openSans(
-                                  fontStyle: FontStyle.normal,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 19.0),
-                            ),
-                          ),
-                        )),
+
                   ],
                 ),
               ),
+            ),
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+//                        padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                child: SleekButton(
+                  onTap: () {
+//                            _signInCheck();
+                  },
+                  style: SleekButtonStyle.flat(
+                    color: Colors.green,
+                    inverted: false,
+                    rounded: false,
+                    size: SleekButtonSize.big,
+                    context: context,
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Place order",
+                      style: GoogleFonts.openSans(
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0),
+                    ),
+                  ),
+                )
             ),
           ],
         ),
       ),
     );
   }
+}
+
+Route _viewCart() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => UserCart(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(0.0, 1.0);
+      var end = Offset.zero;
+      var curve = Curves.decelerate;
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }

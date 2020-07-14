@@ -5,6 +5,10 @@ import 'package:sleek_button/sleek_button.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info/device_info.dart';
+import 'check_out.dart';
+
 class UserCart extends StatefulWidget {
   @override
   _UserCart createState() => _UserCart();
@@ -19,9 +23,26 @@ class _UserCart extends State<UserCart> {
   List lGetAmountPerTenant;
   var isLoading = false;
   var checkOutLoading = true;
+  var deviceId;
 
-  loadCart() {
-    print("hello");
+  Future _getId() async {
+    var dId;
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+      dId = iosDeviceInfo.identifierForVendor; // unique ID on iOS
+    } else{
+      AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
+      dId = androidDeviceInfo.androidId; //
+    }
+    return dId;
+  }
+
+  void _get1() async{
+    var q = await _getId();
+    setState(() {
+      deviceId = q;
+    });
   }
 
   @override
@@ -37,6 +58,7 @@ class _UserCart extends State<UserCart> {
 
   @override
   Widget build(BuildContext context) {
+    _get1();
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context);
@@ -53,18 +75,37 @@ class _UserCart extends State<UserCart> {
             onPressed: () => Navigator.of(context).pop(),
           ),
           actions: <Widget>[
-            Badge(
-              showBadge: true,
-              elevation: 5.0,
-              position: BadgePosition.topRight(top: 5, right: 5),
-              badgeColor: Colors.green,
-              badgeContent: Text('3'),
-              child:  IconButton(
-                  icon: Icon(Ionicons.ios_cart,),
-                  onPressed: () async {
+            StreamBuilder<QuerySnapshot>(
+              stream: Firestore.instance.collection("user_cart").document(deviceId).collection('cart_items').snapshots(),
+              builder: (context, snapshot) {
+                return !snapshot.hasData ?
+                Center(
+                  child: Badge(
+                    animationType: BadgeAnimationType.fade,
+                    position: BadgePosition.topRight(top: 5, right: 5),
+                    badgeColor: Colors.green,
+                    badgeContent: Text('0',style: TextStyle(color: Colors.white,),),
+                    child:  IconButton(
+                        icon: Icon(Ionicons.ios_cart,),
+                        onPressed: () {
 
-                  }
-              ),
+                        }
+                    ),
+                  ),
+                ):
+                Badge(
+                  animationType: BadgeAnimationType.fade,
+                  position: BadgePosition.topRight(top: 5, right: 5),
+                  badgeColor: Colors.green,
+                  badgeContent: Text('${snapshot.data.documents.length}',style: TextStyle(color: Colors.white,),),
+                  child:  IconButton(
+                      icon: Icon(Ionicons.ios_cart,),
+                      onPressed: () {
+
+                      }
+                  ),
+                );
+              },
             ),
             IconButton(
                 icon: Icon(Ionicons.ios_search,),
@@ -82,13 +123,7 @@ class _UserCart extends State<UserCart> {
                 fontSize: 18.0),
           ),
         ),
-        body: isLoading
-            ? Center(
-          child: CircularProgressIndicator(
-            valueColor: new AlwaysStoppedAnimation<Color>(Colors.green),
-          ),
-        )
-            : Column(
+        body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
@@ -97,92 +132,102 @@ class _UserCart extends State<UserCart> {
             ),
             Expanded(
                 child: Scrollbar(
-                  child: ListView.builder(
-                      itemCount:5,
-                      itemBuilder: (BuildContext context, int index) {
-                        return GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            height: 140.0,
-                            width: 30.0,
-                            child: Card(
-                              color: Colors.transparent,
-                              child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
-                                children: [
-                                  Row(
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
-                                        child: Container(
-                                            width: 80.0,
-                                            height: 80.0,
-                                            decoration: new BoxDecoration(
-                                              color: Colors.transparent,
-                                              shape: BoxShape.rectangle,
-                                              image: new DecorationImage(
-                                                image: new NetworkImage('https://images-na.ssl-images-amazon.com/images/I/81isrpm8zDL._SL1500_.jpg'),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            )),
-                                      ),
-                                      Container(
-                                        child:Column(
-                                          crossAxisAlignment:CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Padding(
-                                              padding: EdgeInsets.fromLTRB(15, 1, 5, 1),
-                                              child:Text('Bear Brand with alaska flavor', overflow: TextOverflow.clip,
-                                                style: GoogleFonts.openSans(
-                                                    fontStyle:
-                                                    FontStyle.normal,
-                                                    fontSize: 15.0),
-                                              ),
-                                            ),
-
-                                            Padding(
-                                              padding: EdgeInsets.fromLTRB(15, 1, 5, 5),
-                                              child:Text('100 grams', overflow: TextOverflow.clip,
-                                                style: GoogleFonts.openSans(
-                                                    fontStyle:
-                                                    FontStyle.normal,
-                                                    fontSize: 15.0),
-                                              ),
-                                            ),
-                                            Row(
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: Firestore.instance.collection("user_cart").document(deviceId).collection('cart_items').snapshots(),
+                    builder: (context, snapshot) {
+                      return !snapshot.hasData ?
+                      Center(child: CircularProgressIndicator()):
+                      ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: snapshot.data.documents.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            DocumentSnapshot data = snapshot.data.documents[index];
+                            return GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                height: 140.0,
+                                width: 30.0,
+                                child: Card(
+                                  color: Colors.transparent,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Row(
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
+                                            child: Container(
+                                                width: 80.0,
+                                                height: 80.0,
+                                                decoration: new BoxDecoration(
+                                                  color: Colors.transparent,
+                                                  shape: BoxShape.rectangle,
+                                                  image: new DecorationImage(
+                                                    image: new NetworkImage(data['imgPath']),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                )),
+                                          ),
+                                          Container(
+                                            child:Column(
+                                              crossAxisAlignment:CrossAxisAlignment.start,
                                               children: <Widget>[
                                                 Padding(
-                                                  padding: EdgeInsets.fromLTRB(15, 0, 5, 0),
-                                                  child: new Text(
-                                                    "₱ ${oCcy.format(40)} ",
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                      FontWeight.bold,
-                                                      fontSize: 18,
-                                                      color: Colors.green,
-                                                    ),
+                                                  padding: EdgeInsets.fromLTRB(15, 1, 5, 1),
+                                                  child:Text(data['title'], overflow: TextOverflow.clip,
+                                                    style: GoogleFonts.openSans(
+                                                        fontStyle:
+                                                        FontStyle.normal,
+                                                        fontSize: 15.0),
                                                   ),
+                                                ),
+
+                                                Padding(
+                                                  padding: EdgeInsets.fromLTRB(15, 1, 5, 5),
+                                                  child:Text('100 grams', overflow: TextOverflow.clip,
+                                                    style: GoogleFonts.openSans(
+                                                        fontStyle:
+                                                        FontStyle.normal,
+                                                        fontSize: 15.0),
+                                                  ),
+                                                ),
+                                                Row(
+                                                  children: <Widget>[
+                                                    Padding(
+                                                      padding: EdgeInsets.fromLTRB(15, 0, 5, 0),
+                                                      child: new Text(
+                                                        "₱ ${oCcy.format(data['price'])} ",
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                          FontWeight.bold,
+                                                          fontSize: 18,
+                                                          color: Colors.green,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
                                             ),
-                                          ],
-                                        ),
-                                      ),
+                                          ),
+                                        ],
+                                      )
                                     ],
-                                  )
-                                ],
+                                  ),
+                                  elevation: 0.0,
+                                  margin: EdgeInsets.all(3),
+                                ),
                               ),
-                              elevation: 0.0,
-                              margin: EdgeInsets.all(3),
-                            ),
-                          ),
-                        );
-                      }),
-                ),
+                            );
 
+                          });
+                    },
+                  ),
+                ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
@@ -191,7 +236,7 @@ class _UserCart extends State<UserCart> {
                   Flexible(
                     child: SleekButton(
                       onTap: () async {
-
+                        Navigator.of(context).push(_checkOut());
                       },
                       style: SleekButtonStyle.flat(
                         color: Colors.green,
@@ -222,4 +267,19 @@ class _UserCart extends State<UserCart> {
   }
 }
 
+Route _checkOut() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => CheckOut(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(0.0, 1.0);
+      var end = Offset.zero;
+      var curve = Curves.decelerate;
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
 

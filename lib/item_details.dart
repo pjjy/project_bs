@@ -7,17 +7,18 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:badges/badges.dart';
 import 'package:intl/intl.dart';
 import 'db_helper.dart';
-import 'package:device_info/device_info.dart';
+import 'user_cart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ItemDetail extends StatefulWidget {
+  final String deviceId;
   final String documentID;
   final String imgSrc;
   final String title;
   final int pricing;
   final int priceCompare;
   final String description;
-  ItemDetail({Key key, @required this.documentID,this.imgSrc,this.title,this.pricing,this.priceCompare,this.description}): super(key: key);
+  ItemDetail({Key key, @required this.deviceId, this.documentID,this.imgSrc,this.title,this.pricing,this.priceCompare,this.description}): super(key: key);
   @override
   _ItemDetail createState() => _ItemDetail();
 }
@@ -26,22 +27,14 @@ class _ItemDetail extends State<ItemDetail>  {
   final db = ProjectBs();
   final oCcy = new NumberFormat("#,##0.00", "en_US");
   final itemCount = TextEditingController();
+  Color color = const Color(0xff0084ff);
 
 
-  Future<String> _getId() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
-      return iosDeviceInfo.identifierForVendor; // unique ID on iOS
-    } else {
-      AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
-      return androidDeviceInfo.androidId; // unique ID on Android
-    }
-  }
 
-  addToCart(deviceId,productId)
+
+  addToCart(deviceId,documentID,itemCount,pricing,title,description,imgSrc)
   {
-    db.addToCart(deviceId,productId);
+    db.addToCart(deviceId,documentID,itemCount,pricing,title,description,imgSrc);
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -68,7 +61,7 @@ class _ItemDetail extends State<ItemDetail>  {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Done',style: TextStyle(color:Colors.green.withOpacity(0.8),),),
+              child: Text('Done',style: TextStyle(color:color.withOpacity(0.8),),),
               onPressed: () async{
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
@@ -80,6 +73,9 @@ class _ItemDetail extends State<ItemDetail>  {
       },
     );
   }
+
+
+
 
   @override
   void initState(){
@@ -104,30 +100,32 @@ class _ItemDetail extends State<ItemDetail>  {
             ),
             actions: <Widget>[
               StreamBuilder<QuerySnapshot>(
-                stream: Firestore.instance.collection("user_cart").snapshots(),
+                stream: Firestore.instance.collection("user_cart").document(widget.deviceId).collection('cart_items').snapshots(),
                 builder: (context, snapshot) {
                   return !snapshot.hasData ?
                   Center(
                       child: Badge(
+                        animationType: BadgeAnimationType.fade,
                         position: BadgePosition.topRight(top: 5, right: 5),
-                        badgeColor: Colors.green,
+                        badgeColor: color,
                         badgeContent: Text('0',style: TextStyle(color: Colors.white,),),
                         child:  IconButton(
                             icon: Icon(Ionicons.ios_cart,),
-                            onPressed: () {
-                              db.addUser();
+                            onPressed:(){
+                              Navigator.of(context).push(_viewCart());
                             }
                         ),
                       ),
                   ):
                   Badge(
+                    animationType: BadgeAnimationType.fade,
                     position: BadgePosition.topRight(top: 5, right: 5),
-                    badgeColor: Colors.green,
+                    badgeColor: color,
                     badgeContent: Text('${snapshot.data.documents.length}',style: TextStyle(color: Colors.white,),),
                     child:  IconButton(
                         icon: Icon(Ionicons.ios_cart,),
-                        onPressed: () {
-                          db.addUser();
+                        onPressed:() {
+                          Navigator.of(context).push(_viewCart());
                         }
                     ),
                   );
@@ -177,37 +175,65 @@ class _ItemDetail extends State<ItemDetail>  {
                         ),
                         Container(
                           width: 80,
-                          child:  StreamBuilder<QuerySnapshot>(
-                            stream: Firestore.instance.collection('user_cart').snapshots(),
-                            builder: (context, snapshot) {
-//                           itemCount.value = itemCount.value.copyWith(text: "${snapshot.data.documents[0]['quantity'].toString()}");
-                            return !snapshot.hasData ? Center(child: CircularProgressIndicator()) : TextField(
-                                onChanged: (text) {
-    //                          itemCount.clear();
-                                },
-                                style: new TextStyle(
-                                    color: Colors.green,
-    //                                        fontSize: 18.0,
-                                    fontWeight: FontWeight.bold
-                                ),
-                                controller: itemCount,
-                                maxLength: 3,
-                                textAlign: TextAlign.center,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[.-]'))],
-                                cursorColor: Colors.blueGrey.withOpacity(0.8),
-                                decoration: InputDecoration(
-                                  counterText: "",
-                                  contentPadding: EdgeInsets.all(20.0),
-                                  focusedBorder:OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.blueGrey.withOpacity(0.8), width: 2.0),
-                                  ),
-                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(3.0)),
-                                ),
-                            );
-                           },
-                          ),
-
+                          child: StreamBuilder<DocumentSnapshot>(
+                                stream: Firestore.instance.collection('user_cart').document(widget.deviceId).collection('cart_items').document(widget.documentID).snapshots(),
+                                builder: (context, snapshot) {
+                                if (!snapshot.hasData || !snapshot.data.exists) {
+                                  itemCount.text = "1";
+                                  return TextField(
+                                    onChanged: (text) {
+                                      //itemCount.clear();
+                                    },
+                                    style: new TextStyle(
+                                        color: color,
+                                        //fontSize: 18.0,
+                                        fontWeight: FontWeight.bold
+                                    ),
+                                    controller: itemCount,
+                                    maxLength: 3,
+                                    textAlign: TextAlign.center,
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[.-]'))],
+                                    cursorColor: Colors.blueGrey.withOpacity(0.8),
+                                    decoration: InputDecoration(
+                                      counterText: "",
+                                      contentPadding: EdgeInsets.all(20.0),
+                                      focusedBorder:OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.blueGrey.withOpacity(0.8), width: 2.0),
+                                      ),
+                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(3.0)),
+                                    ),
+                                  );
+                                } else {
+                                  Map<String, dynamic> documentFields = snapshot.data.data;
+                                  itemCount.text = documentFields['quantity'].toString();
+                                      return TextField(
+                                        onChanged: (text) {
+                                          //itemCount.clear();
+                                        },
+                                        style: new TextStyle(
+                                            color: color,
+                                            //fontSize: 18.0,
+                                            fontWeight: FontWeight.bold
+                                        ),
+                                        controller: itemCount,
+                                        maxLength: 3,
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[.-]'))],
+                                        cursorColor: Colors.blueGrey.withOpacity(0.8),
+                                        decoration: InputDecoration(
+                                          counterText: "",
+                                          contentPadding: EdgeInsets.all(20.0),
+                                          focusedBorder:OutlineInputBorder(
+                                            borderSide: BorderSide(color: Colors.blueGrey.withOpacity(0.8), width: 2.0),
+                                          ),
+                                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(3.0)),
+                                        ),
+                                  );
+                                }
+                          }),
+//
                         ),
                         Padding(
                           padding: EdgeInsets.fromLTRB(5, 20, 5, 5),
@@ -223,12 +249,11 @@ class _ItemDetail extends State<ItemDetail>  {
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                       child:SleekButton(
-                        onTap: () async{
-                         var deviceId = await _getId();
-                          addToCart(deviceId,widget.documentID);
+                        onTap: () {
+                          addToCart(widget.deviceId,widget.documentID,int.parse(itemCount.text),widget.pricing,widget.title,widget.description,widget.imgSrc);
                          },
                         style: SleekButtonStyle.flat(
-                          color: Colors.green,
+                          color: color,
                           inverted: false,
                           rounded: false,
                           size: SleekButtonSize.big,
@@ -243,7 +268,7 @@ class _ItemDetail extends State<ItemDetail>  {
                     children: <Widget>[
                       Padding(
                           padding: EdgeInsets.fromLTRB(30.0, 20.0, 5.0, 5.0),
-                          child: new Text("\₱${oCcy.format(widget.pricing)}", style: TextStyle(fontSize: 24,color: Colors.green,),),
+                          child: new Text("\₱${oCcy.format(widget.pricing)}", style: TextStyle(fontSize: 24,color:color,),),
                       ),
 
                       Padding(
@@ -271,6 +296,23 @@ class _ItemDetail extends State<ItemDetail>  {
       ),
     );
   }
+}
+
+
+Route _viewCart() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => UserCart(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(0.0, 1.0);
+      var end = Offset.zero;
+      var curve = Curves.decelerate;
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }
 
 

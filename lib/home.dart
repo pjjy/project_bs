@@ -7,6 +7,8 @@ import 'db_helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'item_details.dart';
+import 'package:device_info/device_info.dart';
+import 'user_cart.dart';
 
 class MyHomePage extends StatefulWidget {
 
@@ -21,19 +23,37 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isLoading = false;
   bool isAppBarExpanded = false;
   List list = new List();
+  var deviceId;
+  Color color = const Color(0xff0084ff);
 
+  Future _getId() async {
+    var dId;
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+      dId = iosDeviceInfo.identifierForVendor; // unique ID on iOS
+    } else{
+      AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
+      dId = androidDeviceInfo.androidId; //
+    }
+    return dId;
+  }
+
+   void _get1() async{
+     var q = await _getId();
+     setState(() {
+       deviceId = q;
+     });
+  }
 
   @override
   void initState() {
     super.initState();
   }
 
-  loadStore(){
-    print("hello");
-  }
-
   @override
   Widget build(BuildContext context) {
+    _get1();
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.light,
@@ -42,36 +62,35 @@ class _MyHomePageState extends State<MyHomePage> {
         iconTheme: new IconThemeData(color: Colors.black),
         actions: <Widget>[
           StreamBuilder<QuerySnapshot>(
-            stream: Firestore.instance.collection("user_cart").snapshots(),
+            stream: Firestore.instance.collection("user_cart").document(deviceId).collection('cart_items').snapshots(),
             builder: (context, snapshot) {
               return !snapshot.hasData ?
               Center(
                 child: Badge(
                   position: BadgePosition.topRight(top: 5, right: 5),
-                  badgeColor: Colors.green,
+                  badgeColor: color,
                   badgeContent: Text('0',style: TextStyle(color: Colors.white,),),
                   child:  IconButton(
                       icon: Icon(Ionicons.ios_cart,),
                       onPressed: () {
-                        db.addUser();
+                        Navigator.of(context).push(_viewCart());
                       }
                   ),
                 ),
               ):
               Badge(
                 position: BadgePosition.topRight(top: 5, right: 5),
-                badgeColor: Colors.green,
+                badgeColor: color,
                 badgeContent: Text('${snapshot.data.documents.length}',style: TextStyle(color: Colors.white,),),
                 child:  IconButton(
                     icon: Icon(Ionicons.ios_cart,),
                     onPressed: () {
-                      db.addUser();
+                      Navigator.of(context).push(_viewCart());
                     }
                 ),
               );
             },
           ),
-
           IconButton(
               icon: Icon(Ionicons.ios_search,),
               onPressed: () {
@@ -81,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(
           "Alturush",
           style: GoogleFonts.fasterOne(
-              color: Colors.green,
+              color: color,
               fontStyle: FontStyle.normal,
               fontSize: 18.0),
         ),
@@ -113,21 +132,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
 
                       ListTile(
-                          leading: Icon(Icons.person,size: 30.0,color: Colors.green,),
+                          leading: Icon(Icons.person,size: 30.0,color:color,),
                           title: Text('Profile',style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 16.0),),
                           onTap: () async{
-
                           }
                       ),
                       ListTile(
-                        leading: Icon(Icons.info_outline,size: 30.0,color: Colors.green,),
+                        leading: Icon(Icons.info_outline,size: 30.0,color: color,),
                         title: Text('About',style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),
                       ListTile(
-                          leading: Icon(Icons.help_outline,size: 30.0,color: Colors.green,),
+                          leading: Icon(Icons.help_outline,size: 30.0,color: color,),
                           title: Text('Log out',style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 16.0),),
                           onTap: () async{
-
                           }
                       ),
                     ],
@@ -138,19 +155,13 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      body: isLoading
-          ? Center(
-        child: CircularProgressIndicator(
-          valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
-        ),
-      )
-          : Column(
+      body: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Expanded(
             child: ListView(
 //              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
+//              physics: BouncingScrollPhysics(),
               children: <Widget>[
 //                      SizedBox(
 //                        height: 10.0,
@@ -201,7 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 Text(
                                   "₱500.00",
                                   style: TextStyle(
-                                      color: Colors.green,
+                                      color: Colors.black87,
                                       fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.normal,
                                       fontSize: 24.0),
@@ -242,7 +253,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 Text(
                                   "₱ 500.00",
                                   style: TextStyle(
-                                      color: Colors.green,
+                                      color: color,
                                       fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.normal,
                                       fontSize: 24.0),
@@ -255,9 +266,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                 ),
-
+                Divider(
+                  height: 50.0,
+                ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(15, 20, 5, 5),
+                  padding: EdgeInsets.fromLTRB(15, 5, 5, 5),
                   child: new Text(
                     "Explore Packages",
                     style: GoogleFonts.openSans(
@@ -298,7 +311,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                       Padding(
                                         padding:EdgeInsets.all(5.0),
-                                        child: Text("₱ ${oCcy.format(400)}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: Colors.green,),
+                                        child: Text("₱ ${oCcy.format(400)}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: color,),
                                       )
                                       ),
                                       SizedBox(
@@ -311,9 +324,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         );
                       }),
                 ),
-
+                Divider(
+                  height: 50.0,
+                ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(15, 20, 5, 5),
+                  padding: EdgeInsets.fromLTRB(15, 5, 5, 5),
                   child: new Text(
                     "Best seller",
                     style: GoogleFonts.openSans(
@@ -328,22 +343,22 @@ class _MyHomePageState extends State<MyHomePage> {
                     return !snapshot.hasData ?
                         Center(child: CircularProgressIndicator()):
                         GridView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: snapshot.data.documents.length,
-                        gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.1),
-                        ),
-                        itemBuilder: (BuildContext context, int index) {
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: snapshot.data.documents.length,
+                          gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.1),
+                          ),
+                          itemBuilder: (BuildContext context, int index) {
                           DocumentSnapshot data = snapshot.data.documents[index];
                           return Card(
                             elevation: 0.0,
                             margin: EdgeInsets.all(2),
                             child:InkWell(
-                              onTap: (){
-                                print(data.documentID);
-                                Navigator.of(context).push(_itemDetails(data.documentID,data['imgSrc'],data['title'],data['pricing']['price'],data['pricing']['price_compare'],data['description']));
+                              onTap: () async{
+                                var deviceId = await _getId();
+                                Navigator.of(context).push(_itemDetails(deviceId,data.documentID,data['imgSrc'],data['title'],data['pricing']['price'],data['pricing']['price_compare'],data['description']));
                               },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -374,7 +389,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16,
-                                              color: Colors.green,
+                                              color: color,
                                             ),
                                           ),
                                         ),
@@ -405,7 +420,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                         });
                   },
-                ),
+                 ),
                 ],
               ),
             ),
@@ -415,9 +430,25 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 }
 
-Route _itemDetails(documentID,imgSrc,title,pricing,priceCompare,description) {
+Route _itemDetails(deviceId,documentID,imgSrc,title,pricing,priceCompare,description) {
   return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => ItemDetail(documentID:documentID,imgSrc:imgSrc,title:title,pricing:pricing,priceCompare:priceCompare,description:description),
+    pageBuilder: (context, animation, secondaryAnimation) => ItemDetail(deviceId:deviceId,documentID:documentID,imgSrc:imgSrc,title:title,pricing:pricing,priceCompare:priceCompare,description:description),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(0.0, 1.0);
+      var end = Offset.zero;
+      var curve = Curves.decelerate;
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
+
+Route _viewCart() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => UserCart(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var begin = Offset(0.0, 1.0);
       var end = Offset.zero;

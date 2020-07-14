@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'home.dart';
-import 'item_details.dart';
-import 'user_cart.dart';
-import 'check_out.dart';
-import 'test.dart';
 void main() {
   runApp(MyApp());
 }
@@ -25,14 +21,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Boy sugo',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-//      home: UserCart(),
-//      home: ItemDetail(),
       home: MyHomePage(),
-//      home:CheckOut(),
-//        home:Test(),
     );
   }
 }
