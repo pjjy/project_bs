@@ -4,10 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:sleek_button/sleek_button.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info/device_info.dart';
-import 'check_out.dart';
+import 'create_account.dart';
 
 class UserCart extends StatefulWidget {
   @override
@@ -24,6 +23,7 @@ class _UserCart extends State<UserCart> {
   var isLoading = false;
   var checkOutLoading = true;
   var deviceId;
+  Color color = const Color(0xff0084ff);
 
   Future _getId() async {
     var dId;
@@ -68,45 +68,13 @@ class _UserCart extends State<UserCart> {
         appBar:AppBar(
           brightness: Brightness.light,
           backgroundColor: Colors.white,
-          elevation: 1.0,
+          elevation: 0.1,
           iconTheme: new IconThemeData(color: Colors.black),
           leading: IconButton(
             icon: Icon(Ionicons.md_arrow_back, color: Colors.black),
             onPressed: () => Navigator.of(context).pop(),
           ),
           actions: <Widget>[
-            StreamBuilder<QuerySnapshot>(
-              stream: Firestore.instance.collection("user_cart").document(deviceId).collection('cart_items').snapshots(),
-              builder: (context, snapshot) {
-                return !snapshot.hasData ?
-                Center(
-                  child: Badge(
-                    animationType: BadgeAnimationType.fade,
-                    position: BadgePosition.topRight(top: 5, right: 5),
-                    badgeColor: Colors.green,
-                    badgeContent: Text('0',style: TextStyle(color: Colors.white,),),
-                    child:  IconButton(
-                        icon: Icon(Ionicons.ios_cart,),
-                        onPressed: () {
-
-                        }
-                    ),
-                  ),
-                ):
-                Badge(
-                  animationType: BadgeAnimationType.fade,
-                  position: BadgePosition.topRight(top: 5, right: 5),
-                  badgeColor: Colors.green,
-                  badgeContent: Text('${snapshot.data.documents.length}',style: TextStyle(color: Colors.white,),),
-                  child:  IconButton(
-                      icon: Icon(Ionicons.ios_cart,),
-                      onPressed: () {
-
-                      }
-                  ),
-                );
-              },
-            ),
             IconButton(
                 icon: Icon(Ionicons.ios_search,),
                 onPressed: () async {
@@ -118,7 +86,7 @@ class _UserCart extends State<UserCart> {
             "My cart",
             style: GoogleFonts.openSans(
                 fontWeight: FontWeight.bold,
-                color: Colors.green.withOpacity(0.8),
+                color: color,
                 fontStyle: FontStyle.normal,
                 fontSize: 18.0),
           ),
@@ -126,10 +94,6 @@ class _UserCart extends State<UserCart> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 5.0),
-              child: Text("Tap to edit Swipe to remove"),
-            ),
             Expanded(
                 child: Scrollbar(
                   child: StreamBuilder<QuerySnapshot>(
@@ -138,13 +102,14 @@ class _UserCart extends State<UserCart> {
                       return !snapshot.hasData ?
                       Center(child: CircularProgressIndicator()):
                       ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: snapshot.data.documents.length,
                           itemBuilder: (BuildContext context, int index) {
                             DocumentSnapshot data = snapshot.data.documents[index];
                             return GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+
+                              },
                               child: Container(
                                 height: 140.0,
                                 width: 30.0,
@@ -188,7 +153,7 @@ class _UserCart extends State<UserCart> {
 
                                                 Padding(
                                                   padding: EdgeInsets.fromLTRB(15, 1, 5, 5),
-                                                  child:Text('100 grams', overflow: TextOverflow.clip,
+                                                  child:Text('100 grams x PCS ${data['quantity']}', overflow: TextOverflow.clip,
                                                     style: GoogleFonts.openSans(
                                                         fontStyle:
                                                         FontStyle.normal,
@@ -205,7 +170,7 @@ class _UserCart extends State<UserCart> {
                                                           fontWeight:
                                                           FontWeight.bold,
                                                           fontSize: 18,
-                                                          color: Colors.green,
+                                                          color:color,
                                                         ),
                                                       ),
                                                     ),
@@ -239,7 +204,7 @@ class _UserCart extends State<UserCart> {
                         Navigator.of(context).push(_checkOut());
                       },
                       style: SleekButtonStyle.flat(
-                        color: Colors.green,
+                        color:color,
                         inverted: false,
                         rounded: false,
                         size: SleekButtonSize.big,
@@ -269,7 +234,7 @@ class _UserCart extends State<UserCart> {
 
 Route _checkOut() {
   return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => CheckOut(),
+    pageBuilder: (context, animation, secondaryAnimation) => CreateAccount(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var begin = Offset(0.0, 1.0);
       var end = Offset.zero;

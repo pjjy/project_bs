@@ -9,15 +9,17 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info/device_info.dart';
 import 'user_cart.dart';
+import 'verify_phone.dart';
 
-class CheckOut extends StatefulWidget {
+class CreateAccount extends StatefulWidget {
   @override
-  _CheckOut createState() => _CheckOut();
+  _CreateAccount createState() => _CreateAccount();
 }
 
-class _CheckOut extends State<CheckOut> {
-  var isLoading = false;
+class _CreateAccount extends State<CreateAccount> {
   var deviceId;
+  final _phoneNumber = TextEditingController();
+  Color color = const Color(0xff0084ff);
 
   Future _getId() async {
     var dId;
@@ -60,7 +62,7 @@ class _CheckOut extends State<CheckOut> {
         appBar:AppBar(
           brightness: Brightness.light,
           backgroundColor: Colors.white,
-          elevation: 1.0,
+          elevation: 0.1,
           iconTheme: new IconThemeData(color: Colors.black),
           leading: IconButton(
             icon: Icon(Ionicons.md_arrow_back, color: Colors.black),
@@ -75,7 +77,7 @@ class _CheckOut extends State<CheckOut> {
                   child: Badge(
                     animationType: BadgeAnimationType.fade,
                     position: BadgePosition.topRight(top: 5, right: 5),
-                    badgeColor: Colors.green,
+                    badgeColor:color,
                     badgeContent: Text('0',style: TextStyle(color: Colors.white,),),
                     child:  IconButton(
                         icon: Icon(Ionicons.ios_cart,),
@@ -88,7 +90,7 @@ class _CheckOut extends State<CheckOut> {
                 Badge(
                   animationType: BadgeAnimationType.fade,
                   position: BadgePosition.topRight(top: 5, right: 5),
-                  badgeColor: Colors.green,
+                  badgeColor:color,
                   badgeContent: Text('${snapshot.data.documents.length}',style: TextStyle(color: Colors.white,),),
                   child:  IconButton(
                       icon: Icon(Ionicons.ios_cart,),
@@ -107,21 +109,15 @@ class _CheckOut extends State<CheckOut> {
             ),
           ],
           title: Text(
-            "Check out",
+            "Account",
             style: GoogleFonts.openSans(
                 fontWeight: FontWeight.bold,
-                color: Colors.green.withOpacity(0.8),
+                color: color,
                 fontStyle: FontStyle.normal,
                 fontSize: 18.0),
           ),
         ),
-        body: isLoading
-            ? Center(
-          child: CircularProgressIndicator(
-            valueColor: new AlwaysStoppedAnimation<Color>(Colors.green),
-          ),
-        )
-            : Column(
+        body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Expanded(
@@ -129,34 +125,34 @@ class _CheckOut extends State<CheckOut> {
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 25.0),
-                      child: Container(
-                        height: 60.0,
-                        decoration: new BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-//                              color: Colors.red,
-                              blurRadius:
-                              0.0, // has the effect of softening the shadow
-                              spreadRadius:
-                              0.0, // has the effect of extending the shadow
-                              offset: Offset(
-                                0.0, // horizontal, move right 10
-                                0.0, // vertical, move down 10
-                              ),
-                            )
-                          ],
-                        ),
-                        child: SignInButton(
-                          Buttons.Google,
-                          text: "Order with google",
-                          onPressed: () {
-
-                          },
-                        ),
-                      ),
-                    ),
+//                    Padding(
+//                      padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 25.0),
+//                      child: Container(
+//                        height: 60.0,
+//                        decoration: new BoxDecoration(
+//                          boxShadow: [
+//                            BoxShadow(
+////                              color: Colors.red,
+//                              blurRadius:
+//                              0.0, // has the effect of softening the shadow
+//                              spreadRadius:
+//                              0.0, // has the effect of extending the shadow
+//                              offset: Offset(
+//                                0.0, // horizontal, move right 10
+//                                0.0, // vertical, move down 10
+//                              ),
+//                            )
+//                          ],
+//                        ),
+//                        child: SignInButton(
+//                          Buttons.Google,
+//                          text: "Order with google",
+//                          onPressed: () {
+//
+//                          },
+//                        ),
+//                      ),
+//                    ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
                       child: new Text(
@@ -197,26 +193,56 @@ class _CheckOut extends State<CheckOut> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 30.0, vertical: 5.0),
-                      child: new TextFormField(
-                        textInputAction: TextInputAction.done,
-                        cursorColor: Colors.blueGrey,
-//                        controller: _passwordLogIn,
-                        decoration: InputDecoration(
-                          contentPadding:
-                          EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.blueGrey,
-                                width: 2.0),
+                      padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            width: MediaQuery.of(context).size.width / 7.5,
+                            child: new TextFormField(
+                              cursorColor:
+                              Colors.deepOrangeAccent.withOpacity(0.8),
+                              enabled: false,
+                              decoration: InputDecoration(
+                                hintText: "+63",
+                                contentPadding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width / 23.5, 10.0, 10.0, 25.0),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.deepOrangeAccent.withOpacity(0.8),
+                                      width: 2.0),
+                                ),
+                                border: OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(3.0)),
+                              ),
+                            ),
                           ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(3.0)),
-                        ),
-//                        onFieldSubmitted: (String value) {
-//                          FocusScope.of(context).requestFocus(textSecondFocusNode);
-//                        },
+                          SizedBox(
+                            width: 2.0,
+                          ),
+                          Flexible(
+                            child: new TextFormField(
+                              maxLength: 13,
+                              keyboardType: TextInputType.text,
+                              inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[.-]'))],
+                              cursorColor:Colors.blueGrey,
+                              controller: _phoneNumber,
+                              decoration: InputDecoration(
+                                counterText: "",
+                                contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.blueGrey
+                                          .withOpacity(0.8),
+                                      width: 2.0),
+                                ),
+                                border: OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(3.0)),
+                              ),
+//                            focusNode: textSecondFocusNode,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     Padding(
@@ -256,27 +282,55 @@ class _CheckOut extends State<CheckOut> {
               ),
             ),
             Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: 30.0, vertical: 1.0),
+              child: Center(
+                child: Text(
+                  "By signing up, you agree to our",
+                  style: GoogleFonts.openSans(
+                      fontStyle: FontStyle.normal, fontSize: 13.0),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: 30.0, vertical: 1.0),
+              child: Center(
+                child: GestureDetector(
+                  onTap: (){
+
+                  },
+                  child: Text(
+                    "Terms & Conditions and Privacy",
+                    style: GoogleFonts.openSans(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 15.0),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-//                        padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                 child: SleekButton(
                   onTap: () {
-//                            _signInCheck();
+                    Navigator.of(context).push(_verifyPhone(_phoneNumber.text));
                   },
                   style: SleekButtonStyle.flat(
-                    color: Colors.green,
+                    color: color,
                     inverted: false,
                     rounded: false,
                     size: SleekButtonSize.big,
                     context: context,
                   ),
                   child: Center(
-                    child: Text(
-                      "Place order",
-                      style: GoogleFonts.openSans(
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.0),
-                    ),
+                      child: Text(
+                        "Agree & Continue",
+                        style: GoogleFonts.openSans(
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0),
+                      ),
                   ),
                 )
             ),
@@ -290,6 +344,22 @@ class _CheckOut extends State<CheckOut> {
 Route _viewCart() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => UserCart(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(0.0, 1.0);
+      var end = Offset.zero;
+      var curve = Curves.decelerate;
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
+
+Route _verifyPhone(phoneNumber) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => VerifyPhone(phoneNumber:phoneNumber),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var begin = Offset(0.0, 1.0);
       var end = Offset.zero;

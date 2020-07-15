@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'home.dart';
+import 'verify_phone.dart';
 void main() {
   runApp(MyApp());
 }
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(),
+//        home: VerifyPhone(),
     );
   }
 }

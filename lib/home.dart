@@ -24,6 +24,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isAppBarExpanded = false;
   List list = new List();
   var deviceId;
+  int gridCount;
   Color color = const Color(0xff0084ff);
 
   Future _getId() async {
@@ -54,11 +55,12 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     _get1();
+    MediaQuery.of(context).size.width >= 600 ? gridCount = 3 : gridCount = 2;
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.light,
         backgroundColor: Colors.white,
-        elevation: 1.0,
+        elevation: 0.1,
         iconTheme: new IconThemeData(color: Colors.black),
         actions: <Widget>[
           StreamBuilder<QuerySnapshot>(
@@ -347,7 +349,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           shrinkWrap: true,
                           itemCount: snapshot.data.documents.length,
                           gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
+                            crossAxisCount: gridCount,
                             childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.1),
                           ),
                           itemBuilder: (BuildContext context, int index) {
