@@ -187,6 +187,38 @@ class _CreateAccount extends State<CreateAccount> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
                       child: new Text(
+                        "Password",
+                        style: GoogleFonts.openSans(
+                            fontStyle: FontStyle.normal, fontSize: 15.0),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 30.0, vertical: 5.0),
+                      child: new TextFormField(
+                        obscureText: true,
+                        textInputAction: TextInputAction.done,
+                        cursorColor:Colors.blueGrey,
+//                        controller: _usernameLogIn,
+                        decoration: InputDecoration(
+                          contentPadding:
+                          EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.blueGrey,
+                                width: 2.0),
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(3.0)),
+                        ),
+//                        onFieldSubmitted: (String value) {
+//                          FocusScope.of(context).requestFocus(textSecondFocusNode);
+//                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
+                      child: new Text(
                         "Phone number",
                         style: GoogleFonts.openSans(
                             fontStyle: FontStyle.normal, fontSize: 15.0),
@@ -222,7 +254,7 @@ class _CreateAccount extends State<CreateAccount> {
                           Flexible(
                             child: new TextFormField(
                               maxLength: 13,
-                              keyboardType: TextInputType.text,
+                              keyboardType: TextInputType.number,
                               inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[.-]'))],
                               cursorColor:Colors.blueGrey,
                               controller: _phoneNumber,
@@ -271,12 +303,8 @@ class _CreateAccount extends State<CreateAccount> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(3.0)),
                         ),
-//                        onFieldSubmitted: (String value) {
-//                          FocusScope.of(context).requestFocus(textSecondFocusNode);
-//                        },
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -314,6 +342,7 @@ class _CreateAccount extends State<CreateAccount> {
                 padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                 child: SleekButton(
                   onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
                     Navigator.of(context).push(_verifyPhone(_phoneNumber.text));
                   },
                   style: SleekButtonStyle.flat(

@@ -2,7 +2,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:sleek_button/sleek_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'dart:async';
+import 'package:countdown_flutter/countdown_flutter.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 class VerifyPhone extends StatefulWidget {
   final String phoneNumber;
@@ -14,25 +16,36 @@ class VerifyPhone extends StatefulWidget {
 
 class _VerifyPhone extends State<VerifyPhone> {
   Color color = const Color(0xff0084ff);
-  String phoneNo, verificationId, smsCode;
-  bool codeSent = false;
+  String phoneNo, verificationId;
   final countryCode = "+63";
+  final smsCode = TextEditingController();
+
+
+  Future<void> signInWithOTP(smsCode, verId) async{
+
+       AuthCredential authId = PhoneAuthProvider.getCredential(
+        verificationId: verId,
+        smsCode: smsCode);
+
+      await FirebaseAuth.instance.signInWithCredential(authId).then((user){
+        print("corect code");
+      }).catchError((e){
+        print("wrong code");
+      });
+  }
 
   Future<void> verifyPhone(phoneNumber) async {
     final PhoneVerificationCompleted verified = (AuthCredential authResult) {
-      print("success");
+
     };
 
     final PhoneVerificationFailed verificationFailed =
         (AuthException authException) {
-      print('${authException.message}');
+
     };
 
     final PhoneCodeSent smsSent = (String verId, [int forceResend]) {
       this.verificationId = verId;
-      setState(() {
-        this.codeSent = true;
-      });
     };
 
     final PhoneCodeAutoRetrievalTimeout autoTimeout = (String verId) {
@@ -41,33 +54,36 @@ class _VerifyPhone extends State<VerifyPhone> {
 
     await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: phoneNumber,
-        timeout: const Duration(seconds: 10),
+        timeout: const Duration(seconds: 30),
         verificationCompleted: verified,
         verificationFailed: verificationFailed,
         codeSent: smsSent,
         codeAutoRetrievalTimeout: autoTimeout);
   }
 
+  //timer
+
   @override
   void initState() {
-    print(countryCode+widget.phoneNumber);
-//    verifyPhone(widget.phoneNumber);
+    verifyPhone(countryCode+widget.phoneNumber);
+    BackButtonInterceptor.add(myInterceptor);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent) {
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:AppBar(
-        brightness: Brightness.light,
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        iconTheme: new IconThemeData(color: Colors.black),
-        leading: IconButton(
-          icon: Icon(Ionicons.md_arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
+
       body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -77,7 +93,7 @@ class _VerifyPhone extends State<VerifyPhone> {
                   physics: NeverScrollableScrollPhysics(),
                   children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
+                        padding: EdgeInsets.fromLTRB(0.0, 150.0, 0.0, 0.0),
                         child: Center(
                           child: Text("Please Enter Verification Code",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24.0),),
                         ),
@@ -95,6 +111,7 @@ class _VerifyPhone extends State<VerifyPhone> {
                             textInputAction: TextInputAction.done,
                             keyboardType: TextInputType.number,
                             cursorColor: Colors.blueGrey,
+                            controller: smsCode,
                             decoration: InputDecoration(
                               contentPadding:
                               EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
@@ -109,12 +126,23 @@ class _VerifyPhone extends State<VerifyPhone> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(100.0, 15.0, 100.0, 0.0),
-                        child: Center(
-                          child: Text("RESEND CODE IN: 12",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black54 ,fontSize: 15.0),),
-                        ),
-                      ),
+
+
+                    CountdownFormatted(
+                      duration: Duration(seconds: 30),
+                      onFinish: () {
+                        Navigator.of(context).pop();
+                      },
+                      builder: (BuildContext ctx, String remaining) {
+                        return Padding(
+                          padding: EdgeInsets.fromLTRB(100.0, 15.0, 100.0, 0.0),
+                          child: Center(
+                            child: Text("TIME OUT: $remaining",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black54 ,fontSize: 15.0),),
+                          ),
+                        );
+                      },
+                    ),
+
                   ],
                 ),
               ),
@@ -122,11 +150,10 @@ class _VerifyPhone extends State<VerifyPhone> {
               padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
               child: Row(
                 children: <Widget>[
-
                   Flexible(
                     child: SleekButton(
                       onTap: () async {
-//                        Navigator.of(context).push(_checkOut());
+                        signInWithOTP(smsCode.text, verificationId);
                       },
                       style: SleekButtonStyle.flat(
                         color:color,

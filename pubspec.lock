@@ -22,6 +22,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.1"
+  back_button_interceptor:
+    dependency: "direct main"
+    description:
+      name: back_button_interceptor
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.2.4"
   badges:
     dependency: "direct main"
     description:
@@ -85,6 +92,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
+  countdown_flutter:
+    dependency: "direct main"
+    description:
+      name: countdown_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
   crypto:
     dependency: transitive
     description:
@@ -449,5 +463,5 @@ packages:
     source: hosted
     version: "3.6.1"
 sdks:
-  dart: ">=2.7.0 <3.0.0"
+  dart: ">=2.8.0 <3.0.0"
   flutter: ">=1.17.0 <2.0.0"
