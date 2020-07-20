@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
 import 'package:sleek_button/sleek_button.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:badges/badges.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info/device_info.dart';
 import 'user_cart.dart';
 import 'verify_phone.dart';
+import 'db_helper.dart';
 
 class CreateAccount extends StatefulWidget {
   @override
@@ -18,9 +17,15 @@ class CreateAccount extends StatefulWidget {
 
 class _CreateAccount extends State<CreateAccount> {
   var deviceId;
+  final db = ProjectBs();
   final _phoneNumber = TextEditingController();
+  final _name = TextEditingController();
+  final _password = TextEditingController();
+  final _address = TextEditingController();
+  final countryCode = "+63";
   Color color = const Color(0xff0084ff);
-
+  var _formKey = GlobalKey<FormState>();
+  String vali;
   Future _getId() async {
     var dId;
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -32,6 +37,16 @@ class _CreateAccount extends State<CreateAccount> {
       dId = androidDeviceInfo.androidId; //
     }
     return dId;
+  }
+
+  addPhoneNumber(phoneNumber) async{
+   var exist = await db.checkPhoneNumber(phoneNumber);
+   if(exist == true){
+     vali = "number already exist";
+   }else{
+     await db.addPhoneNumber(phoneNumber);
+     print("save");
+   }
   }
 
   void _get1() async{
@@ -120,39 +135,13 @@ class _CreateAccount extends State<CreateAccount> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Expanded(
+            Form(
+             key:_formKey,
+             child:Expanded(
               child:Scrollbar(
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: <Widget>[
-//                    Padding(
-//                      padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 25.0),
-//                      child: Container(
-//                        height: 60.0,
-//                        decoration: new BoxDecoration(
-//                          boxShadow: [
-//                            BoxShadow(
-////                              color: Colors.red,
-//                              blurRadius:
-//                              0.0, // has the effect of softening the shadow
-//                              spreadRadius:
-//                              0.0, // has the effect of extending the shadow
-//                              offset: Offset(
-//                                0.0, // horizontal, move right 10
-//                                0.0, // vertical, move down 10
-//                              ),
-//                            )
-//                          ],
-//                        ),
-//                        child: SignInButton(
-//                          Buttons.Google,
-//                          text: "Order with google",
-//                          onPressed: () {
-//
-//                          },
-//                        ),
-//                      ),
-//                    ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
                       child: new Text(
@@ -163,11 +152,17 @@ class _CreateAccount extends State<CreateAccount> {
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: 30.0, vertical: 5.0),
+                      horizontal: 30.0, vertical: 5.0),
                       child: new TextFormField(
                         textInputAction: TextInputAction.done,
                         cursorColor:Colors.blueGrey,
-//                        controller: _usernameLogIn,
+                        controller: _name,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter full name';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           contentPadding:
                           EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
@@ -179,9 +174,6 @@ class _CreateAccount extends State<CreateAccount> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(3.0)),
                         ),
-//                        onFieldSubmitted: (String value) {
-//                          FocusScope.of(context).requestFocus(textSecondFocusNode);
-//                        },
                       ),
                     ),
                     Padding(
@@ -199,7 +191,13 @@ class _CreateAccount extends State<CreateAccount> {
                         obscureText: true,
                         textInputAction: TextInputAction.done,
                         cursorColor:Colors.blueGrey,
-//                        controller: _usernameLogIn,
+                        controller: _password,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter password';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           contentPadding:
                           EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
@@ -211,9 +209,6 @@ class _CreateAccount extends State<CreateAccount> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(3.0)),
                         ),
-//                        onFieldSubmitted: (String value) {
-//                          FocusScope.of(context).requestFocus(textSecondFocusNode);
-//                        },
                       ),
                     ),
                     Padding(
@@ -228,37 +223,21 @@ class _CreateAccount extends State<CreateAccount> {
                       padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
                       child: Row(
                         children: <Widget>[
-                          Container(
-                            width: MediaQuery.of(context).size.width / 7.5,
-                            child: new TextFormField(
-                              cursorColor:
-                              Colors.deepOrangeAccent.withOpacity(0.8),
-                              enabled: false,
-                              decoration: InputDecoration(
-                                hintText: "+63",
-                                contentPadding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width / 23.5, 10.0, 10.0, 25.0),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.deepOrangeAccent.withOpacity(0.8),
-                                      width: 2.0),
-                                ),
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(3.0)),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 2.0,
-                          ),
                           Flexible(
                             child: new TextFormField(
                               maxLength: 13,
                               keyboardType: TextInputType.number,
-                              inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[.-]'))],
+                              inputFormatters:[BlacklistingTextInputFormatter(new RegExp('[.-]'))],
                               cursorColor:Colors.blueGrey,
                               controller: _phoneNumber,
+                              validator: (value){
+                                if (value.isEmpty){
+                                  return 'Please enter mobile number';
+                                }
+                                return null;
+                              },
                               decoration: InputDecoration(
+                                prefixText: "+63",
                                 counterText: "",
                                 contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
                                 focusedBorder: OutlineInputBorder(
@@ -291,7 +270,13 @@ class _CreateAccount extends State<CreateAccount> {
                       child: new TextFormField(
                         textInputAction: TextInputAction.done,
                         cursorColor: Colors.blueGrey,
-//                        controller: _passwordLogIn,
+                        controller: _address,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter exact address';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           contentPadding:
                           EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
@@ -308,7 +293,9 @@ class _CreateAccount extends State<CreateAccount> {
                   ],
                 ),
               ),
+             ),
             ),
+
             Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: 30.0, vertical: 1.0),
@@ -343,7 +330,10 @@ class _CreateAccount extends State<CreateAccount> {
                 child: SleekButton(
                   onTap: () {
                     FocusScope.of(context).requestFocus(FocusNode());
-                    Navigator.of(context).push(_verifyPhone(_phoneNumber.text));
+//                    Navigator.of(context).push(_verifyPhone(_phoneNumber.text));
+                    if(_formKey.currentState.validate()){
+                      addPhoneNumber(countryCode+_phoneNumber.text);
+                    }
                   },
                   style: SleekButtonStyle.flat(
                     color: color,

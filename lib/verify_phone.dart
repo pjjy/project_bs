@@ -58,10 +58,9 @@ class _VerifyPhone extends State<VerifyPhone> {
         verificationCompleted: verified,
         verificationFailed: verificationFailed,
         codeSent: smsSent,
-        codeAutoRetrievalTimeout: autoTimeout);
+        codeAutoRetrievalTimeout: autoTimeout
+    );
   }
-
-  //timer
 
   @override
   void initState() {
@@ -126,23 +125,20 @@ class _VerifyPhone extends State<VerifyPhone> {
                           ),
                         ),
                       ),
-
-
-                    CountdownFormatted(
-                      duration: Duration(seconds: 30),
-                      onFinish: () {
-                        Navigator.of(context).pop();
-                      },
-                      builder: (BuildContext ctx, String remaining) {
-                        return Padding(
-                          padding: EdgeInsets.fromLTRB(100.0, 15.0, 100.0, 0.0),
-                          child: Center(
-                            child: Text("TIME OUT: $remaining",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black54 ,fontSize: 15.0),),
-                          ),
-                        );
-                      },
-                    ),
-
+                        CountdownFormatted(
+                          duration: Duration(seconds: 30),
+                          onFinish: () {
+                            Navigator.of(context).pop();
+                          },
+                          builder: (BuildContext ctx, String remaining) {
+                            return Padding(
+                              padding: EdgeInsets.fromLTRB(100.0, 15.0, 100.0, 0.0),
+                              child: Center(
+                                child: Text("TIME OUT: $remaining",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black54 ,fontSize: 15.0),),
+                              ),
+                            );
+                          },
+                        ),
                   ],
                 ),
               ),

@@ -14,14 +14,33 @@ class ProjectBs {
             "street" : "street 24",
             "city" : "new york"
           }
-        });
+        }
+    );
+  }
+
+  Future addPhoneNumber(checkPhoneNumber) async{
+    fireStoreInstance.collection("phone_number").add(
+        {
+          "phone_number":checkPhoneNumber
+        }
+    );
+  }
+
+  Future checkPhoneNumber(checkPhoneNumber) async{
+    final QuerySnapshot result = await Firestore.instance.collection('phone_number').where('phone_number', isEqualTo:checkPhoneNumber).getDocuments();
+    final List < DocumentSnapshot > documents = result.documents;
+    if(documents.length > 0){
+      return true;
+    }else{
+      return false;
+    }
   }
 
   Future addToCart(deviceId,documentID,itemCount,pricing,title,description,imgSrc) async {
 
     fireStoreInstance.document("user_cart/$deviceId").setData(
         {
-
+        //date here
         }).then((value) {
 
           fireStoreInstance
