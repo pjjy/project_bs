@@ -63,7 +63,7 @@ class _CreateAccount extends State<CreateAccount> {
           print(validate);
       }
       if(exist == false){
-        validate = false;
+//        validate = false;
         Navigator.of(context).push(_verifyPhone(_phoneNumber.text));
         await db.addPhoneNumber(phoneNumber);
       }
