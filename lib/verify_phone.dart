@@ -64,8 +64,8 @@ class _VerifyPhone extends State<VerifyPhone> {
 
   @override
   void initState() {
-    verifyPhone(countryCode+widget.phoneNumber);
-    BackButtonInterceptor.add(myInterceptor);
+//    verifyPhone(countryCode+widget.phoneNumber);
+//    BackButtonInterceptor.add(myInterceptor);
     super.initState();
   }
 

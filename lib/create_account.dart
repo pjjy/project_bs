@@ -25,28 +25,58 @@ class _CreateAccount extends State<CreateAccount> {
   final countryCode = "+63";
   Color color = const Color(0xff0084ff);
   var _formKey = GlobalKey<FormState>();
-  String vali;
+  var validate;
+
   Future _getId() async {
     var dId;
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
-      dId = iosDeviceInfo.identifierForVendor; // unique ID on iOS
+      dId = iosDeviceInfo.identifierForVendor;
     } else{
       AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
-      dId = androidDeviceInfo.androidId; //
+      dId = androidDeviceInfo.androidId;
     }
     return dId;
   }
 
+
+  String validateNumber(String value){
+      if (value.isEmpty) {
+        return 'Please enter number';
+      }if(validate == true){
+        return "already";
+      }
+      return null;
+
+    }
+
+
+
   addPhoneNumber(phoneNumber) async{
-   var exist = await db.checkPhoneNumber(phoneNumber);
-   if(exist == true){
-     vali = "number already exist";
-   }else{
-     await db.addPhoneNumber(phoneNumber);
-     print("save");
-   }
+
+
+
+      var exist = await db.checkPhoneNumber(phoneNumber);
+      if(exist == true){
+        validate = true;
+          print(validate);
+      }
+      if(exist == false){
+        validate = false;
+        Navigator.of(context).push(_verifyPhone(_phoneNumber.text));
+        await db.addPhoneNumber(phoneNumber);
+      }
+  }
+
+   test(){
+
+    if(_formKey.currentState.validate()){
+      print("naay sud");
+//      setState(() {
+        addPhoneNumber(countryCode+_phoneNumber.text);
+//      });
+    }
   }
 
   void _get1() async{
@@ -77,7 +107,7 @@ class _CreateAccount extends State<CreateAccount> {
         appBar:AppBar(
           brightness: Brightness.light,
           backgroundColor: Colors.white,
-          elevation: 0.1,
+          elevation: 1.0,
           iconTheme: new IconThemeData(color: Colors.black),
           leading: IconButton(
             icon: Icon(Ionicons.md_arrow_back, color: Colors.black),
@@ -225,25 +255,19 @@ class _CreateAccount extends State<CreateAccount> {
                         children: <Widget>[
                           Flexible(
                             child: new TextFormField(
-                              maxLength: 13,
+                              maxLength: 10,
                               keyboardType: TextInputType.number,
                               inputFormatters:[BlacklistingTextInputFormatter(new RegExp('[.-]'))],
                               cursorColor:Colors.blueGrey,
                               controller: _phoneNumber,
-                              validator: (value){
-                                if (value.isEmpty){
-                                  return 'Please enter mobile number';
-                                }
-                                return null;
-                              },
+                              validator: validateNumber,
                               decoration: InputDecoration(
-                                prefixText: "+63",
+                                prefixIcon: Padding(padding: EdgeInsets.all(15), child: Text('+63',style: TextStyle(fontSize: 16.0),)),
                                 counterText: "",
                                 contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Colors.blueGrey
-                                          .withOpacity(0.8),
+                                      color: Colors.blueGrey.withOpacity(0.8),
                                       width: 2.0),
                                 ),
                                 border: OutlineInputBorder(
@@ -328,12 +352,14 @@ class _CreateAccount extends State<CreateAccount> {
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                 child: SleekButton(
-                  onTap: () {
-                    FocusScope.of(context).requestFocus(FocusNode());
-//                    Navigator.of(context).push(_verifyPhone(_phoneNumber.text));
-                    if(_formKey.currentState.validate()){
-                      addPhoneNumber(countryCode+_phoneNumber.text);
-                    }
+                  onTap: (){
+
+
+                    test();
+
+
+
+//
                   },
                   style: SleekButtonStyle.flat(
                     color: color,

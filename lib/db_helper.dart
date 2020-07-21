@@ -18,10 +18,10 @@ class ProjectBs {
     );
   }
 
-  Future addPhoneNumber(checkPhoneNumber) async{
+  Future addPhoneNumber(phoneNumber) async{
     fireStoreInstance.collection("phone_number").add(
         {
-          "phone_number":checkPhoneNumber
+          "phone_number":phoneNumber
         }
     );
   }

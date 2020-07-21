@@ -68,7 +68,7 @@ class _UserCart extends State<UserCart> {
         appBar:AppBar(
           brightness: Brightness.light,
           backgroundColor: Colors.white,
-          elevation: 0.1,
+          elevation: 1.0,
           iconTheme: new IconThemeData(color: Colors.black),
           leading: IconButton(
             icon: Icon(Ionicons.md_arrow_back, color: Colors.black),
