@@ -55,7 +55,6 @@ class _ItemDetail extends State<ItemDetail>  {
                   padding:EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
                   child:Center(child:Text("Successfully added to cart")),
                 ),
-
               ],
             ),
           ),

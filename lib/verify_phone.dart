@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'package:countdown_flutter/countdown_flutter.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'db_helper.dart';
 
 class VerifyPhone extends StatefulWidget {
   final String phoneNumber;
@@ -15,6 +16,7 @@ class VerifyPhone extends StatefulWidget {
 }
 
 class _VerifyPhone extends State<VerifyPhone> {
+  final db = ProjectBs();
   Color color = const Color(0xff0084ff);
   String phoneNo, verificationId;
   final countryCode = "+63";
@@ -27,8 +29,9 @@ class _VerifyPhone extends State<VerifyPhone> {
         verificationId: verId,
         smsCode: smsCode);
 
-      await FirebaseAuth.instance.signInWithCredential(authId).then((user){
-        print("corect code");
+      await FirebaseAuth.instance.signInWithCredential(authId).then((user) async{
+        print("correct code");
+        await db.verifyNumber(countryCode+widget.phoneNumber);
       }).catchError((e){
         print("wrong code");
       });
@@ -64,8 +67,8 @@ class _VerifyPhone extends State<VerifyPhone> {
 
   @override
   void initState() {
-//    verifyPhone(countryCode+widget.phoneNumber);
-//    BackButtonInterceptor.add(myInterceptor);
+    verifyPhone(countryCode+widget.phoneNumber);
+    BackButtonInterceptor.add(myInterceptor);
     super.initState();
   }
 
@@ -100,7 +103,7 @@ class _VerifyPhone extends State<VerifyPhone> {
                       Padding(
                         padding: EdgeInsets.fromLTRB(100.0, 5.0, 100.0, 0.0),
                         child: Center(
-                          child: Text("Please enter the code sent to (+63) ${widget.phoneNumber}",style: TextStyle(color: Colors.black54 ,fontSize: 18.0),),
+                          child: Text("Please enter the code sent to ($countryCode) ${widget.phoneNumber}",style: TextStyle(color: Colors.black54 ,fontSize: 18.0),),
                         ),
                       ),
                       Padding(
@@ -127,7 +130,9 @@ class _VerifyPhone extends State<VerifyPhone> {
                       ),
                         CountdownFormatted(
                           duration: Duration(seconds: 30),
-                          onFinish: () {
+                          onFinish: () async{
+                            //delete number
+                            await db.deleteIfTimesUp(countryCode+widget.phoneNumber);
                             Navigator.of(context).pop();
                           },
                           builder: (BuildContext ctx, String remaining) {

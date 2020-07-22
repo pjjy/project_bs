@@ -5,6 +5,7 @@ import 'home.dart';
 import 'verify_phone.dart';
 import 'create_account.dart';
 import 'user_cart.dart';
+import 'test.dart';
 void main() {
   runApp(MyApp());
 }
@@ -27,8 +28,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-home:UserCart(),
-//      home: MyHomePage(),
+//          home:Test(),
+        home:UserCart(),
+//        home: MyHomePage(),
 //        home: CreateAccount(),
     );
   }

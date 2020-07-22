@@ -41,42 +41,22 @@ class _CreateAccount extends State<CreateAccount> {
   }
 
 
-  String validateNumber(String value){
-      if (value.isEmpty) {
-        return 'Please enter number';
-      }if(validate == true){
-        return "already";
-      }
-      return null;
-
-    }
-
-
-
   addPhoneNumber(phoneNumber) async{
-
-
-
-      var exist = await db.checkPhoneNumber(phoneNumber);
-      if(exist == true){
-        validate = true;
-          print(validate);
-      }
-      if(exist == false){
-//        validate = false;
-        Navigator.of(context).push(_verifyPhone(_phoneNumber.text));
-        await db.addPhoneNumber(phoneNumber);
-      }
+    var exist = await db.checkPhoneNumber(phoneNumber);
+    if(exist == true){
+      validate = true;
+    }
+    if(exist == false){
+      validate = false;
+      Navigator.of(context).push(_verifyPhone(_phoneNumber.text));
+      await db.addPhoneNumber(phoneNumber);
+    }
   }
 
-   test(){
+  test(){
 
-    if(_formKey.currentState.validate()){
-      print("naay sud");
-//      setState(() {
-        addPhoneNumber(countryCode+_phoneNumber.text);
-//      });
-    }
+      addPhoneNumber(countryCode+_phoneNumber.text);
+
   }
 
   void _get1() async{
@@ -140,7 +120,7 @@ class _CreateAccount extends State<CreateAccount> {
                   child:  IconButton(
                       icon: Icon(Ionicons.ios_cart,),
                       onPressed:(){
-                         Navigator.of(context).push(_viewCart());
+                        Navigator.of(context).push(_viewCart());
                       }
                   ),
                 );
@@ -166,158 +146,164 @@ class _CreateAccount extends State<CreateAccount> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Form(
-             key:_formKey,
-             child:Expanded(
-              child:Scrollbar(
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
-                      child: new Text(
-                        "Name",
-                        style: GoogleFonts.openSans(
-                            fontStyle: FontStyle.normal, fontSize: 15.0),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                      horizontal: 30.0, vertical: 5.0),
-                      child: new TextFormField(
-                        textInputAction: TextInputAction.done,
-                        cursorColor:Colors.blueGrey,
-                        controller: _name,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter full name';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          contentPadding:
-                          EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.blueGrey,
-                                width: 2.0),
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(3.0)),
+              key:_formKey,
+              child:Expanded(
+                child:Scrollbar(
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
+                        child: new Text(
+                          "Name",
+                          style: GoogleFonts.openSans(
+                              fontStyle: FontStyle.normal, fontSize: 15.0),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
-                      child: new Text(
-                        "Password",
-                        style: GoogleFonts.openSans(
-                            fontStyle: FontStyle.normal, fontSize: 15.0),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 30.0, vertical: 5.0),
-                      child: new TextFormField(
-                        obscureText: true,
-                        textInputAction: TextInputAction.done,
-                        cursorColor:Colors.blueGrey,
-                        controller: _password,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter password';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          contentPadding:
-                          EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.blueGrey,
-                                width: 2.0),
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(3.0)),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
-                      child: new Text(
-                        "Phone number",
-                        style: GoogleFonts.openSans(
-                            fontStyle: FontStyle.normal, fontSize: 15.0),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
-                      child: Row(
-                        children: <Widget>[
-                          Flexible(
-                            child: new TextFormField(
-                              maxLength: 10,
-                              keyboardType: TextInputType.number,
-                              inputFormatters:[BlacklistingTextInputFormatter(new RegExp('[.-]'))],
-                              cursorColor:Colors.blueGrey,
-                              controller: _phoneNumber,
-                              validator: validateNumber,
-                              decoration: InputDecoration(
-                                prefixIcon: Padding(padding: EdgeInsets.all(15), child: Text('+63',style: TextStyle(fontSize: 16.0),)),
-                                counterText: "",
-                                contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.blueGrey.withOpacity(0.8),
-                                      width: 2.0),
-                                ),
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(3.0)),
-                              ),
-//                            focusNode: textSecondFocusNode,
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 30.0, vertical: 5.0),
+                        child: new TextFormField(
+                          textInputAction: TextInputAction.done,
+                          cursorColor:Colors.blueGrey,
+                          controller: _name,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter full name';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            contentPadding:
+                            EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.blueGrey,
+                                  width: 2.0),
                             ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(3.0)),
                           ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
-                      child: new Text(
-                        "Address",
-                        style: GoogleFonts.openSans(
-                            fontStyle: FontStyle.normal, fontSize: 15.0),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 30.0, vertical: 5.0),
-                      child: new TextFormField(
-                        textInputAction: TextInputAction.done,
-                        cursorColor: Colors.blueGrey,
-                        controller: _address,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter exact address';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          contentPadding:
-                          EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.blueGrey,
-                                width: 2.0),
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(3.0)),
                         ),
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
+                        child: new Text(
+                          "Password",
+                          style: GoogleFonts.openSans(
+                              fontStyle: FontStyle.normal, fontSize: 15.0),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 30.0, vertical: 5.0),
+                        child: new TextFormField(
+                          obscureText: true,
+                          textInputAction: TextInputAction.done,
+                          cursorColor:Colors.blueGrey,
+                          controller: _password,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter password';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            contentPadding:
+                            EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.blueGrey,
+                                  width: 2.0),
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(3.0)),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
+                        child: new Text(
+                          "Phone number",
+                          style: GoogleFonts.openSans(
+                              fontStyle: FontStyle.normal, fontSize: 15.0),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
+                        child: Row(
+                          children: <Widget>[
+                            Flexible(
+                              child: new TextFormField(
+                                maxLength: 10,
+                                keyboardType: TextInputType.number,
+                                inputFormatters:[BlacklistingTextInputFormatter(new RegExp('[.-]'))],
+                                cursorColor:Colors.blueGrey,
+                                controller: _phoneNumber,
+                                validator: (value){
+                                  if (value.isEmpty) {
+                                    return 'Please enter number';
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  errorText: validate == true ? 'Phone number is already taken' : null,
+                                  prefixIcon: Padding(padding: EdgeInsets.all(15), child: Text('+63',style: TextStyle(fontSize: 16.0),)),
+                                  counterText: "",
+                                  contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.blueGrey.withOpacity(0.8),
+                                        width: 2.0),
+                                  ),
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(3.0)),
+                                ),
+//                            focusNode: textSecondFocusNode,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
+                        child: new Text(
+                          "Address",
+                          style: GoogleFonts.openSans(
+                              fontStyle: FontStyle.normal, fontSize: 15.0),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 30.0, vertical: 5.0),
+                        child: new TextFormField(
+                          textInputAction: TextInputAction.done,
+                          cursorColor: Colors.blueGrey,
+                          controller: _address,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter exact address';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            contentPadding:
+                            EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.blueGrey,
+                                  width: 2.0),
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(3.0)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-             ),
             ),
 
             Padding(
@@ -353,13 +339,9 @@ class _CreateAccount extends State<CreateAccount> {
                 padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                 child: SleekButton(
                   onTap: (){
-
-
-                    test();
-
-
-
-//
+                    if(_formKey.currentState.validate()){
+                      test();
+                    }
                   },
                   style: SleekButtonStyle.flat(
                     color: color,
@@ -369,13 +351,13 @@ class _CreateAccount extends State<CreateAccount> {
                     context: context,
                   ),
                   child: Center(
-                      child: Text(
-                        "Agree & Continue",
-                        style: GoogleFonts.openSans(
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.0),
-                      ),
+                    child: Text(
+                      "Agree & Continue",
+                      style: GoogleFonts.openSans(
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0),
+                    ),
                   ),
                 )
             ),

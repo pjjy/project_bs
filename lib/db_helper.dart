@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
+
 class ProjectBs {
   final fireStoreInstance = Firestore.instance;
 
@@ -19,15 +21,27 @@ class ProjectBs {
   }
 
   Future addPhoneNumber(phoneNumber) async{
-    fireStoreInstance.collection("phone_number").add(
+    fireStoreInstance.document("phone_number/$phoneNumber").setData(
         {
+          "verified":"false",
           "phone_number":phoneNumber
         }
     );
   }
 
+//  update number status to verified if otp code is correct
+  Future verifyNumber(phoneNumber) async{
+    fireStoreInstance.collection("phone_number").document(phoneNumber).updateData({"verified":"true"});
+    print("updated");
+  }
+
+  Future deleteIfTimesUp(phoneNumber) async{
+    fireStoreInstance.collection("phone_number").document(phoneNumber).delete();
+  }
+
   Future checkPhoneNumber(checkPhoneNumber) async{
-    final QuerySnapshot result = await Firestore.instance.collection('phone_number').where('phone_number', isEqualTo:checkPhoneNumber).getDocuments();
+    final QuerySnapshot result = await Firestore.instance.collection('phone_number').where('verified',isEqualTo: "true").where('phone_number', isEqualTo:checkPhoneNumber).getDocuments();
+//    final QuerySnapshot result = await FirebaseAuth.instance.
     final List < DocumentSnapshot > documents = result.documents;
     if(documents.length > 0){
       return true;
@@ -35,9 +49,9 @@ class ProjectBs {
       return false;
     }
   }
+  
 
   Future addToCart(deviceId,documentID,itemCount,pricing,title,description,imgSrc) async {
-
     fireStoreInstance.document("user_cart/$deviceId").setData(
         {
         //date here

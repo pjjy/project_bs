@@ -13,119 +13,45 @@ class Test extends StatefulWidget {
 }
 
 class _Test extends State<Test> {
-  final db = ProjectBs();
-  @override
-  void initState() {
-    super.initState();
-  }
+  final _text = TextEditingController();
+  bool _validate = false;
 
-  loadStore(){
-    print("hello");
+  @override
+  void dispose() {
+    _text.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.light,
-        backgroundColor: Colors.white,
-        elevation: 1.0,
-        iconTheme: new IconThemeData(color: Colors.black),
-        actions: <Widget>[
-          Badge(
-            position: BadgePosition.topRight(top: 5, right: 5),
-            badgeColor: Colors.green,
-            badgeContent: Text('3'),
-            child:  IconButton(
-                icon: Icon(Ionicons.ios_cart,),
-                onPressed: () {
-                  db.addUser();
-                }
-            ),
-          ),
-          IconButton(
-              icon: Icon(Ionicons.ios_search,),
-              onPressed: () async{
-
-              }
-          ),
-        ],
-        title: Text(
-          "Alturush",
-          style: GoogleFonts.fasterOne(
-              color: Colors.green,
-              fontStyle: FontStyle.normal,
-              fontSize: 18.0),
-        ),
+        title: Text('TextField Demo'),
       ),
-      drawer:Container(
-        color: Colors.red,
-        width: 280,
-        child: Drawer(
-          child: Container(
-            color: Colors.white,
-            child:ListView(
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                Container(
-                  child:Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 70.0,
-                      ),
-                      SizedBox(
-                        height: 30.0,
-                      ),
-                      Center(
-                        child: Text("Sign up/Log in",style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 23.0),),
-                      ),
-                      SizedBox(
-                        height: 50.0,
-                      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('Error Showed if Field is Empty on Submit button Pressed'),
+            TextField(
+              controller: _text,
+              decoration: InputDecoration(
 
-                      ListTile(
-                          leading: Icon(Icons.person,size: 30.0,color: Colors.green,),
-                          title: Text('Profile',style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 16.0),),
-                          onTap: () async{
-
-                          }
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.info_outline,size: 30.0,color: Colors.green,),
-                        title: Text('About',style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 16.0),),
-                      ),
-                      ListTile(
-                          leading: Icon(Icons.help_outline,size: 30.0,color: Colors.green,),
-                          title: Text('Log out',style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 16.0),),
-                          onTap: () async{
-
-                          }
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                errorText: _validate ? 'Value Can\'t Be Empty' : null,
+              ),
             ),
-          ),
+            RaisedButton(
+              onPressed: () {
+                setState(() {
+                  _text.text.isEmpty ? _validate = true : _validate = false;
+                });
+              },
+              child: Text('Submit'),
+              textColor: Colors.white,
+              color: Colors.blueAccent,
+            )
+          ],
         ),
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection("user").snapshots(),
-        builder: (context, snapshot) {
-          return !snapshot.hasData
-              ? Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                itemCount: snapshot.data.documents.length,
-                itemBuilder: (context, index) {
-                  DocumentSnapshot data = snapshot.data.documents[index];
-                  return ListTile(
-                      title: Text(data['age'].toString()),
-
-                  );
-                },
-          );
-        },
       ),
     );
   }
