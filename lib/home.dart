@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         brightness: Brightness.light,
         backgroundColor: Colors.white,
-        elevation: 0.1,
+        elevation: 1.0,
         iconTheme: new IconThemeData(color: Colors.black),
         actions: <Widget>[
           StreamBuilder<QuerySnapshot>(
@@ -350,75 +350,77 @@ class _MyHomePageState extends State<MyHomePage> {
                           itemCount: snapshot.data.documents.length,
                           gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: gridCount,
-                            childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.1),
+                            childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.5),
                           ),
                           itemBuilder: (BuildContext context, int index) {
                           DocumentSnapshot data = snapshot.data.documents[index];
-                          return Card(
-                            elevation: 0.0,
-                            margin: EdgeInsets.all(2),
-                            child:InkWell(
-                              onTap: () async{
-                                var deviceId = await _getId();
-                                Navigator.of(context).push(_itemDetails(deviceId,data.documentID,data['imgSrc'],data['title'],data['pricing']['price'],data['pricing']['price_compare'],data['description']));
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  new Expanded(
-                                    child: Image.network(data['imgSrc'],
-                                      fit: BoxFit.fitHeight,
-                                      alignment: Alignment.center,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 1.0,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20/4,vertical: 20.0 / 4),
-                                    child: Text(data['title'].toString(),
-                                      style: TextStyle(fontSize: 14,),
+                            return Card(
+                                elevation: 0.0,
+                                margin: EdgeInsets.all(2),
+                                child:InkWell(
+                                  onTap: () async{
+                                    var deviceId = await _getId();
+                                    Navigator.of(context).push(_itemDetails(deviceId,data.documentID,data['imgSrc'],data['title'],data['pricing']['price'],data['pricing']['price_compare'],data['description']));
+                                  },
 
-                                    ),
-                                  ),
-                                  Row(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Expanded(
-                                        child:Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 20/4,vertical: 20.0 / 4),
-                                          child: Text(
-                                            "\₱${oCcy.format(data['pricing']['price'])}",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                              color: color,
-                                            ),
-                                          ),
+                                      new Expanded(
+                                        child: Image.network(data['imgSrc'],
+                                          fit: BoxFit.fitHeight,
+                                          alignment: Alignment.center,
+
                                         ),
                                       ),
+                                      SizedBox(
+                                        height: 1.0,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 20/4,vertical: 20.0 / 4),
+                                        child: Text(data['title'].toString(),
+                                          style: TextStyle(fontSize: 14,),
 
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 20/4,vertical: 20.0 / 4),
-                                          child: Text("\₱${oCcy.format(data['pricing']['price_compare'])}",
-                                            style: TextStyle(
-                                              decoration: TextDecoration.lineThrough,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                              color: Colors.grey,
+                                        ),
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child:Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 20/4,vertical: 20.0 / 4),
+                                              child: Text(
+                                                "\₱${oCcy.format(data['pricing']['price'])}",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                  color: color,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
 
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20/4,vertical: 20.0 / 4),
+                                            child: Text("\₱${oCcy.format(data['pricing']['price_compare'])}",
+                                              style: TextStyle(
+                                                decoration: TextDecoration.lineThrough,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ),
+
+                                        ],
+                                      ),
+
+                                      SizedBox(
+                                        height: 5.0,
+                                      ),
                                     ],
                                   ),
-
-                                  SizedBox(
-                                    height: 5.0,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
+                                ),
+                              );
 
                         });
                   },

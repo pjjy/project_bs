@@ -53,11 +53,16 @@ class _CreateAccount extends State<CreateAccount> {
     }
   }
 
-  test(){
-
-      addPhoneNumber(countryCode+_phoneNumber.text);
-
+  checkOut() async{
+    await db.checkOut();
   }
+
+  test() {
+    checkOut();
+//    addPhoneNumber(countryCode + _phoneNumber.text);
+  }
+
+
 
   void _get1() async{
     var q = await _getId();
@@ -243,6 +248,8 @@ class _CreateAccount extends State<CreateAccount> {
                                 validator: (value){
                                   if (value.isEmpty) {
                                     return 'Please enter number';
+                                  }if(value.length < 10 || _phoneNumber.text[0] != '9' ){
+                                    return 'Please enter a valid phone number';
                                   }
                                   return null;
                                 },
@@ -339,9 +346,10 @@ class _CreateAccount extends State<CreateAccount> {
                 padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                 child: SleekButton(
                   onTap: (){
-                    if(_formKey.currentState.validate()){
-                      test();
-                    }
+                    test();
+//                    if(_formKey.currentState.validate()){
+//
+//                    }
                   },
                   style: SleekButtonStyle.flat(
                     color: color,
