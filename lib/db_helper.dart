@@ -39,13 +39,57 @@ class ProjectBs {
    QuerySnapshot snapshot = await fireStoreInstance.collection("user_cart/64a6d6eb0e8cf55c/cart_items").getDocuments();
    fireStoreInstance.collection("customer_order").add(
        {
-         "date": "here"
+         "customer" :  {
+           "contact" : "+63093213216",
+           "location" : "9.6602978 123.8496343"
+         },
+         "name:":{
+           "contact" : "Paul Jearic Niones",
+           "location" : "new york"
+         },
+         "datetime":{
+           "created":"created",
+           "delivered":"delivered",
+           "inTransit":"inTransit",
+           "packaging":"packaging",
+           "updated":"updated"
+         },
+         "order_details":{
+           "deliveryCharge":"400",
+           "tip":"40",
+           "totalPrice":"440",
+         },
+         "recipient":{
+           "contact":"+6309465465",
+           "location":{
+             "barrio":"del carmen este",
+             "landmark":"dool sa akasya",
+             "municipality":"balilihan",
+             "street":"juan street",
+           },
+           "name":"Paul Jearic",
+           "last":"Niones"
+         },
+         "riders":{
+           "contact":"+63985621568",
+           "name":{
+             "first":"Renan",
+             "last":"Ocoy"
+           },
+           "rideRef":"",
+         },
+
+         "status":{
+           "delivery":"True",
+           "inTransit":"True",
+           "packaging":"True"
+         }
        }).then((value){
 
        for(var mes in snapshot.documents){
-         print(mes.documentID);
          fireStoreInstance.collection("customer_order").document(value.documentID).collection("basket").document(mes.documentID).setData({
-           "quantity":mes.data['price']
+           "quantity":mes.data['quantity'],
+           "title":mes.data['title'],
          });
 
        }
@@ -54,10 +98,6 @@ class ProjectBs {
    });
 
   }
-
-//  for(var mes in snapshot.documents){
-//  }
-
 
   Future checkPhoneNumber(checkPhoneNumber) async{
     final QuerySnapshot result = await Firestore.instance.collection('phone_number').where('verified',isEqualTo: "true").where('phone_number', isEqualTo:checkPhoneNumber).getDocuments();
