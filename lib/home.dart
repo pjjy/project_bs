@@ -339,8 +339,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         fontSize: 15.0),
                   ),
                 ),
-                StreamBuilder<QuerySnapshot>(
-                  stream: Firestore.instance.collection("products").snapshots(),
+                FutureBuilder(
+                  future: Firestore.instance.collection("products").getDocuments(),
                   builder: (context, snapshot) {
                     return !snapshot.hasData ?
                         Center(child: CircularProgressIndicator()):
