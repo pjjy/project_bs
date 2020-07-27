@@ -80,9 +80,9 @@ class ProjectBs {
          },
 
          "status":{
-           "delivery":"True",
-           "inTransit":"True",
-           "packaging":"True"
+           "delivery":true,
+           "inTransit":true,
+           "packaging":true
          }
        }).then((value){
 
@@ -90,13 +90,10 @@ class ProjectBs {
          fireStoreInstance.collection("customer_order").document(value.documentID).collection("basket").document(mes.documentID).setData({
            "quantity":mes.data['quantity'],
            "title":mes.data['title'],
+           "imagePath":mes.data['imagePath']
          });
-
        }
-
-
    });
-
   }
 
   Future checkPhoneNumber(checkPhoneNumber) async{
@@ -114,7 +111,7 @@ class ProjectBs {
        fireStoreInstance.document("user_cart/$deviceId").setData(
         {
           //date here
-        }).then((value) {
+        }).then((value){
           fireStoreInstance.collection("user_cart").document(deviceId).collection("cart_items").document(documentID).setData({
                   "quantity":itemCount,
                   'imgPath':imgSrc,

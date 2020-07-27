@@ -96,8 +96,8 @@ class _UserCart extends State<UserCart> {
           children: <Widget>[
             Expanded(
                 child: Scrollbar(
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: Firestore.instance.collection("user_cart").document(deviceId).collection('cart_items').snapshots(),
+                  child: FutureBuilder(
+                    future: Firestore.instance.collection("user_cart").document(deviceId).collection('cart_items').getDocuments(),
                     builder: (context, snapshot) {
                       return !snapshot.hasData ?
                       Center(child: CircularProgressIndicator()):
