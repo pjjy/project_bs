@@ -360,14 +360,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                 child:InkWell(
                                   onTap: () async{
                                     var deviceId = await _getId();
-                                    Navigator.of(context).push(_itemDetails(deviceId,data.documentID,data['imgSrc'],data['title'],data['pricing']['price'],data['pricing']['price_compare'],data['description']));
-                                  },
+                                    Navigator.of(context).push(_itemDetails(deviceId,data.documentID,data['image']['imgSrc'],data['info']['title'],double.parse(data['pricing']['price']),double.parse(data['pricing']['price_compare']),data['info']['description']));
+                                    print(data['pricing']['price']);
+                                    print(data['pricing']['price_compare']);
+                                   },
 
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
                                       new Expanded(
-                                        child: Image.network(data['imgSrc'],
+                                        child: Image.network(data['image']['imgSrc'],
                                           fit: BoxFit.fitHeight,
                                           alignment: Alignment.center,
 
@@ -378,7 +380,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 20/4,vertical: 20.0 / 4),
-                                        child: Text(data['title'].toString(),
+                                        child: Text(data['info']['title'].toString(),
                                           style: TextStyle(fontSize: 14,),
 
                                         ),
