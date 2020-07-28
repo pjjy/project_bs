@@ -15,8 +15,8 @@ class ItemDetail extends StatefulWidget {
   final String documentID;
   final String imgSrc;
   final String title;
-  final double pricing;
-  final double priceCompare;
+  final  pricing;
+  final  priceCompare;
   final String description;
   ItemDetail({Key key, @required this.deviceId, this.documentID,this.imgSrc,this.title,this.pricing,this.priceCompare,this.description}): super(key: key);
   @override
@@ -267,12 +267,12 @@ class _ItemDetail extends State<ItemDetail>{
                     children: <Widget>[
                       Padding(
                           padding: EdgeInsets.fromLTRB(30.0, 20.0, 5.0, 5.0),
-                          child: new Text("\₱${oCcy.format(12).toString()}", style: TextStyle(fontSize: 24,color:color,),),
+                          child: new Text("\₱${oCcy.format(widget.pricing)}", style: TextStyle(fontSize: 24,color:color,),),
                       ),
 
                       Padding(
                         padding: EdgeInsets.fromLTRB(30.0, 20.0, 5.0, 5.0),
-                        child: new Text("\₱${oCcy.format(12)}", style: TextStyle(decoration: TextDecoration.lineThrough,fontSize: 24,color: Colors.grey,),),
+                        child: new Text("\₱${oCcy.format(widget.priceCompare)}", style: TextStyle(decoration: TextDecoration.lineThrough,fontSize: 24,color: Colors.grey,),),
                       ),
                     ],
                   ),

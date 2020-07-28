@@ -111,8 +111,8 @@ class _UserCart extends State<UserCart> {
 
                               },
                               child: Container(
-                                height: 140.0,
-                                width: 30.0,
+                                height: MediaQuery.of(context).size.height / 7.0,
+                                width: MediaQuery.of(context).size.width / 10.0,
                                 child: Card(
                                   color: Colors.transparent,
                                   child: Column(
@@ -126,8 +126,8 @@ class _UserCart extends State<UserCart> {
                                           Padding(
                                             padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
                                             child: Container(
-                                                width: 80.0,
-                                                height: 80.0,
+                                                width: MediaQuery.of(context).size.width / 7.0,
+                                                height: MediaQuery.of(context).size.height / 10.0,
                                                 decoration: new BoxDecoration(
                                                   color: Colors.transparent,
                                                   shape: BoxShape.rectangle,
@@ -142,12 +142,12 @@ class _UserCart extends State<UserCart> {
                                               crossAxisAlignment:CrossAxisAlignment.start,
                                               children: <Widget>[
                                                 Padding(
-                                                  padding: EdgeInsets.fromLTRB(15, 1, 5, 1),
+                                                  padding: EdgeInsets.fromLTRB(15.0, 1.0,  5.0, 1.0),
                                                   child:Text(data['title'], overflow: TextOverflow.clip,
                                                     style: GoogleFonts.openSans(
                                                         fontStyle:
                                                         FontStyle.normal,
-                                                        fontSize: 15.0),
+                                                        fontSize: MediaQuery.of(context).size.width / 28.0),
                                                   ),
                                                 ),
 
@@ -157,7 +157,7 @@ class _UserCart extends State<UserCart> {
                                                     style: GoogleFonts.openSans(
                                                         fontStyle:
                                                         FontStyle.normal,
-                                                        fontSize: 15.0),
+                                                        fontSize:MediaQuery.of(context).size.width / 30.0),
                                                   ),
                                                 ),
                                                 Row(
@@ -169,7 +169,7 @@ class _UserCart extends State<UserCart> {
                                                         style: TextStyle(
                                                           fontWeight:
                                                           FontWeight.bold,
-                                                          fontSize: 18,
+                                                          fontSize: MediaQuery.of(context).size.width / 28.0,
                                                           color:color,
                                                         ),
                                                       ),

@@ -360,9 +360,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 child:InkWell(
                                   onTap: () async{
                                     var deviceId = await _getId();
-                                    Navigator.of(context).push(_itemDetails(deviceId,data.documentID,data['image']['imgSrc'],data['info']['title'],double.parse(data['pricing']['price']),double.parse(data['pricing']['price_compare']),data['info']['description']));
-                                    print(data['pricing']['price']);
-                                    print(data['pricing']['price_compare']);
+                                    Navigator.of(context).push(_itemDetails(deviceId,data.documentID,data['image']['imgSrc'],data['info']['title'],data['pricing']['price'],data['pricing']['price_compare'],data['info']['description']));
                                    },
 
                                   child: Column(
@@ -415,7 +413,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                         ],
                                       ),
-
                                       SizedBox(
                                         height: 5.0,
                                       ),
@@ -423,7 +420,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 ),
                               );
-
                         });
                   },
                  ),
