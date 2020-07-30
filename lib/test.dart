@@ -1,57 +1,50 @@
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_pro/carousel_pro.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'package:badges/badges.dart';
-import 'db_helper.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
-class Test extends StatefulWidget {
 
+class HomePage extends StatefulWidget {
   @override
-  _Test createState() => _Test();
+  State createState() => _HomePageState();
 }
 
-class _Test extends State<Test> {
-  final _text = TextEditingController();
-  bool _validate = false;
+class _HomePageState extends State<HomePage> {
+  final List<TitledNavigationBarItem> items = [
+    TitledNavigationBarItem(title: Text('Home'), icon: Icons.home),
+    TitledNavigationBarItem(title: Text('Search'), icon: Icons.search),
+    TitledNavigationBarItem(title: Text('Bag'), icon: Icons.card_travel),
+    TitledNavigationBarItem(title: Text('Orders'), icon: Icons.shopping_cart),
+    TitledNavigationBarItem(title: Text('Profile'), icon: Icons.person_outline),
+  ];
 
-  @override
-  void dispose() {
-    _text.dispose();
-    super.dispose();
-  }
+  bool navBarMode = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TextField Demo'),
+        title: Text("Titled Bottom Bar"),
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text('Error Showed if Field is Empty on Submit button Pressed'),
-            TextField(
-              controller: _text,
-              decoration: InputDecoration(
-
-                errorText: _validate ? 'Value Can\'t Be Empty' : null,
-              ),
-            ),
-            RaisedButton(
-              onPressed: () {
-                setState(() {
-                  _text.text.isEmpty ? _validate = true : _validate = false;
-                });
+            Text("Reversed mode:"),
+            Switch(
+              value: navBarMode,
+              onChanged: (v) {
+                setState(() => navBarMode = v);
               },
-              child: Text('Submit'),
-              textColor: Colors.white,
-              color: Colors.blueAccent,
-            )
+            ),
           ],
         ),
+      ),
+      bottomNavigationBar: TitledBottomNavigationBar(
+        onTap: (index) => print("Selected Index: $index"),
+        reverse: navBarMode,
+        curve: Curves.easeInBack,
+        items: items,
+        activeColor: Colors.red,
+        inactiveColor: Colors.blueGrey,
       ),
     );
   }

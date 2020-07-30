@@ -151,7 +151,6 @@ class _ItemDetail extends State<ItemDetail>{
                 )
             ),
           ),
-
           SliverList(
             delegate: SliverChildBuilderDelegate((context, index) => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

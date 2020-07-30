@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'item_details.dart';
 import 'package:device_info/device_info.dart';
 import 'user_cart.dart';
+import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 class MyHomePage extends StatefulWidget {
 
@@ -26,6 +27,15 @@ class _MyHomePageState extends State<MyHomePage> {
   var deviceId;
   int gridCount;
   Color color = const Color(0xff0084ff);
+
+  final List<TitledNavigationBarItem> items = [
+    TitledNavigationBarItem(title: Text('Home'), icon: Ionicons.md_home),
+    TitledNavigationBarItem(title: Text('Categories'), icon: Ionicons.md_grid),
+    TitledNavigationBarItem(title: Text('Wish'), icon: Ionicons.md_heart),
+    TitledNavigationBarItem(title: Text('Profile'), icon: Ionicons.md_person),
+  ];
+
+  bool navBarMode = false;
 
   Future _getId() async {
     var dId;
@@ -60,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         brightness: Brightness.light,
         backgroundColor: Colors.white,
-        elevation: 1.0,
+        elevation: 0.0,
         iconTheme: new IconThemeData(color: Colors.black),
         actions: <Widget>[
           StreamBuilder<QuerySnapshot>(
@@ -354,20 +364,21 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           itemBuilder: (BuildContext context, int index) {
                           DocumentSnapshot data = snapshot.data.documents[index];
+
                             return Card(
                                 elevation: 0.0,
                                 margin: EdgeInsets.all(2),
                                 child:InkWell(
                                   onTap: () async{
                                     var deviceId = await _getId();
-                                    Navigator.of(context).push(_itemDetails(deviceId,data.documentID,data['image']['imgSrc'],data['info']['title'],data['pricing']['price'],data['pricing']['price_compare'],data['info']['description']));
+                                    Navigator.of(context).push(_itemDetails(deviceId,data.documentID,data['images'][0]['imgSrc'],data['info']['title'],data['pricing']['price'],data['pricing']['price_compare'],data['info']['description']));
                                    },
 
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
                                       new Expanded(
-                                        child: Image.network(data['image']['imgSrc'],
+                                        child: Image.network(data['images'][0]['imgSrc'],
                                           fit: BoxFit.fitHeight,
                                           alignment: Alignment.center,
 
@@ -427,6 +438,16 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ],
+        ),
+        bottomNavigationBar: TitledBottomNavigationBar(
+          enableShadow: false,
+          onTap: (index) => print("Selected Index: $index"),
+          reverse: navBarMode,
+          curve: Curves.easeInBack,
+          items: items,
+          activeColor: color,
+
+          inactiveColor: Colors.blueGrey,
         ),
       );
     }
