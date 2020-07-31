@@ -360,77 +360,124 @@ class _MyHomePageState extends State<MyHomePage> {
                           itemCount: snapshot.data.documents.length,
                           gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: gridCount,
-                            childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.5),
+                            childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height / 1.1),
                           ),
                           itemBuilder: (BuildContext context, int index) {
                           DocumentSnapshot data = snapshot.data.documents[index];
 
-                            return Card(
-                                elevation: 0.0,
-                                margin: EdgeInsets.all(2),
-                                child:InkWell(
+                          return GestureDetector(
                                   onTap: () async{
                                     var deviceId = await _getId();
                                     Navigator.of(context).push(_itemDetails(deviceId,data.documentID,data['images'][0]['imgSrc'],data['info']['title'],data['pricing']['price'],data['pricing']['price_compare'],data['info']['description']));
                                    },
-
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      new Expanded(
-                                        child: Image.network(data['images'][0]['imgSrc'],
-                                          fit: BoxFit.fitHeight,
-                                          alignment: Alignment.center,
-
-                                        ),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                            top: BorderSide(
+                                                width: 1.0, color: Colors.grey),
+                                            right: BorderSide(
+                                                width: 1.0, color: Colors.grey),
+                                            left: BorderSide(
+                                                width: 1.0, color: Colors.grey),
+                                            bottom: BorderSide(
+                                                width: 1.0, color: Colors.grey)),
+                                        color: Colors.white,
                                       ),
-                                      SizedBox(
-                                        height: 1.0,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 20/4,vertical: 20.0 / 4),
-                                        child: Text(data['info']['title'].toString(),
-                                          style: TextStyle(fontSize: 14,),
-
-                                        ),
-                                      ),
-                                      Row(
+                                      margin: EdgeInsets.all(1),
+                                      child: Column(
                                         children: <Widget>[
-                                          Expanded(
-                                            child:Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 20/4,vertical: 20.0 / 4),
-                                              child: Text(
-                                                "\₱${oCcy.format(data['pricing']['price'])}",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                  color: color,
-                                                ),
-                                              ),
+                                          new Expanded(
+                                            child: Image.network(
+                                              data['images'][0]['imgSrc'],
+                                              fit: BoxFit.scaleDown,
+                                              alignment: Alignment.center,
                                             ),
                                           ),
-
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20/4,vertical: 20.0 / 4),
-                                            child: Text("\₱${oCcy.format(data['pricing']['price_compare'])}",
+                                          SizedBox(
+                                            height: 25,
+                                          ),
+                                          ListTile(
+                                            title: Text(
+                                              "${data['info']['title']}",
                                               style: TextStyle(
-                                                decoration: TextDecoration.lineThrough,
+                                                  fontSize: 15,
+                                                  color: Colors.black87),
+                                            ),
+                                            subtitle: Text(
+                                              "\₱${oCcy.format(data['pricing']['price'])}",
+                                              style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16,
-                                                color: Colors.grey,
+                                                color: Colors.orange,
                                               ),
                                             ),
                                           ),
-
+                                          SizedBox(
+                                            height: 25,
+                                          ),
                                         ],
                                       ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
+                                    ),
+//                                  child: Column(
+//                                    crossAxisAlignment: CrossAxisAlignment.start,
+//                                    children: <Widget>[
+
+
+
+//                                      new Expanded(
+//                                        child: Image.network(data['images'][0]['imgSrc'],
+//                                          fit: BoxFit.fitHeight,
+//                                          alignment: Alignment.center,
+//
+//                                        ),
+//                                      ),
+//                                      SizedBox(
+//                                        height: 1.0,
+//                                      ),
+//                                      Padding(
+//                                        padding: const EdgeInsets.symmetric(horizontal: 20/4,vertical: 20.0 / 4),
+//                                        child: Text(data['info']['title'].toString(),
+//                                          style: TextStyle(fontSize: 14,),
+//
+//                                        ),
+//                                      ),
+//                                      Row(
+//                                        children: <Widget>[
+//                                          Expanded(
+//                                            child:Padding(
+//                                              padding: const EdgeInsets.symmetric(horizontal: 20/4,vertical: 20.0 / 4),
+//                                              child: Text(
+//                                                "\₱${oCcy.format(data['pricing']['price'])}",
+//                                                style: TextStyle(
+//                                                  fontWeight: FontWeight.bold,
+//                                                  fontSize: 16,
+//                                                  color: color,
+//                                                ),
+//                                              ),
+//                                            ),
+//                                          ),
+//
+//                                          Padding(
+//                                            padding: const EdgeInsets.symmetric(horizontal: 20/4,vertical: 20.0 / 4),
+//                                            child: Text("\₱${oCcy.format(data['pricing']['price_compare'])}",
+//                                              style: TextStyle(
+//                                                decoration: TextDecoration.lineThrough,
+//                                                fontWeight: FontWeight.bold,
+//                                                fontSize: 16,
+//                                                color: Colors.grey,
+//                                              ),
+//                                            ),
+//                                          ),
+//
+//                                        ],
+//                                      ),
+//                                      SizedBox(
+//                                        height: 5.0,
+//                                      ),
+//                                    ],
+//                                  ),
+                                );
+
                         });
                   },
                  ),
