@@ -364,8 +364,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           itemBuilder: (BuildContext context, int index) {
                           DocumentSnapshot data = snapshot.data.documents[index];
-
-                          return GestureDetector(
+                          return InkWell(
                                   onTap: () async{
                                     var deviceId = await _getId();
                                     Navigator.of(context).push(_itemDetails(deviceId,data.documentID,data['images'][0]['imgSrc'],data['info']['title'],data['pricing']['price'],data['pricing']['price_compare'],data['info']['description']));
@@ -373,14 +372,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                         border: Border(
-                                            top: BorderSide(
-                                                width: 1.0, color: Colors.grey),
-                                            right: BorderSide(
-                                                width: 1.0, color: Colors.grey),
-                                            left: BorderSide(
-                                                width: 1.0, color: Colors.grey),
-                                            bottom: BorderSide(
-                                                width: 1.0, color: Colors.grey)),
+//                                            top: BorderSide(width: 1.0, color: Colors.grey),
+//                                            right: BorderSide(width: 1.0, color: Colors.grey),
+//                                            left: BorderSide(width: 1.0, color: Colors.grey),
+                                            bottom: BorderSide(width: 1.0, color: color)),
                                         color: Colors.white,
                                       ),
                                       margin: EdgeInsets.all(1),
