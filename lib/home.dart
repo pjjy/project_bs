@@ -403,7 +403,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16,
-                                                color: Colors.orange,
+                                                color: color,
                                               ),
                                             ),
                                           ),

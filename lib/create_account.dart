@@ -18,8 +18,9 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccount extends State<CreateAccount> {
   var deviceId;
   final db = ProjectBs();
+  final _email = TextEditingController();
   final _phoneNumber = TextEditingController();
-  final _name = TextEditingController();
+  final _fullName = TextEditingController();
   final _password = TextEditingController();
   final _address = TextEditingController();
   final _phoneNumberLogIn = TextEditingController();
@@ -52,18 +53,19 @@ class _CreateAccount extends State<CreateAccount> {
     }
     if(exist == false){
       validate = false;
-      Navigator.of(context).push(_verifyPhone(_phoneNumber.text));
-      await db.addPhoneNumber(phoneNumber);
+//      Navigator.of(context).push(_verifyPhone(_phoneNumber.text));
+//      await db.addPhoneNumber(phoneNumber);
     }
   }
 
-  checkOut() async{
-    await db.checkOut();
-  }
-
+//
+//  checkOut() async{
+//    await db.checkOut();
+//  }
+//
   test() {
-    checkOut();
-//    addPhoneNumber(countryCode + _phoneNumber.text);
+//    checkOut();
+    addPhoneNumber(countryCode + _phoneNumber.text);
   }
 
 
@@ -154,18 +156,53 @@ class _CreateAccount extends State<CreateAccount> {
                                   Padding(
                                     padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
                                     child: new Text(
-                                      "Name",
-                                      style: GoogleFonts.openSans(
-                                          fontStyle: FontStyle.normal, fontSize: 15.0),
+                                      "Email",
+                                      style: GoogleFonts.openSans(color: Colors.black54, fontStyle: FontStyle.normal, fontSize: 15.0),
                                     ),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: 30.0, vertical: 5.0),
+                                        horizontal: 20.0, vertical: 5.0),
                                     child: new TextFormField(
                                       textInputAction: TextInputAction.done,
                                       cursorColor:Colors.blueGrey,
-                                      controller: _name,
+                                      controller: _email,
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'Please enter email';
+                                        }if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)){
+                                          return 'Please enter a valid email';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        hintText: 'juan@yourmail.com',
+                                        hintStyle:  GoogleFonts.openSans(color: Colors.grey,fontStyle: FontStyle.normal, fontSize: 15.0),
+                                        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.blueGrey,
+                                              width: 2.0),
+                                        ),
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(3.0)),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
+                                    child: new Text(
+                                      "Full Name",
+                                      style: GoogleFonts.openSans(color: Colors.black54,fontStyle: FontStyle.normal, fontSize: 15.0),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20.0, vertical: 5.0),
+                                    child: new TextFormField(
+                                      textInputAction: TextInputAction.done,
+                                      cursorColor:Colors.blueGrey,
+                                      controller: _fullName,
                                       validator: (value) {
                                         if (value.isEmpty) {
                                           return 'Please enter full name';
@@ -173,8 +210,9 @@ class _CreateAccount extends State<CreateAccount> {
                                         return null;
                                       },
                                       decoration: InputDecoration(
-                                        contentPadding:
-                                        EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
+                                        hintText: 'Juan Dela Cruz',
+                                        hintStyle:  GoogleFonts.openSans(color: Colors.grey,fontStyle: FontStyle.normal, fontSize: 15.0),
+                                        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                               color: Colors.blueGrey,
@@ -189,13 +227,12 @@ class _CreateAccount extends State<CreateAccount> {
                                     padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
                                     child: new Text(
                                       "Password",
-                                      style: GoogleFonts.openSans(
-                                          fontStyle: FontStyle.normal, fontSize: 15.0),
+                                      style: GoogleFonts.openSans(color: Colors.black54,fontStyle: FontStyle.normal, fontSize: 15.0),
                                     ),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: 30.0, vertical: 5.0),
+                                        horizontal: 20.0, vertical: 5.0),
                                     child: new TextFormField(
                                       obscureText: true,
                                       textInputAction: TextInputAction.done,
@@ -224,12 +261,11 @@ class _CreateAccount extends State<CreateAccount> {
                                     padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
                                     child: new Text(
                                       "Phone number",
-                                      style: GoogleFonts.openSans(
-                                          fontStyle: FontStyle.normal, fontSize: 15.0),
+                                      style: GoogleFonts.openSans(color: Colors.black54,fontStyle: FontStyle.normal, fontSize: 15.0),
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
+                                    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                                     child: Row(
                                       children: <Widget>[
                                         Flexible(
@@ -247,8 +283,10 @@ class _CreateAccount extends State<CreateAccount> {
                                               }
                                               return null;
                                             },
+
                                             decoration: InputDecoration(
-                                              prefixIcon: Padding(padding: EdgeInsets.all(15), child: Text('+63',style: TextStyle(fontSize: 16.0),)),
+                                              errorText: validate == true ? 'This number is already taken' : null,
+                                              prefixIcon: Padding(padding: EdgeInsets.all(15), child: Text('+63',style:   TextStyle(color: Colors.grey,fontStyle: FontStyle.normal, fontSize: 15.0),)),
                                               counterText: "",
                                               contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
                                               focusedBorder: OutlineInputBorder(
@@ -268,14 +306,11 @@ class _CreateAccount extends State<CreateAccount> {
                                   Padding(
                                     padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
                                     child: new Text(
-                                      "Address",
-                                      style: GoogleFonts.openSans(
-                                          fontStyle: FontStyle.normal, fontSize: 15.0),
+                                      "Address",style: GoogleFonts.openSans(color: Colors.black54,fontStyle: FontStyle.normal, fontSize: 15.0),
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 30.0, vertical: 5.0),
+                                    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                                     child: new TextFormField(
                                       textInputAction: TextInputAction.done,
                                       cursorColor: Colors.blueGrey,
@@ -304,8 +339,7 @@ class _CreateAccount extends State<CreateAccount> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 30.0, vertical: 1.0),
+                        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 1.0),
                         child: Center(
                           child: Text(
                             "By signing up, you agree to our",
@@ -316,7 +350,7 @@ class _CreateAccount extends State<CreateAccount> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 30.0, vertical: 1.0),
+                            horizontal: 20.0, vertical: 1.0),
                         child: Center(
                           child: GestureDetector(
                             onTap: (){
@@ -333,13 +367,12 @@ class _CreateAccount extends State<CreateAccount> {
                         ),
                       ),
                       Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                           child: SleekButton(
                             onTap: (){
                               test();
-                            //  if(_formKey.currentState.validate()){
-                            //
-                            //  }
+                              if(_formKey.currentState.validate()){
+                              }
                             },
                             style: SleekButtonStyle.flat(
                               color: color,
@@ -377,7 +410,7 @@ class _CreateAccount extends State<CreateAccount> {
                             Padding(
                               padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
                               child: new Text(
-                                "Phone number",
+                                "Email",
                                 style: GoogleFonts.openSans(
                                     fontStyle: FontStyle.normal, fontSize: 15.0),
                               ),
@@ -396,7 +429,8 @@ class _CreateAccount extends State<CreateAccount> {
                                   return null;
                                 },
                                 decoration: InputDecoration(
-                                  prefixIcon: Padding(padding: EdgeInsets.all(15), child: Text('+63',style: TextStyle(fontSize: 16.0),)),
+                                  hintText: 'juan@yourmail.com',
+                                  hintStyle:  GoogleFonts.openSans(color: Colors.grey,fontStyle: FontStyle.normal, fontSize: 15.0),
                                   contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.blueGrey, width: 2.0),
@@ -426,8 +460,7 @@ class _CreateAccount extends State<CreateAccount> {
                                   return null;
                                 },
                                 decoration: InputDecoration(
-                                  contentPadding:
-                                  EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
+                                  contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
                                   focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blueGrey, width: 2.0),
                                   ),
                                   border: OutlineInputBorder(
@@ -446,7 +479,7 @@ class _CreateAccount extends State<CreateAccount> {
                       padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
                       child: SleekButton(
                         onTap: (){
-//                          test();
+                            test();
                             if(_formKey1.currentState.validate()){
 
                             }
@@ -478,20 +511,4 @@ class _CreateAccount extends State<CreateAccount> {
 
     );
   }
-}
-
-Route _verifyPhone(phoneNumber) {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => VerifyPhone(phoneNumber:phoneNumber),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(0.0, 1.0);
-      var end = Offset.zero;
-      var curve = Curves.decelerate;
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
 }
