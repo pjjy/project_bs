@@ -100,7 +100,7 @@ class _CreateAccount extends State<CreateAccount> {
           appBar:AppBar(
             brightness: Brightness.light,
             backgroundColor: Colors.white,
-            elevation: 1.0,
+            elevation: 0.0,
             iconTheme: new IconThemeData(color: Colors.black),
             leading: IconButton(
               icon: Icon(Ionicons.md_arrow_back, color: Colors.black),
@@ -367,7 +367,7 @@ class _CreateAccount extends State<CreateAccount> {
                         ),
                       ),
                       Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
                           child: SleekButton(
                             onTap: (){
                               test();
@@ -387,7 +387,7 @@ class _CreateAccount extends State<CreateAccount> {
                                 style: GoogleFonts.openSans(
                                     fontStyle: FontStyle.normal,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 15.0),
+                                    fontSize: 17.0),
                               ),
                             ),
                           )
@@ -416,7 +416,7 @@ class _CreateAccount extends State<CreateAccount> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
+                              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                               child: new TextFormField(
                                 keyboardType:TextInputType.number,
                                 textInputAction: TextInputAction.done,
@@ -447,7 +447,7 @@ class _CreateAccount extends State<CreateAccount> {
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 30.0, vertical: 5.0),
+                                  horizontal: 20.0, vertical: 5.0),
                               child: new TextFormField(
                                 obscureText: true,
                                 textInputAction: TextInputAction.done,
@@ -475,8 +475,7 @@ class _CreateAccount extends State<CreateAccount> {
                       ),
                     ),
                   ),
-                  Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                  Padding(padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
                       child: SleekButton(
                         onTap: (){
                             test();
@@ -497,7 +496,7 @@ class _CreateAccount extends State<CreateAccount> {
                             style: GoogleFonts.openSans(
                                 fontStyle: FontStyle.normal,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 15.0),
+                                fontSize: 17.0),
                           ),
                         ),
                       )

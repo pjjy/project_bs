@@ -103,18 +103,18 @@ class _ItemDetail extends State<ItemDetail>{
                 builder: (context, snapshot) {
                   return !snapshot.hasData ?
                   Center(
-                      child: Badge(
-                        animationType: BadgeAnimationType.fade,
-                        position: BadgePosition.topRight(top: 5, right: 5),
-                        badgeColor: color,
-                        badgeContent: Text('0',style: TextStyle(color: Colors.white,),),
-                        child:  IconButton(
-                            icon: Icon(Ionicons.ios_cart,),
-                            onPressed:(){
-                              Navigator.of(context).push(_viewCart());
-                            }
-                        ),
+                    child: Badge(
+                      animationType: BadgeAnimationType.fade,
+                      position: BadgePosition.topRight(top: 5, right: 5),
+                      badgeColor: color,
+                      badgeContent: Text('0',style: TextStyle(color: Colors.white,),),
+                      child:  IconButton(
+                          icon: Icon(Ionicons.ios_cart,),
+                          onPressed:(){
+                            Navigator.of(context).push(_viewCart());
+                          }
                       ),
+                    ),
                   ):
                   Badge(
                     animationType: BadgeAnimationType.fade,
@@ -153,144 +153,141 @@ class _ItemDetail extends State<ItemDetail>{
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate((context, index) => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    height: 50.0,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20.0, 10.0, 5.0, 10.0),
+                  child:IconButton(
+                    tooltip: "Add to wish list",
+                    icon: Icon(Ionicons.md_heart_empty,size: 30.0, color: Colors.red),
+                    onPressed: () => Navigator.of(context).pop(),
                   ),
-                  Center(
-                    child:Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        FlatButton(
-                          onPressed: (){
+                ),
 
-                          },
-                          child: new Text('-',style: TextStyle(fontSize: 25,color: Colors.black,),),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(5, 20, 5, 5),
-                        ),
-                        Container(
-                          width: 80,
-                          child: StreamBuilder<DocumentSnapshot>(
-                                stream: Firestore.instance.collection('user_cart').document(widget.deviceId).collection('cart_items').document(widget.documentID).snapshots(),
-                                builder: (context, snapshot) {
-                                if (!snapshot.hasData || !snapshot.data.exists) {
-                                  itemCount.text = "1";
-                                  return TextField(
-                                    onChanged: (text) {
-                                      //itemCount.clear();
-                                    },
-                                    style: new TextStyle(
-                                        color: color,
-                                        //fontSize: 18.0,
-                                        fontWeight: FontWeight.bold
-                                    ),
-                                    controller: itemCount,
-                                    maxLength: 3,
-                                    textAlign: TextAlign.center,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[.-]'))],
-                                    cursorColor: Colors.blueGrey.withOpacity(0.8),
-                                    decoration: InputDecoration(
-                                      counterText: "",
-                                      contentPadding: EdgeInsets.all(20.0),
-                                      focusedBorder:OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blueGrey.withOpacity(0.8), width: 2.0),
-                                      ),
-                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(3.0)),
-                                    ),
-                                  );
-                                } else {
-                                  Map<String, dynamic> documentFields = snapshot.data.data;
-                                  itemCount.text = documentFields['quantity'].toString();
-                                      return TextField(
-                                        onChanged: (text) {
-                                          //itemCount.clear();
-                                        },
-                                        style: new TextStyle(
-                                            color: color,
-                                            //fontSize: 18.0,
-                                            fontWeight: FontWeight.bold
-                                        ),
-                                        controller: itemCount,
-                                        maxLength: 3,
-                                        textAlign: TextAlign.center,
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[.-]'))],
-                                        cursorColor: Colors.blueGrey.withOpacity(0.8),
-                                        decoration: InputDecoration(
-                                          counterText: "",
-                                          contentPadding: EdgeInsets.all(20.0),
-                                          focusedBorder:OutlineInputBorder(
-                                            borderSide: BorderSide(color: Colors.blueGrey.withOpacity(0.8), width: 2.0),
-                                          ),
-                                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(3.0)),
-                                        ),
-                                  );
-                                }
-                          }),
-//
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(5, 20, 5, 5),
-                        ),
-                        FlatButton(
-                          onPressed: (){
-                          },
-                          child: new Text('+',style: TextStyle(fontSize: 25,color: Colors.black,),),
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-                      child:SleekButton(
-                        onTap: () {
-                          addToCart(widget.deviceId,widget.documentID,int.parse(itemCount.text),widget.pricing,widget.title,widget.description,widget.imgSrc);
-                         },
-                        style: SleekButtonStyle.flat(
-                          color: color,
-                          inverted: false,
-                          rounded: false,
-                          size: SleekButtonSize.big,
-                          context: context,
-                        ),
-                        child: Center(
-                          child:Text("Add to cart", style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 15.0),),
-                        ),
-                      )
-                  ),
-                  Row(
+                Center(
+                  child:Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Padding(
-                          padding: EdgeInsets.fromLTRB(30.0, 20.0, 5.0, 5.0),
-                          child: new Text("\₱${oCcy.format(widget.pricing)}", style: TextStyle(fontSize: 24,color:color,),),
-                      ),
+                      FlatButton(
+                        onPressed: (){
 
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(30.0, 20.0, 5.0, 5.0),
-                        child: new Text("\₱${oCcy.format(widget.priceCompare)}", style: TextStyle(decoration: TextDecoration.lineThrough,fontSize: 24,color: Colors.grey,),),
+                        },
+                        child: new Text('-',style: TextStyle(fontSize: 25,color: Colors.black,),),
                       ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(5, 20, 5, 5),
+                      ),
+                      Container(
+                        width: 80,
+                        child: StreamBuilder<DocumentSnapshot>(
+                            stream: Firestore.instance.collection('user_cart').document(widget.deviceId).collection('cart_items').document(widget.documentID).snapshots(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData || !snapshot.data.exists) {
+                                itemCount.text = "1";
+                                return TextField(
+                                  onChanged: (text) {
+                                    //itemCount.clear();
+                                  },
+                                  style: new TextStyle(
+                                      color: color,
+                                      //fontSize: 18.0,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                  controller: itemCount,
+                                  maxLength: 3,
+                                  textAlign: TextAlign.center,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[.-]'))],
+                                  cursorColor: Colors.blueGrey.withOpacity(0.8),
+                                  decoration: InputDecoration(
+                                    counterText: "",
+                                    contentPadding: EdgeInsets.all(20.0),
+                                    focusedBorder:OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.blueGrey.withOpacity(0.8), width: 2.0),
+                                    ),
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(3.0)),
+                                  ),
+                                );
+                              } else {
+                                Map<String, dynamic> documentFields = snapshot.data.data;
+                                itemCount.text = documentFields['quantity'].toString();
+                                return TextField(
+                                  onChanged: (text) {
+                                    //itemCount.clear();
+                                  },
+                                  style: new TextStyle(
+                                      color: color,
+                                      //fontSize: 18.0,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                  controller: itemCount,
+                                  maxLength: 3,
+                                  textAlign: TextAlign.center,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[.-]'))],
+                                  cursorColor: Colors.blueGrey.withOpacity(0.8),
+                                  decoration: InputDecoration(
+                                    counterText: "",
+                                    contentPadding: EdgeInsets.all(20.0),
+                                    focusedBorder:OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.blueGrey.withOpacity(0.8), width: 2.0),
+                                    ),
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(3.0)),
+                                  ),
+                                );
+                              }
+                            }),
+//
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(5, 20, 5, 5),
+                      ),
+                      FlatButton(
+                        onPressed: (){
+                        },
+                        child: new Text('+',style: TextStyle(fontSize: 25,color: Colors.black,),),
+                      )
                     ],
                   ),
+                ),
+                Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(30.0, 20.0, 5.0, 5.0),
+                      child: new Text("\₱${oCcy.format(widget.pricing)}", style: TextStyle(fontSize: 24,color:color,),),
+                    ),
 
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(30.0, 10.0, 5.0, 10.0),
-                    child: new Text(widget.title, style: GoogleFonts.openSans(fontWeight: FontWeight.bold,fontStyle: FontStyle.normal,fontSize: 23.0),),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(30.0, 0.0, 8.0, 20.0),
-                    child: new Text(widget.description, style: GoogleFonts.openSans( fontStyle: FontStyle.normal,fontSize: 18.0),),
-                  ),
-                ],
-              ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(30.0, 20.0, 5.0, 5.0),
+                      child: new Text("\₱${oCcy.format(widget.priceCompare)}", style: TextStyle(decoration: TextDecoration.lineThrough,fontSize: 24,color: Colors.grey,),),
+                    ),
+                  ],
+                ),
+
+                Padding(
+                  padding: EdgeInsets.fromLTRB(30.0, 10.0, 5.0, 10.0),
+                  child: new Text(widget.title, style: GoogleFonts.openSans(fontWeight: FontWeight.bold,fontStyle: FontStyle.normal,fontSize: 23.0),),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(30.0, 0.0, 8.0, 20.0),
+                  child: new Text(widget.description, style: GoogleFonts.openSans( fontStyle: FontStyle.normal,fontSize: 18.0),),
+                ),
+              ],
+            ),
               childCount: 1,
             ),
           ),
 
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          addToCart(widget.deviceId,widget.documentID,int.parse(itemCount.text),widget.pricing,widget.title,widget.description,widget.imgSrc);
+        },
+        tooltip: "Add to cart",
+        backgroundColor: color,
+        child: Icon(Icons.shopping_basket,
+            color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
       ),
     );
   }
@@ -312,5 +309,4 @@ Route _viewCart() {
     },
   );
 }
-
 

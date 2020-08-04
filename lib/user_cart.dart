@@ -68,7 +68,7 @@ class _UserCart extends State<UserCart> {
         appBar:AppBar(
           brightness: Brightness.light,
           backgroundColor: Colors.white,
-          elevation: 1.0,
+          elevation: 0.0,
           iconTheme: new IconThemeData(color: Colors.black),
           leading: IconButton(
             icon: Icon(Ionicons.md_arrow_back, color: Colors.black),
@@ -195,10 +195,34 @@ class _UserCart extends State<UserCart> {
                 ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
               child: Row(
                 children: <Widget>[
-                  Flexible(
+                  Expanded(
+                    child: SleekButton(
+                      onTap: () async {
+                        Navigator.of(context).push(_checkOut());
+                      },
+                      style: SleekButtonStyle.flat(
+                        color:Colors.transparent,
+//                        inverted: false,
+                        rounded: false,
+                        size: SleekButtonSize.big,
+                        context: context,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Total: \₱2,220",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontStyle: FontStyle.normal,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
                     child: SleekButton(
                       onTap: () async {
                         Navigator.of(context).push(_checkOut());
@@ -212,11 +236,11 @@ class _UserCart extends State<UserCart> {
                       ),
                       child: Center(
                         child: Text(
-                          "Next",
+                          "Check Out",
                           style: GoogleFonts.openSans(
                               fontStyle: FontStyle.normal,
                               fontWeight: FontWeight.bold,
-                              fontSize: 15.0),
+                              fontSize: 17.0),
                         ),
                       ),
                     ),

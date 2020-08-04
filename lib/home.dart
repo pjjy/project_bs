@@ -207,7 +207,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               fit: BoxFit.fitWidth),
                         ),
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(35.0, 140.0, 5.0, 0.0),
+                          padding: EdgeInsets.fromLTRB(35.0, 120.0, 5.0, 0.0),
                           child: Container(
                             child: Column(
                               crossAxisAlignment:
@@ -243,12 +243,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           color: Colors.blue,
                           image: DecorationImage(
                               image: new NetworkImage(
-                                'https://i.pinimg.com/originals/f0/0f/ac/f00fac312c7e1a733c47c1644c3be8d3.png',
+                                'https://www.treehugger.com/thmb/oVLB_Em5OBGo8Qc5M9i8g4lg2bM=/768x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/__opt__aboutcom__coeus__resources__content_migration__treehugger__images__2020__04__grocery-cart-a12224a52f8f4e42a3a5464cfe0caa28.jpg',
                               ),
                               fit: BoxFit.fitWidth),
                         ),
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(35.0, 140.0, 5.0, 0.0),
+                          padding: EdgeInsets.fromLTRB(35.0, 120.0, 5.0, 0.0),
                           child: Container(
                             child: Column(
                               crossAxisAlignment:
@@ -265,7 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 Text(
                                   "₱ 500.00",
                                   style: TextStyle(
-                                      color: color,
+                                      color: Colors.black87 ,
                                       fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.normal,
                                       fontSize: 24.0),
@@ -296,7 +296,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: 210,
                   width: 130,
                   child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
+
                       scrollDirection: Axis.horizontal,
                       itemCount: 5,
                       itemBuilder: (BuildContext context, int index) {
@@ -311,7 +311,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       Expanded(
                                         child:  Image.network(
                                           'https://placeimg.com/640/480/any',
-                                          fit: BoxFit.fill,
+                                          fit: BoxFit.scaleDown,
                                         ),
                                       ),
                                       SizedBox(
@@ -372,10 +372,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                         border: Border(
-//                                            top: BorderSide(width: 1.0, color: Colors.grey),
-//                                            right: BorderSide(width: 1.0, color: Colors.grey),
-//                                            left: BorderSide(width: 1.0, color: Colors.grey),
-                                            bottom: BorderSide(width: 1.0, color: color)),
+                                              top: BorderSide(width: 1.0, color: color)),
                                         color: Colors.white,
                                       ),
                                       margin: EdgeInsets.all(1),
@@ -389,13 +386,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                             ),
                                           ),
                                           SizedBox(
-                                            height: 25,
+                                            height: 15,
                                           ),
                                           ListTile(
                                             title: Text(
                                               "${data['info']['title']}",
                                               style: TextStyle(
-                                                  fontSize: 15,
+                                                  fontSize: 13,
                                                   color: Colors.black87),
                                             ),
                                             subtitle: Text(
@@ -413,64 +410,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ],
                                       ),
                                     ),
-//                                  child: Column(
-//                                    crossAxisAlignment: CrossAxisAlignment.start,
-//                                    children: <Widget>[
-
-
-
-//                                      new Expanded(
-//                                        child: Image.network(data['images'][0]['imgSrc'],
-//                                          fit: BoxFit.fitHeight,
-//                                          alignment: Alignment.center,
-//
-//                                        ),
-//                                      ),
-//                                      SizedBox(
-//                                        height: 1.0,
-//                                      ),
-//                                      Padding(
-//                                        padding: const EdgeInsets.symmetric(horizontal: 20/4,vertical: 20.0 / 4),
-//                                        child: Text(data['info']['title'].toString(),
-//                                          style: TextStyle(fontSize: 14,),
-//
-//                                        ),
-//                                      ),
-//                                      Row(
-//                                        children: <Widget>[
-//                                          Expanded(
-//                                            child:Padding(
-//                                              padding: const EdgeInsets.symmetric(horizontal: 20/4,vertical: 20.0 / 4),
-//                                              child: Text(
-//                                                "\₱${oCcy.format(data['pricing']['price'])}",
-//                                                style: TextStyle(
-//                                                  fontWeight: FontWeight.bold,
-//                                                  fontSize: 16,
-//                                                  color: color,
-//                                                ),
-//                                              ),
-//                                            ),
-//                                          ),
-//
-//                                          Padding(
-//                                            padding: const EdgeInsets.symmetric(horizontal: 20/4,vertical: 20.0 / 4),
-//                                            child: Text("\₱${oCcy.format(data['pricing']['price_compare'])}",
-//                                              style: TextStyle(
-//                                                decoration: TextDecoration.lineThrough,
-//                                                fontWeight: FontWeight.bold,
-//                                                fontSize: 16,
-//                                                color: Colors.grey,
-//                                              ),
-//                                            ),
-//                                          ),
-//
-//                                        ],
-//                                      ),
-//                                      SizedBox(
-//                                        height: 5.0,
-//                                      ),
-//                                    ],
-//                                  ),
                                 );
 
                         });
@@ -484,11 +423,10 @@ class _MyHomePageState extends State<MyHomePage> {
         bottomNavigationBar: TitledBottomNavigationBar(
           enableShadow: false,
           onTap: (index) => print("Selected Index: $index"),
-          reverse: navBarMode,
+//          reverse: ,
           curve: Curves.easeInBack,
           items: items,
           activeColor: color,
-
           inactiveColor: Colors.blueGrey,
         ),
       );
