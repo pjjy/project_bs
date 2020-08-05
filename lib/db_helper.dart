@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 class ProjectBs {
   final fireStoreInstance = Firestore.instance;
@@ -17,23 +18,23 @@ class ProjectBs {
     );
   }
 
-  Future addPhoneNumber(phoneNumber) async{
-    fireStoreInstance.document("phone_number/$phoneNumber").setData(
-        {
-          "verified":"false",
-          "phone_number":phoneNumber
-        }
-    );
-  }
+//  Future addPhoneNumber(phoneNumber) async{
+//    fireStoreInstance.document("phone_number/$phoneNumber").setData(
+//        {
+//          "verified":"false",
+//          "phone_number":phoneNumber
+//        }
+//    );
+//  }
 
 //  update number status to verified if otp code is correct
-  Future verifyNumber(phoneNumber) async{
-    fireStoreInstance.collection("phone_number").document(phoneNumber).updateData({"verified":"true"});
-  }
-
-  Future deleteIfTimesUp(phoneNumber) async{
-    fireStoreInstance.collection("phone_number").document(phoneNumber).delete();
-  }
+//  Future verifyNumber(phoneNumber) async{
+//    fireStoreInstance.collection("phone_number").document(phoneNumber).updateData({"verified":"true"});
+//  }
+//
+//  Future deleteIfTimesUp(phoneNumber) async{
+//    fireStoreInstance.collection("phone_number").document(phoneNumber).delete();
+//  }
 
   Future checkOut() async{
    QuerySnapshot snapshot = await fireStoreInstance.collection("user_cart/64a6d6eb0e8cf55c/cart_items").getDocuments();
@@ -103,6 +104,21 @@ class ProjectBs {
       return true;
     }else{
       return false;
+    }
+  }
+
+  Future signUpWithEmailPassword(email,password) async{
+    try {
+      final newUser = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: email, password: password);
+      if (newUser != null) {
+          return true;
+
+      }
+    }
+     catch (e)
+    {
+      return e.code;
     }
   }
   

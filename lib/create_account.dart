@@ -30,6 +30,11 @@ class _CreateAccount extends State<CreateAccount> {
   var _formKey = GlobalKey<FormState>();
   var _formKey1 = GlobalKey<FormState>();
   var validate;
+  var message;
+  var errorText;
+  var errorTextPass;
+  bool boolErrorTextEmail = false;
+  bool boolErrorTextPass = false;
   TabController _tabController;
 
   Future _getId() async {
@@ -46,26 +51,59 @@ class _CreateAccount extends State<CreateAccount> {
   }
 
 
-  addPhoneNumber(phoneNumber) async{
+  addPhoneNumber(_email,_password,phoneNumber) async{
     var exist = await db.checkPhoneNumber(phoneNumber);
     if(exist == true){
       validate = true;
     }
     if(exist == false){
       validate = false;
-//      Navigator.of(context).push(_verifyPhone(_phoneNumber.text));
-//      await db.addPhoneNumber(phoneNumber);
+
+      message = await db.signUpWithEmailPassword(_email,_password);
+      print(message);
+      if(message == true){
+        setState(() {
+          print("pwede naka musod");
+        });
+      }
+      if(message=='ERROR_WEAK_PASSWORD'){
+        setState(() {
+          boolErrorTextPass = true;
+          errorTextPass = "Password should be at least 6 characters";
+          print(boolErrorTextPass);
+        });
+      }
+      else{
+        setState(() {
+          boolErrorTextPass = false;
+          boolErrorTextEmail = false;
+        });
+      }
+      if(message=='ERROR_INVALID_EMAIL'){
+        setState(() {
+          boolErrorTextEmail = true;
+
+          errorText = "The email address is badly formatted.";
+        });
+      }
+      if(message=='ERROR_EMAIL_ALREADY_IN_USE'){
+        setState(() {
+          boolErrorTextEmail = true;
+          errorText = "The email address is already in use by another account.";
+        });
+      }
+//      else{
+//        setState(() {
+////          boolErrorTextPass = false;
+//          boolErrorTextEmail = false;
+//        });
+//      }
     }
   }
 
-//
-//  checkOut() async{
-//    await db.checkOut();
-//  }
-//
   test() {
-//    checkOut();
-    addPhoneNumber(countryCode + _phoneNumber.text);
+    errorText=null;
+    addPhoneNumber(_email.text,_password.text,countryCode + _phoneNumber.text);
   }
 
 
@@ -170,15 +208,51 @@ class _CreateAccount extends State<CreateAccount> {
                                       validator: (value) {
                                         if (value.isEmpty) {
                                           return 'Please enter email';
-                                        }if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)){
-                                          return 'Please enter a valid email';
                                         }
                                         return null;
                                       },
                                       decoration: InputDecoration(
                                         hintText: 'juan@yourmail.com',
+                                        errorText: boolErrorTextEmail == true ? errorText: null,
                                         hintStyle:  GoogleFonts.openSans(color: Colors.grey,fontStyle: FontStyle.normal, fontSize: 15.0),
                                         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.blueGrey,
+                                              width: 2.0),
+                                        ),
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(3.0)),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
+                                    child: new Text(
+                                      "Password",
+                                      style: GoogleFonts.openSans(color: Colors.black54,fontStyle: FontStyle.normal, fontSize: 15.0),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20.0, vertical: 5.0),
+                                    child: new TextFormField(
+                                      obscureText: true,
+                                      textInputAction: TextInputAction.done,
+                                      cursorColor:Colors.blueGrey,
+                                      controller: _password,
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'Please enter password';
+                                        }
+//                                        if(value.length <6){
+//                                          return 'Password should be at least 6 characters';
+//                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
+                                        errorText: boolErrorTextPass==true?errorTextPass:null,
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                               color: Colors.blueGrey,
@@ -211,6 +285,7 @@ class _CreateAccount extends State<CreateAccount> {
                                       },
                                       decoration: InputDecoration(
                                         hintText: 'Juan Dela Cruz',
+
                                         hintStyle:  GoogleFonts.openSans(color: Colors.grey,fontStyle: FontStyle.normal, fontSize: 15.0),
                                         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
                                         focusedBorder: OutlineInputBorder(
@@ -223,40 +298,7 @@ class _CreateAccount extends State<CreateAccount> {
                                       ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
-                                    child: new Text(
-                                      "Password",
-                                      style: GoogleFonts.openSans(color: Colors.black54,fontStyle: FontStyle.normal, fontSize: 15.0),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20.0, vertical: 5.0),
-                                    child: new TextFormField(
-                                      obscureText: true,
-                                      textInputAction: TextInputAction.done,
-                                      cursorColor:Colors.blueGrey,
-                                      controller: _password,
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return 'Please enter password';
-                                        }
-                                        return null;
-                                      },
-                                      decoration: InputDecoration(
-                                        contentPadding:
-                                        EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Colors.blueGrey,
-                                              width: 2.0),
-                                        ),
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(3.0)),
-                                      ),
-                                    ),
-                                  ),
+
                                   Padding(
                                     padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
                                     child: new Text(
@@ -370,8 +412,9 @@ class _CreateAccount extends State<CreateAccount> {
                           padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
                           child: SleekButton(
                             onTap: (){
-                              test();
+
                               if(_formKey.currentState.validate()){
+                                test();
                               }
                             },
                             style: SleekButtonStyle.flat(
