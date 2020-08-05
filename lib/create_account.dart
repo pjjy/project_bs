@@ -102,7 +102,7 @@ class _CreateAccount extends State<CreateAccount> {
   }
 
   test() {
-    errorText=null;
+    errorText = null;
     addPhoneNumber(_email.text,_password.text,countryCode + _phoneNumber.text);
   }
 
