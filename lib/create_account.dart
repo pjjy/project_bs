@@ -6,6 +6,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info/device_info.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'user_cart.dart';
 import 'verify_phone.dart';
 import 'db_helper.dart';
@@ -23,18 +24,26 @@ class _CreateAccount extends State<CreateAccount> {
   final _fullName = TextEditingController();
   final _password = TextEditingController();
   final _address = TextEditingController();
-  final _phoneNumberLogIn = TextEditingController();
+  final _emailLogIn = TextEditingController();
   final _passwordLogIn = TextEditingController();
   final countryCode = "+63";
   Color color = const Color(0xff0084ff);
   var _formKey = GlobalKey<FormState>();
   var _formKey1 = GlobalKey<FormState>();
   var validate;
-  var message;
-  var errorText;
+  var signUpMessage;
+  var signUpErrorText;
+  var signInErrorText;
+  var signInErrorTextPass;
+  var signInMessage;
   var errorTextPass;
-  bool boolErrorTextEmail = false;
-  bool boolErrorTextPass = false;
+  bool _isSigUpLoading = false;
+  bool _isSigInLoading = false;
+  bool boolErrorSignUpTextEmail = false;
+  bool boolErrorSignUpTextPass = false;
+
+  bool boolSignInErrorTextEmail = false;
+  bool boolSignInErrorTextPass = false;
   TabController _tabController;
 
   Future _getId() async {
@@ -51,45 +60,47 @@ class _CreateAccount extends State<CreateAccount> {
   }
 
 
-  addPhoneNumber(_email,_password,phoneNumber) async{
-    var exist = await db.checkPhoneNumber(phoneNumber);
+  addPhoneNumber(_email,_password,_fullName,_phoneNumber,_address) async{
+    var exist = await db.checkPhoneNumber(_phoneNumber);
     if(exist == true){
       validate = true;
     }
     if(exist == false){
       validate = false;
 
-      message = await db.signUpWithEmailPassword(_email,_password);
-      print(message);
-      if(message == true){
+      signUpMessage = await db.signUpWithEmailPassword(_email,_password,_fullName,_phoneNumber,_address);
+      if(signUpMessage == true){
         setState(() {
+          _isSigUpLoading = false;
           print("pwede naka musod");
         });
       }
-      if(message=='ERROR_WEAK_PASSWORD'){
+      if(signUpMessage=='ERROR_WEAK_PASSWORD'){
         setState(() {
-          boolErrorTextPass = true;
+          _isSigUpLoading = false;
+          boolErrorSignUpTextPass = true;
           errorTextPass = "Password should be at least 6 characters";
-          print(boolErrorTextPass);
         });
       }
       else{
         setState(() {
-          boolErrorTextPass = false;
-          boolErrorTextEmail = false;
+          _isSigUpLoading = false;
+          boolErrorSignUpTextPass = false;
+          boolErrorSignUpTextEmail = false;
         });
       }
-      if(message=='ERROR_INVALID_EMAIL'){
+      if(signUpMessage=='ERROR_INVALID_EMAIL'){
         setState(() {
-          boolErrorTextEmail = true;
-
-          errorText = "The email address is badly formatted.";
+          _isSigUpLoading = false;
+          boolErrorSignUpTextEmail = true;
+          signUpErrorText = "The email address is badly formatted.";
         });
       }
-      if(message=='ERROR_EMAIL_ALREADY_IN_USE'){
+      if(signUpMessage=='ERROR_EMAIL_ALREADY_IN_USE'){
         setState(() {
-          boolErrorTextEmail = true;
-          errorText = "The email address is already in use by another account.";
+          _isSigUpLoading = false;
+          boolErrorSignUpTextEmail = true;
+          signUpErrorText = "The email address is already in use by another account.";
         });
       }
 //      else{
@@ -102,17 +113,68 @@ class _CreateAccount extends State<CreateAccount> {
   }
 
   test() {
-    errorText = null;
-    addPhoneNumber(_email.text,_password.text,countryCode + _phoneNumber.text);
+    signUpErrorText = null;
+    errorTextPass = null;
+    _isSigUpLoading = true;
+    addPhoneNumber(_email.text,_password.text,_fullName.text,countryCode + _phoneNumber.text,_address.text);
   }
 
+  signIn() async{
+    signInErrorText = null;
+    signInErrorTextPass = null;
+    _isSigInLoading = true;
+    signInMessage = await db.signIpWithEmailPassword(_emailLogIn.text,_passwordLogIn.text);
+    print(signInMessage);
+    if(signInMessage == true){
+      setState(() {
+        _isSigInLoading = false;
+        boolSignInErrorTextEmail = true;
+        print('pwede naka mo sud from sign in');
+      });
+    }
+    if(signInMessage=='ERROR_INVALID_EMAIL'){
+      setState(() {
+        _isSigInLoading = false;
+        boolSignInErrorTextEmail = true;
+        signInErrorText = "The email address is badly formatted.";
+      });
 
+    }
+    if(signInMessage=='ERROR_USER_NOT_FOUND'){
+      setState(() {
+        _isSigInLoading = false;
+        boolSignInErrorTextEmail = true;
+        signInErrorText = "This email does not exist.";
+      });
+    }
+    if(signInMessage=='ERROR_WRONG_PASSWORD'){
+      setState(() {
+        _isSigInLoading = false;
+        boolSignInErrorTextPass = true;
+        signInErrorTextPass = "Your password is invalid for this account";
+      });
+
+    }
+    if(signInMessage=='ERROR_TOO_MANY_REQUESTS'){
+      setState(() {
+        _isSigInLoading = false;
+        boolSignInErrorTextEmail = true;
+        signInErrorText = "Too many request, try again later";
+      });
+    }
+    // ERROR_INVALID_EMAIL
+    // ERROR_USER_NOT_FOUND
+    // ERROR_WRONG_PASSWORD
+    // ERROR_TOO_MANY_REQUESTS
+  }
 
   void _get1() async{
     var q = await _getId();
     setState(() {
       deviceId = q;
     });
+
+
   }
 
   @override
@@ -213,7 +275,7 @@ class _CreateAccount extends State<CreateAccount> {
                                       },
                                       decoration: InputDecoration(
                                         hintText: 'juan@yourmail.com',
-                                        errorText: boolErrorTextEmail == true ? errorText: null,
+                                        errorText: boolErrorSignUpTextEmail == true ? signUpErrorText: null,
                                         hintStyle:  GoogleFonts.openSans(color: Colors.grey,fontStyle: FontStyle.normal, fontSize: 15.0),
                                         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
                                         focusedBorder: OutlineInputBorder(
@@ -252,7 +314,7 @@ class _CreateAccount extends State<CreateAccount> {
                                       },
                                       decoration: InputDecoration(
                                         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
-                                        errorText: boolErrorTextPass==true?errorTextPass:null,
+                                        errorText: boolErrorSignUpTextPass == true ? errorTextPass: null,
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                               color: Colors.blueGrey,
@@ -395,9 +457,9 @@ class _CreateAccount extends State<CreateAccount> {
                             horizontal: 20.0, vertical: 1.0),
                         child: Center(
                           child: GestureDetector(
-                            onTap: (){
-
-                            },
+                            onTap: _isSigUpLoading == false ? (){
+                                      print("hello");
+                            }:null,
                             child: Text(
                               "Terms & Conditions and Privacy",
                               style: GoogleFonts.openSans(
@@ -408,9 +470,13 @@ class _CreateAccount extends State<CreateAccount> {
                           ),
                         ),
                       ),
-                      Padding(
+                       Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                          child: SleekButton(
+                          child:_isSigUpLoading ? Center(child:SpinKitRing(
+                            color: Colors.blue,
+                            lineWidth: 5.0,
+                            size: 40,
+                          ),) : SleekButton(
                             onTap: (){
 
                               if(_formKey.currentState.validate()){
@@ -464,7 +530,7 @@ class _CreateAccount extends State<CreateAccount> {
                                 keyboardType:TextInputType.number,
                                 textInputAction: TextInputAction.done,
                                 cursorColor:Colors.blueGrey,
-                                controller: _phoneNumberLogIn,
+                                controller: _emailLogIn,
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return 'Please enter phone number';
@@ -473,6 +539,7 @@ class _CreateAccount extends State<CreateAccount> {
                                 },
                                 decoration: InputDecoration(
                                   hintText: 'juan@yourmail.com',
+                                  errorText: boolSignInErrorTextEmail ? signInErrorText : null,
                                   hintStyle:  GoogleFonts.openSans(color: Colors.grey,fontStyle: FontStyle.normal, fontSize: 15.0),
                                   contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
                                   focusedBorder: OutlineInputBorder(
@@ -503,6 +570,7 @@ class _CreateAccount extends State<CreateAccount> {
                                   return null;
                                 },
                                 decoration: InputDecoration(
+                                  errorText: boolSignInErrorTextPass?signInErrorTextPass:null,
                                   contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
                                   focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blueGrey, width: 2.0),
                                   ),
@@ -519,11 +587,14 @@ class _CreateAccount extends State<CreateAccount> {
                     ),
                   ),
                   Padding(padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                      child: SleekButton(
+                      child: _isSigInLoading ? Center(child:SpinKitRing(
+                        color: Colors.blue,
+                        lineWidth: 5.0,
+                        size: 40,
+                      ),) : SleekButton(
                         onTap: (){
-                            test();
                             if(_formKey1.currentState.validate()){
-
+                                signIn();
                             }
                         },
                         style: SleekButtonStyle.flat(

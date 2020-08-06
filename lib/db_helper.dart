@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
+
 class ProjectBs {
   final fireStoreInstance = Firestore.instance;
 
@@ -107,21 +109,58 @@ class ProjectBs {
     }
   }
 
-  Future signUpWithEmailPassword(email,password) async{
+  Future signUpWithEmailPassword(_email,_password,_fullName,_phoneNumber,_address) async{
     try {
-      final newUser = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email, password: password);
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      final newUser = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _email, password: _password);
       if (newUser != null) {
+          final FirebaseUser user = await _auth.currentUser();
+          final uid = user.uid;
+          saveCustomerDetails(_fullName,_phoneNumber,_address,uid);
           return true;
-
       }
-    }
-     catch (e)
-    {
+    } catch (e) {
       return e.code;
     }
   }
-  
+
+  Future signIpWithEmailPassword(_emailLogIn,_passwordLogIn) async{
+    try{
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      final newUser = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailLogIn, password: _passwordLogIn);
+      if (newUser != null) {
+        final FirebaseUser user = await _auth.currentUser();
+        final uid = user.uid;
+        getCustomerDetails(uid);
+        return true;
+      }
+    }catch (e){
+      return e.code;
+    }
+  }
+
+  Future getCustomerDetails(uid) async{
+    fireStoreInstance.collection("customer").where("uid", isEqualTo: uid).getDocuments().then((value) {
+      value.documents.forEach((result) {
+        print(result.data['fullName']);
+        print(result.data['address']);
+        print(result.data['phoneNumber']);
+        print(result.data['uid']);
+        //save to shared prefs
+      });
+    });
+  }
+
+  Future saveCustomerDetails(_fullName,_phoneNumber,_address,_uid) async{
+    fireStoreInstance.collection("customer").add(
+        {
+         "fullName":_fullName,
+         "phoneNumber":_phoneNumber,
+         "address":_address,
+         "uid":_uid
+        }
+    );
+  }
 
   Future addToCart(deviceId,documentID,itemCount,pricing,title,description,imgSrc) async {
        fireStoreInstance.document("user_cart/$deviceId").setData(
