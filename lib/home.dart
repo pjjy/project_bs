@@ -300,40 +300,49 @@ class _MyHomePageState extends State<MyHomePage> {
                       scrollDirection: Axis.horizontal,
                       itemCount: 5,
                       itemBuilder: (BuildContext context, int index) {
-                        return Card(
-                          semanticContainer: true,
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: InkWell(
+//                        return Card(
+//                          semanticContainer: true,
+//                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          return InkWell(
                             onTap: () {},
+                            child:Container(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(width: 1.0, color: color.withOpacity(0.5))),
+                                color: Colors.white,
+                              ),
+                              margin: EdgeInsets.all(3),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                      Expanded(
-                                        child:  Image.network(
-                                          'https://placeimg.com/640/480/any',
-                                          fit: BoxFit.scaleDown,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 1.0,
-                                      ),
-                                      Padding(
-                                        padding:EdgeInsets.all(5.0),
-                                        child:Text("address"),
-                                      ),
-                                      Padding(
-                                        padding:EdgeInsets.all(5.0),
-                                        child: Text("₱ ${oCcy.format(400)}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: color,),
+                                  Expanded(
+                                    child:  Image.network(
+                                      'https://placeimg.com/640/480/any',
+                                      fit: BoxFit.scaleDown,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 1.0,
+                                  ),
+                                  Padding(
+                                    padding:EdgeInsets.all(5.0),
+                                    child:Text("address"),
+                                  ),
+                                  Padding(
+                                      padding:EdgeInsets.all(5.0),
+                                      child: Text("₱ ${oCcy.format(400)}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: color,),
                                       )
-                                      ),
-                                      SizedBox(
-                                        height: 1.0,
-                                      ),
+                                  ),
+                                  SizedBox(
+                                    height: 1.0,
+                                  ),
                                 ],
                               ),
-                          ),
-                          elevation: 0.0,
-                        );
+                            ),
+
+                          );
+//                          elevation: 0.0,
+//                        );
                       }),
                 ),
                 Divider(
@@ -372,7 +381,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                         border: Border(
-                                              top: BorderSide(width: 1.0, color: color)),
+                                            top: BorderSide(width: 1.0, color: color.withOpacity(0.5))),
                                         color: Colors.white,
                                       ),
                                       margin: EdgeInsets.all(1),

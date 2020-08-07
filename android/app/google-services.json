@@ -8,6 +8,35 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:491091387523:android:64069bc396c4e4dca1e7b6",
+        "android_client_info": {
+          "package_name": "com.example.boysugo_tenant_v1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "491091387523-qu359jopdsj55ga5t0rsjeerc7uo83gg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSNsNo3tmMbJHvhbHJDJe9MwaEzLciO6A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "491091387523-qu359jopdsj55ga5t0rsjeerc7uo83gg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:491091387523:android:fde5802c3665a5fda1e7b6",
         "android_client_info": {
           "package_name": "com.example.boysugorider_v1"
@@ -19,6 +48,43 @@
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.boysugorider_v1",
+            "certificate_hash": "0a7ad8eb1ec729f664cc94984198b80a8f36cf2b"
+          }
+        },
+        {
+          "client_id": "491091387523-qu359jopdsj55ga5t0rsjeerc7uo83gg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSNsNo3tmMbJHvhbHJDJe9MwaEzLciO6A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "491091387523-qu359jopdsj55ga5t0rsjeerc7uo83gg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491091387523:android:c0659861c12adc8ca1e7b6",
+        "android_client_info": {
+          "package_name": "com.example.fcm_v2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "491091387523-eu8fqjqu2e5cn0fbctvkrb8oea8mcbkt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fcm_v2",
             "certificate_hash": "0a7ad8eb1ec729f664cc94984198b80a8f36cf2b"
           }
         },

@@ -140,15 +140,25 @@ class ProjectBs {
   }
 
   Future getCustomerDetails(uid) async{
+
     fireStoreInstance.collection("customer").where("uid", isEqualTo: uid).getDocuments().then((value) {
-      value.documents.forEach((result) {
+      value.documents.forEach((result) async{
         print(result.data['fullName']);
         print(result.data['address']);
         print(result.data['phoneNumber']);
         print(result.data['uid']);
         //save to shared prefs
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('fullName', result.data['fullName']);
+        prefs.setString('address', result.data['address']);
+        prefs.setString('phoneNumber', result.data['phoneNumber']);
+        prefs.setString('uid', result.data['uid']);
+
       });
+
     });
+
   }
 
   Future saveCustomerDetails(_fullName,_phoneNumber,_address,_uid) async{
