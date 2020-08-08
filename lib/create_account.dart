@@ -471,14 +471,13 @@ class _CreateAccount extends State<CreateAccount> {
                         ),
                       ),
                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                           child:_isSigUpLoading ? Center(child:SpinKitRing(
                             color: Colors.blue,
                             lineWidth: 5.0,
                             size: 40,
                           ),) : SleekButton(
                             onTap: (){
-
                               if(_formKey.currentState.validate()){
                                 test();
                               }
@@ -509,6 +508,8 @@ class _CreateAccount extends State<CreateAccount> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+
+
                   Form(
                     key: _formKey1,
                     child:Expanded(
@@ -516,8 +517,51 @@ class _CreateAccount extends State<CreateAccount> {
                         child: ListView(
                           padding: EdgeInsets.zero,
                           children: <Widget>[
+
                             Padding(
-                              padding: EdgeInsets.fromLTRB(35, 20, 5, 5),
+                                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                                child: _isSigInLoading ? Center(child:SpinKitRing(
+                                  color: Colors.blue,
+                                  lineWidth: 5.0,
+                                  size: 40,
+                                ),) : SleekButton(
+                                  onTap: (){
+
+                                  },
+                                  style: SleekButtonStyle.flat(
+                                    color: color,
+                                    inverted: false,
+                                    rounded: false,
+                                    size: SleekButtonSize.big,
+                                    context: context,
+                                  ),
+                                  child:Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Icon(Ionicons.logo_facebook),
+                                        SizedBox(
+                                          width: 10.0,
+                                        ),
+                                        Text(
+                                          "Log in with facebook",
+                                          style: GoogleFonts.openSans(
+                                              fontStyle: FontStyle.normal,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 17.0),
+                                        ),
+                                  ],
+                                ),
+                                )
+                            ),
+                            SizedBox(
+                              height: 13.0,
+                            ),
+                            Center(
+                              child: Text("Or",style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontSize: 15.0)),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(35.0, 10.0, 5.0, 5.0),
                               child: new Text(
                                 "Email",
                                 style: GoogleFonts.openSans(
@@ -586,7 +630,8 @@ class _CreateAccount extends State<CreateAccount> {
                       ),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                  Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                       child: _isSigInLoading ? Center(child:SpinKitRing(
                         color: Colors.blue,
                         lineWidth: 5.0,

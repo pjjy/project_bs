@@ -7,6 +7,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info/device_info.dart';
 import 'create_account.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class UserCart extends StatefulWidget {
   @override
@@ -106,7 +107,8 @@ class _UserCart extends State<UserCart> {
                           itemCount: snapshot.data.documents.length,
                           itemBuilder: (BuildContext context, int index) {
                             DocumentSnapshot data = snapshot.data.documents[index];
-                            return GestureDetector(
+
+                            return InkWell(
                               onTap: () {
 
                               },
@@ -114,7 +116,7 @@ class _UserCart extends State<UserCart> {
                                 height: MediaQuery.of(context).size.height / 7.0,
                                 width: MediaQuery.of(context).size.width / 10.0,
                                 child: Card(
-                                  color: Colors.transparent,
+                                  color: Colors.white,
                                   child: Column(
                                     crossAxisAlignment:
                                     CrossAxisAlignment.start,
@@ -137,12 +139,16 @@ class _UserCart extends State<UserCart> {
                                                   ),
                                                 )),
                                           ),
-                                          Container(
+                                          Expanded(
                                             child:Column(
                                               crossAxisAlignment:CrossAxisAlignment.start,
                                               children: <Widget>[
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [],
+                                                ),
                                                 Padding(
-                                                  padding: EdgeInsets.fromLTRB(15.0, 1.0,  5.0, 1.0),
+                                                  padding: EdgeInsets.fromLTRB(15.0, 1.0,  0.0, 1.0),
                                                   child:Text(data['title'], overflow: TextOverflow.clip,
                                                     style: GoogleFonts.openSans(
                                                         fontStyle:
@@ -150,9 +156,8 @@ class _UserCart extends State<UserCart> {
                                                         fontSize: MediaQuery.of(context).size.width / 28.0),
                                                   ),
                                                 ),
-
                                                 Padding(
-                                                  padding: EdgeInsets.fromLTRB(15, 1, 5, 5),
+                                                  padding: EdgeInsets.fromLTRB(15.0, 1.0, 5.0, 3.0),
                                                   child:Text('100 grams x PCS ${data['quantity']}', overflow: TextOverflow.clip,
                                                     style: GoogleFonts.openSans(
                                                         fontStyle:
@@ -166,16 +171,13 @@ class _UserCart extends State<UserCart> {
                                                       padding: EdgeInsets.fromLTRB(15, 0, 5, 0),
                                                       child: new Text(
                                                         "₱ ${oCcy.format(data['price'])} ",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                          FontWeight.bold,
-                                                          fontSize: MediaQuery.of(context).size.width / 28.0,
-                                                          color:color,
+                                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width / 28.0, color:color,
                                                         ),
                                                       ),
                                                     ),
                                                   ],
                                                 ),
+
                                               ],
                                             ),
                                           ),
@@ -184,11 +186,10 @@ class _UserCart extends State<UserCart> {
                                     ],
                                   ),
                                   elevation: 0.0,
-                                  margin: EdgeInsets.all(3),
+                                  margin: EdgeInsets.all(2.5),
                                 ),
                               ),
                             );
-
                           });
                     },
                   ),
@@ -212,7 +213,7 @@ class _UserCart extends State<UserCart> {
                       ),
                       child: Center(
                         child: Text(
-                          "Total: \₱2,220",
+                          "Total: \₱2,220.00",
                           style: TextStyle(
                               color: Colors.black,
                               fontStyle: FontStyle.normal,

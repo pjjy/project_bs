@@ -139,7 +139,7 @@ class _ItemDetail extends State<ItemDetail>{
               ),
             ],
             brightness: Brightness.light,
-            expandedHeight: 310.0,
+            expandedHeight: 390.0,
             floating: false,
             pinned: true,
             snap: false,
