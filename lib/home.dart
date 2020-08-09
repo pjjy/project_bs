@@ -10,6 +10,7 @@ import 'item_details.dart';
 import 'package:device_info/device_info.dart';
 import 'user_cart.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
+import 'global_vars.dart';
 
 class MyHomePage extends StatefulWidget {
 
@@ -18,12 +19,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   final db = ProjectBs();
   final oCcy = new NumberFormat("#,##0.00", "en_US");
   final fireStoreInstance = Firestore.instance;
   bool isLoading = false;
   bool isAppBarExpanded = false;
-  List list = new List();
   var deviceId;
   int gridCount;
   Color color = const Color(0xff0084ff);
@@ -32,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
     TitledNavigationBarItem(title: Text('Home'), icon: Ionicons.md_home),
     TitledNavigationBarItem(title: Text('Categories'), icon: Ionicons.md_grid),
     TitledNavigationBarItem(title: Text('Wish'), icon: Ionicons.md_heart),
-    TitledNavigationBarItem(title: Text('Profile'), icon: Ionicons.md_person),
+//    TitledNavigationBarItem(title: Text('Profile'), icon: Ionicons.md_person),
   ];
 
   bool navBarMode = false;
@@ -60,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    name = "Imba_og";
   }
 
   @override
@@ -85,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child:  IconButton(
                       icon: Icon(Ionicons.ios_cart,),
                       onPressed: () {
+
                         Navigator.of(context).push(_viewCart());
                       }
                   ),
@@ -97,6 +100,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 child:  IconButton(
                     icon: Icon(Ionicons.ios_cart,),
                     onPressed: () {
+
+
                       Navigator.of(context).push(_viewCart());
                     }
                 ),
@@ -296,13 +301,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: 210,
                   width: 130,
                   child: ListView.builder(
-
                       scrollDirection: Axis.horizontal,
                       itemCount: 5,
                       itemBuilder: (BuildContext context, int index) {
-//                        return Card(
-//                          semanticContainer: true,
-//                          clipBehavior: Clip.antiAliasWithSaveLayer,
                           return InkWell(
                             onTap: () {},
                             child:Container(
@@ -339,10 +340,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ],
                               ),
                             ),
-
                           );
-//                          elevation: 0.0,
-//                        );
                       }),
                 ),
                 Divider(

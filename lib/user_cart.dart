@@ -8,16 +8,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info/device_info.dart';
 import 'create_account.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'global_vars.dart';
 
 class UserCart extends StatefulWidget {
+
   @override
   _UserCart createState() => _UserCart();
 }
 
 class _UserCart extends State<UserCart> {
-
   final oCcy = new NumberFormat("#,##0.00", "en_US");
-
   List loadEdit;
   List getTenantLimit;
   List lGetAmountPerTenant;
@@ -26,29 +26,15 @@ class _UserCart extends State<UserCart> {
   var deviceId;
   Color color = const Color(0xff0084ff);
 
-  Future _getId() async {
-    var dId;
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
-      dId = iosDeviceInfo.identifierForVendor; // unique ID on iOS
-    } else{
-      AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
-      dId = androidDeviceInfo.androidId; //
-    }
-    return dId;
-  }
-
-  void _get1() async{
-    var q = await _getId();
-    setState(() {
-      deviceId = q;
-    });
+  checkIf() async{
+    DocumentSnapshot ds = await Firestore.instance.collection("user_cart").document("fe0fd1e7299a904f").get();
+    print(ds.exists);
   }
 
   @override
   void initState() {
     super.initState();
+    print(name);
   }
 
   @override
@@ -56,10 +42,9 @@ class _UserCart extends State<UserCart> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    _get1();
+
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context);
@@ -79,7 +64,7 @@ class _UserCart extends State<UserCart> {
             IconButton(
                 icon: Icon(Ionicons.ios_search,),
                 onPressed: () async {
-
+                      print("hello");
                 }
             ),
           ],
@@ -100,6 +85,7 @@ class _UserCart extends State<UserCart> {
                   child: FutureBuilder(
                     future: Firestore.instance.collection("user_cart").document(deviceId).collection('cart_items').getDocuments(),
                     builder: (context, snapshot) {
+
                       return !snapshot.hasData ?
                       Center(child: CircularProgressIndicator()):
                       ListView.builder(
@@ -107,7 +93,9 @@ class _UserCart extends State<UserCart> {
                           itemCount: snapshot.data.documents.length,
                           itemBuilder: (BuildContext context, int index) {
                             DocumentSnapshot data = snapshot.data.documents[index];
-
+                            if(snapshot.data.documents == null){
+                              print("no data");
+                            }
                             return InkWell(
                               onTap: () {
 

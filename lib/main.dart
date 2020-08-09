@@ -6,6 +6,7 @@ import 'verify_phone.dart';
 import 'create_account.dart';
 import 'user_cart.dart';
 import 'test.dart';
+import 'check_out.dart';
 void main() {
   runApp(MyApp());
 }
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
 //        home:UserCart(),
         home: MyHomePage(),
 //        home: CreateAccount(),
+//          home:CheckOut(),
     );
   }
 }
