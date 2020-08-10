@@ -55,13 +55,13 @@ class _MyHomePageState extends State<MyHomePage> {
      var q = await _getId();
      setState(() {
        deviceId = q;
+       globalDeviceId = deviceId;
      });
   }
 
   @override
   void initState() {
     super.initState();
-    name = "Imba_og";
   }
 
   @override

@@ -23,18 +23,19 @@ class _UserCart extends State<UserCart> {
   List lGetAmountPerTenant;
   var isLoading = false;
   var checkOutLoading = true;
-  var deviceId;
+  var userExistInCart;
   Color color = const Color(0xff0084ff);
-
   checkIf() async{
-    DocumentSnapshot ds = await Firestore.instance.collection("user_cart").document("fe0fd1e7299a904f").get();
-    print(ds.exists);
+//    print(globalDeviceId);
+    DocumentSnapshot ds = await Firestore.instance.collection("user_cart").document(globalDeviceId).get();
+    userExistInCart = ds.exists;
+    print(userExistInCart);
   }
 
   @override
   void initState() {
     super.initState();
-    print(name);
+    checkIf();
   }
 
   @override
@@ -80,109 +81,112 @@ class _UserCart extends State<UserCart> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Expanded(
-                child: Scrollbar(
-                  child: FutureBuilder(
-                    future: Firestore.instance.collection("user_cart").document(deviceId).collection('cart_items').getDocuments(),
-                    builder: (context, snapshot) {
+          Visibility(
+            child:Expanded(
+              child: Scrollbar(
+                child: FutureBuilder(
+                  future: Firestore.instance.collection("user_cart").document(globalDeviceId).collection('cart_items').getDocuments(),
+                  builder: (context, snapshot) {
 
-                      return !snapshot.hasData ?
-                      Center(child: CircularProgressIndicator()):
-                      ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: snapshot.data.documents.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            DocumentSnapshot data = snapshot.data.documents[index];
-                            if(snapshot.data.documents == null){
-                              print("no data");
-                            }
-                            return InkWell(
-                              onTap: () {
+                    return !snapshot.hasData ?
+                    Center(child: CircularProgressIndicator()):
+                    ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data.documents.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          DocumentSnapshot data = snapshot.data.documents[index];
+                          if(snapshot.data.documents == null){
+                            print("no data");
+                          }
+                          return InkWell(
+                            onTap: () {
 
-                              },
-                              child: Container(
-                                height: MediaQuery.of(context).size.height / 7.0,
-                                width: MediaQuery.of(context).size.width / 10.0,
-                                child: Card(
-                                  color: Colors.white,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Row(
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
-                                            child: Container(
-                                                width: MediaQuery.of(context).size.width / 7.0,
-                                                height: MediaQuery.of(context).size.height / 10.0,
-                                                decoration: new BoxDecoration(
-                                                  color: Colors.transparent,
-                                                  shape: BoxShape.rectangle,
-                                                  image: new DecorationImage(
-                                                    image: new NetworkImage(data['imgPath']),
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                )),
-                                          ),
-                                          Expanded(
-                                            child:Column(
-                                              crossAxisAlignment:CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                  children: [],
+                            },
+                            child: Container(
+                              height: MediaQuery.of(context).size.height / 7.0,
+                              width: MediaQuery.of(context).size.width / 10.0,
+                              child: Card(
+                                color: Colors.white,
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Row(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
+                                          child: Container(
+                                              width: MediaQuery.of(context).size.width / 7.0,
+                                              height: MediaQuery.of(context).size.height / 10.0,
+                                              decoration: new BoxDecoration(
+                                                color: Colors.transparent,
+                                                shape: BoxShape.rectangle,
+                                                image: new DecorationImage(
+                                                  image: new NetworkImage(data['imgPath']),
+                                                  fit: BoxFit.cover,
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(15.0, 1.0,  0.0, 1.0),
-                                                  child:Text(data['title'], overflow: TextOverflow.clip,
-                                                    style: GoogleFonts.openSans(
-                                                        fontStyle:
-                                                        FontStyle.normal,
-                                                        fontSize: MediaQuery.of(context).size.width / 28.0),
-                                                  ),
+                                              )),
+                                        ),
+                                        Expanded(
+                                          child:Column(
+                                            crossAxisAlignment:CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                children: [],
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.fromLTRB(15.0, 1.0,  0.0, 1.0),
+                                                child:Text(data['title'], overflow: TextOverflow.clip,
+                                                  style: GoogleFonts.openSans(
+                                                      fontStyle:
+                                                      FontStyle.normal,
+                                                      fontSize: MediaQuery.of(context).size.width / 28.0),
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(15.0, 1.0, 5.0, 3.0),
-                                                  child:Text('100 grams x PCS ${data['quantity']}', overflow: TextOverflow.clip,
-                                                    style: GoogleFonts.openSans(
-                                                        fontStyle:
-                                                        FontStyle.normal,
-                                                        fontSize:MediaQuery.of(context).size.width / 30.0),
-                                                  ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.fromLTRB(15.0, 1.0, 5.0, 3.0),
+                                                child:Text('100 grams x PCS ${data['quantity']}', overflow: TextOverflow.clip,
+                                                  style: GoogleFonts.openSans(
+                                                      fontStyle:
+                                                      FontStyle.normal,
+                                                      fontSize:MediaQuery.of(context).size.width / 30.0),
                                                 ),
-                                                Row(
-                                                  children: <Widget>[
-                                                    Padding(
-                                                      padding: EdgeInsets.fromLTRB(15, 0, 5, 0),
-                                                      child: new Text(
-                                                        "₱ ${oCcy.format(data['price'])} ",
-                                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width / 28.0, color:color,
-                                                        ),
+                                              ),
+                                              Row(
+                                                children: <Widget>[
+                                                  Padding(
+                                                    padding: EdgeInsets.fromLTRB(15, 0, 5, 0),
+                                                    child: new Text(
+                                                      "₱ ${oCcy.format(data['price'])} ",
+                                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width / 28.0, color:color,
                                                       ),
                                                     ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                ],
+                                              ),
 
-                                              ],
-                                            ),
+                                            ],
                                           ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  elevation: 0.0,
-                                  margin: EdgeInsets.all(2.5),
+                                        ),
+                                      ],
+                                    )
+                                  ],
                                 ),
+                                elevation: 0.0,
+                                margin: EdgeInsets.all(2.5),
                               ),
-                            );
-                          });
-                    },
-                  ),
+                            ),
+                          );
+                        });
+                  },
                 ),
+              ),
             ),
+          ),
+
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
               child: Row(

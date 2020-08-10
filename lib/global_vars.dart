@@ -1,3 +1,3 @@
 
 
- String name = "";
+ String globalDeviceId = "";
