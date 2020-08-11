@@ -85,9 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   badgeColor: color,
                   badgeContent: Text('0',style: TextStyle(color: Colors.white,),),
                   child:  IconButton(
-                      icon: Icon(Ionicons.ios_cart,),
+                      icon: Icon(SimpleLineIcons.bag,),
                       onPressed: () {
-
                         Navigator.of(context).push(_viewCart());
                       }
                   ),
@@ -98,10 +97,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 badgeColor: color,
                 badgeContent: Text('${snapshot.data.documents.length}',style: TextStyle(color: Colors.white,),),
                 child:  IconButton(
-                    icon: Icon(Ionicons.ios_cart,),
+                    icon: Icon(SimpleLineIcons.bag,),
                     onPressed: () {
-
-
                       Navigator.of(context).push(_viewCart());
                     }
                 ),
@@ -109,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
           IconButton(
-              icon: Icon(Ionicons.ios_search,),
+              icon: Icon(SimpleLineIcons.magnifier,),
               onPressed: () {
               }
           ),
@@ -382,10 +379,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                             top: BorderSide(width: 1.0, color: color.withOpacity(0.5))),
                                         color: Colors.white,
                                       ),
-                                      margin: EdgeInsets.all(1),
+                                      margin: EdgeInsets.all(2),
                                       child: Column(
                                         children: <Widget>[
-                                          new Expanded(
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Expanded(
                                             child: Image.network(
                                               data['images'][0]['imgSrc'],
                                               fit: BoxFit.scaleDown,

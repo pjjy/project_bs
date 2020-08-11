@@ -5,10 +5,11 @@ import 'package:sleek_button/sleek_button.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:device_info/device_info.dart';
 import 'create_account.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'global_vars.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'check_out.dart';
 
 class UserCart extends StatefulWidget {
 
@@ -21,15 +22,17 @@ class _UserCart extends State<UserCart> {
   List loadEdit;
   List getTenantLimit;
   List lGetAmountPerTenant;
-  var isLoading = false;
+  var isLoading = true;
   var checkOutLoading = true;
-  var userExistInCart;
+  var userExistInCart = false;
   Color color = const Color(0xff0084ff);
   checkIf() async{
 //    print(globalDeviceId);
     DocumentSnapshot ds = await Firestore.instance.collection("user_cart").document(globalDeviceId).get();
-    userExistInCart = ds.exists;
-    print(userExistInCart);
+    setState(() {
+      userExistInCart = ds.exists;
+      isLoading = false;
+    });
   }
 
   @override
@@ -63,9 +66,9 @@ class _UserCart extends State<UserCart> {
           ),
           actions: <Widget>[
             IconButton(
-                icon: Icon(Ionicons.ios_search,),
-                onPressed: () async {
-                      print("hello");
+                icon: Icon(SimpleLineIcons.magnifier,),
+                onPressed: () {
+
                 }
             ),
           ],
@@ -78,26 +81,50 @@ class _UserCart extends State<UserCart> {
                 fontSize: 18.0),
           ),
         ),
-        body: Column(
+        body: isLoading ? Center(child:SpinKitRing(
+          color: Colors.blue,
+          lineWidth: 5.0,
+          size: 40,
+        ),): Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
           Visibility(
+            visible: userExistInCart == false ? false:true,
+            replacement: Expanded(
+              child: Center(
+                child:Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                 children: [
+                   Container(
+                     height: 70,
+                     width: 70,
+                     child: Image.asset("assets/png/empty-cart.png"),
+                   ),
+                   SizedBox(
+                     height: 15.0,
+                   ),
+                   Text("Your cart is empty",style: GoogleFonts.openSans(color: Colors.black54, fontStyle: FontStyle.normal, fontSize: 18.0)),
+                 ],
+                ),
+              ),
+            ),
             child:Expanded(
               child: Scrollbar(
                 child: FutureBuilder(
                   future: Firestore.instance.collection("user_cart").document(globalDeviceId).collection('cart_items').getDocuments(),
                   builder: (context, snapshot) {
-
                     return !snapshot.hasData ?
-                    Center(child: CircularProgressIndicator()):
+                    Center(child:SpinKitRing(
+                      color: Colors.blue,
+                      lineWidth: 5.0,
+                      size: 40,
+                    ),):
                     ListView.builder(
                         shrinkWrap: true,
                         itemCount: snapshot.data.documents.length,
                         itemBuilder: (BuildContext context, int index) {
                           DocumentSnapshot data = snapshot.data.documents[index];
-                          if(snapshot.data.documents == null){
-                            print("no data");
-                          }
                           return InkWell(
                             onTap: () {
 
@@ -186,61 +213,70 @@ class _UserCart extends State<UserCart> {
               ),
             ),
           ),
-
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: SleekButton(
-                      onTap: () async {
-                        Navigator.of(context).push(_checkOut());
-                      },
-                      style: SleekButtonStyle.flat(
-                        color:Colors.transparent,
+        Visibility(
+         visible: userExistInCart == false ? false:true,
+         child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: SleekButton(
+                  onTap: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.clear();
+                    print("logout");
+//                    Navigator.of(context).push(_checkOut());
+                  },
+                  style: SleekButtonStyle.flat(
+                    color:Colors.transparent,
 //                        inverted: false,
-                        rounded: false,
-                        size: SleekButtonSize.big,
-                        context: context,
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Total: \₱2,220.00",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontStyle: FontStyle.normal,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17.0),
-                        ),
-                      ),
+                    rounded: false,
+                    size: SleekButtonSize.big,
+                    context: context,
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Total: \₱2,220.00",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17.0),
                     ),
                   ),
-                  Container(
-                    child: SleekButton(
-                      onTap: () async {
-                        Navigator.of(context).push(_checkOut());
-                      },
-                      style: SleekButtonStyle.flat(
-                        color:color,
-                        inverted: false,
-                        rounded: false,
-                        size: SleekButtonSize.big,
-                        context: context,
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Check Out",
-                          style: GoogleFonts.openSans(
-                              fontStyle: FontStyle.normal,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17.0),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+              Container(
+                child: SleekButton(
+                  onTap: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    String status  = prefs.getString('uid');
+                    status != null ? Navigator.of(context).push(_checkOut()):
+                    Navigator.of(context).push(_createAccount());
+                  },
+                  style: SleekButtonStyle.flat(
+                    color:color,
+                    inverted: false,
+                    rounded: false,
+                    size: SleekButtonSize.big,
+                    context: context,
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Next",
+                      style: GoogleFonts.openSans(
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17.0),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        ),
+
           ],
         ),
 //      ),
@@ -250,6 +286,22 @@ class _UserCart extends State<UserCart> {
 }
 
 Route _checkOut() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => CheckOut(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(0.0, 1.0);
+      var end = Offset.zero;
+      var curve = Curves.decelerate;
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
+
+Route _createAccount() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => CreateAccount(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -264,4 +316,3 @@ Route _checkOut() {
     },
   );
 }
-

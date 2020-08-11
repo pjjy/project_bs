@@ -50,7 +50,7 @@ class _CheckOut extends State<CheckOut> {
           ),
           actions: <Widget>[
             IconButton(
-                icon: Icon(Ionicons.ios_search,),
+                icon: Icon(SimpleLineIcons.magnifier,),
                 onPressed: () async {
                   print("hello");
                 }
@@ -72,6 +72,16 @@ class _CheckOut extends State<CheckOut> {
               child: Scrollbar(
                 child: ListView(
                     children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(15.0, 1.0,  0.0, 1.0),
+                        child:Text('Delivery Address',
+                          style: GoogleFonts.openSans(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.normal,
+                              fontSize: MediaQuery.of(context).size.width / 28.0),
+                        ),
+                      ),
                       InkWell(
                         onTap: () {
 
@@ -79,10 +89,96 @@ class _CheckOut extends State<CheckOut> {
                         child: Container(
                           height: MediaQuery.of(context).size.height / 7.0,
                           width: MediaQuery.of(context).size.width / 10.0,
-                          child: Card(
+                          child:Card(
                             elevation: 0.0,
                             color: Colors.white,
-//                            child: ,
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+
+
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Icon(Icons.arrow_forward_ios, color: Colors.black26),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(15.0, 1.0,  0.0, 1.0),
+                        child:Text('Payment Method',
+                          style: GoogleFonts.openSans(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.normal,
+                              fontSize: MediaQuery.of(context).size.width / 28.0),
+                        ),
+                      ),
+                      InkWell(
+                        onTap:(){
+
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.height / 7.0,
+                          width: MediaQuery.of(context).size.width / 10.0,
+                          child:Card(
+                            elevation: 0.0,
+                            color: Colors.white,
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+
+
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Icon(Icons.arrow_forward_ios, color: Colors.black26),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.height / 7.0,
+                          width: MediaQuery.of(context).size.width / 10.0,
+                          child:Card(
+                            elevation: 0.0,
+                            color: Colors.white,
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+
+
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Icon(Icons.arrow_forward_ios, color: Colors.black26),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -97,7 +193,7 @@ class _CheckOut extends State<CheckOut> {
                   Expanded(
                     child: SleekButton(
                       onTap: () async {
-                        Navigator.of(context).push(_checkOut());
+
                       },
                       style: SleekButtonStyle.flat(
                         color:Colors.transparent,
@@ -121,7 +217,8 @@ class _CheckOut extends State<CheckOut> {
                   Container(
                     child: SleekButton(
                       onTap: () async {
-                        Navigator.of(context).push(_checkOut());
+
+
                       },
                       style: SleekButtonStyle.flat(
                         color:color,

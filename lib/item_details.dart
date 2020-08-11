@@ -109,8 +109,8 @@ class _ItemDetail extends State<ItemDetail>{
                       badgeColor: color,
                       badgeContent: Text('0',style: TextStyle(color: Colors.white,),),
                       child:  IconButton(
-                          icon: Icon(Ionicons.ios_cart,),
-                          onPressed:(){
+                          icon: Icon(SimpleLineIcons.bag,),
+                          onPressed: () {
                             Navigator.of(context).push(_viewCart());
                           }
                       ),
@@ -121,20 +121,19 @@ class _ItemDetail extends State<ItemDetail>{
                     position: BadgePosition.topRight(top: 5, right: 5),
                     badgeColor: color,
                     badgeContent: Text('${snapshot.data.documents.length}',style: TextStyle(color: Colors.white,),),
-                    child:  IconButton(
-                        icon: Icon(Ionicons.ios_cart,),
-                        onPressed:() {
+                    child:IconButton(
+                        icon: Icon(SimpleLineIcons.bag,),
+                        onPressed: () {
                           Navigator.of(context).push(_viewCart());
                         }
                     ),
                   );
                 },
               ),
-
               IconButton(
-                  icon: Icon(Ionicons.ios_search,),
-                  onPressed: () async {
-
+                  icon: Icon(SimpleLineIcons.magnifier,),
+                  onPressed: () {
+                    Navigator.of(context).push(_viewCart());
                   }
               ),
             ],

@@ -153,7 +153,14 @@ class _CreateAccount extends State<CreateAccount> {
         boolSignInErrorTextPass = true;
         signInErrorTextPass = "Your password is invalid for this account";
       });
-
+     if(signInMessage == 'ERROR_NETWORK_REQUEST_FAILED'){
+       setState(() {
+         _isSigInLoading = false;
+         boolSignInErrorTextPass = true;
+         signInErrorTextPass = "Request failed try again";
+         signInErrorText = "Request failed try again";
+       });
+     }
     }
     if(signInMessage=='ERROR_TOO_MANY_REQUESTS'){
       setState(() {
@@ -503,13 +510,10 @@ class _CreateAccount extends State<CreateAccount> {
                     ],
                 ),
 
-
               //login tab
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-
-
                   Form(
                     key: _formKey1,
                     child:Expanded(
@@ -517,16 +521,10 @@ class _CreateAccount extends State<CreateAccount> {
                         child: ListView(
                           padding: EdgeInsets.zero,
                           children: <Widget>[
-
                             Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                                child: _isSigInLoading ? Center(child:SpinKitRing(
-                                  color: Colors.blue,
-                                  lineWidth: 5.0,
-                                  size: 40,
-                                ),) : SleekButton(
+                                child: SleekButton(
                                   onTap: (){
-
                                   },
                                   style: SleekButtonStyle.flat(
                                     color: color,
@@ -571,7 +569,6 @@ class _CreateAccount extends State<CreateAccount> {
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
                               child: new TextFormField(
-                                keyboardType:TextInputType.number,
                                 textInputAction: TextInputAction.done,
                                 cursorColor:Colors.blueGrey,
                                 controller: _emailLogIn,
