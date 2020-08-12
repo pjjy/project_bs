@@ -29,6 +29,7 @@ class _UserCart extends State<UserCart> {
   checkIf() async{
 //    print(globalDeviceId);
     DocumentSnapshot ds = await Firestore.instance.collection("user_cart").document(globalDeviceId).get();
+    if (!mounted) return;
     setState(() {
       userExistInCart = ds.exists;
       isLoading = false;

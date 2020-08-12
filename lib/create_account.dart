@@ -60,22 +60,24 @@ class _CreateAccount extends State<CreateAccount> {
   }
 
 
-  addPhoneNumber(_email,_password,_fullName,_phoneNumber,_address) async{
+  void addPhoneNumber(_email,_password,_fullName,_phoneNumber,_address) async{
     var exist = await db.checkPhoneNumber(_phoneNumber);
+
     if(exist == true){
       validate = true;
     }
     if(exist == false){
       validate = false;
-
       signUpMessage = await db.signUpWithEmailPassword(_email,_password,_fullName,_phoneNumber,_address);
       if(signUpMessage == true){
+        if (!mounted) return;
         setState(() {
           _isSigUpLoading = false;
           print("pwede naka musod");
         });
       }
       if(signUpMessage=='ERROR_WEAK_PASSWORD'){
+        if (!mounted) return;
         setState(() {
           _isSigUpLoading = false;
           boolErrorSignUpTextPass = true;
@@ -83,6 +85,7 @@ class _CreateAccount extends State<CreateAccount> {
         });
       }
       else{
+        if (!mounted) return;
         setState(() {
           _isSigUpLoading = false;
           boolErrorSignUpTextPass = false;
@@ -90,6 +93,7 @@ class _CreateAccount extends State<CreateAccount> {
         });
       }
       if(signUpMessage=='ERROR_INVALID_EMAIL'){
+        if (!mounted) return;
         setState(() {
           _isSigUpLoading = false;
           boolErrorSignUpTextEmail = true;
@@ -97,6 +101,7 @@ class _CreateAccount extends State<CreateAccount> {
         });
       }
       if(signUpMessage=='ERROR_EMAIL_ALREADY_IN_USE'){
+        if (!mounted) return;
         setState(() {
           _isSigUpLoading = false;
           boolErrorSignUpTextEmail = true;
@@ -119,13 +124,15 @@ class _CreateAccount extends State<CreateAccount> {
     addPhoneNumber(_email.text,_password.text,_fullName.text,countryCode + _phoneNumber.text,_address.text);
   }
 
-  signIn() async{
+  void signIn() async{
     signInErrorText = null;
     signInErrorTextPass = null;
     _isSigInLoading = true;
+
     signInMessage = await db.signIpWithEmailPassword(_emailLogIn.text,_passwordLogIn.text);
     print(signInMessage);
     if(signInMessage == true){
+      if (!mounted) return;
       setState(() {
         _isSigInLoading = false;
         boolSignInErrorTextEmail = true;
@@ -133,6 +140,7 @@ class _CreateAccount extends State<CreateAccount> {
       });
     }
     if(signInMessage=='ERROR_INVALID_EMAIL'){
+      if (!mounted) return;
       setState(() {
         _isSigInLoading = false;
         boolSignInErrorTextEmail = true;
@@ -141,6 +149,7 @@ class _CreateAccount extends State<CreateAccount> {
 
     }
     if(signInMessage=='ERROR_USER_NOT_FOUND'){
+      if (!mounted) return;
       setState(() {
         _isSigInLoading = false;
         boolSignInErrorTextEmail = true;
@@ -148,12 +157,14 @@ class _CreateAccount extends State<CreateAccount> {
       });
     }
     if(signInMessage=='ERROR_WRONG_PASSWORD'){
+      if (!mounted) return;
       setState(() {
         _isSigInLoading = false;
         boolSignInErrorTextPass = true;
         signInErrorTextPass = "Your password is invalid for this account";
       });
      if(signInMessage == 'ERROR_NETWORK_REQUEST_FAILED'){
+       if (!mounted) return;
        setState(() {
          _isSigInLoading = false;
          boolSignInErrorTextPass = true;
@@ -163,6 +174,7 @@ class _CreateAccount extends State<CreateAccount> {
      }
     }
     if(signInMessage=='ERROR_TOO_MANY_REQUESTS'){
+      if (!mounted) return;
       setState(() {
         _isSigInLoading = false;
         boolSignInErrorTextEmail = true;
@@ -180,9 +192,9 @@ class _CreateAccount extends State<CreateAccount> {
     setState(() {
       deviceId = q;
     });
-
-
   }
+
+
 
   @override
   void initState() {
@@ -605,7 +617,7 @@ class _CreateAccount extends State<CreateAccount> {
                                 cursorColor:Colors.blueGrey,
                                 controller: _passwordLogIn,
                                 validator: (value) {
-                                  if (value.isEmpty) {
+                                  if (value.isEmpty){
                                     return 'Please enter password';
                                   }
                                   return null;
@@ -620,8 +632,6 @@ class _CreateAccount extends State<CreateAccount> {
                                 ),
                               ),
                             ),
-
-
                           ],
                         ),
                       ),
@@ -636,7 +646,7 @@ class _CreateAccount extends State<CreateAccount> {
                       ),) : SleekButton(
                         onTap: (){
                             if(_formKey1.currentState.validate()){
-                                signIn();
+                              signIn();
                             }
                         },
                         style: SleekButtonStyle.flat(
@@ -663,7 +673,6 @@ class _CreateAccount extends State<CreateAccount> {
           ),
         ),
       ),
-
     );
   }
 }

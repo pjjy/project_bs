@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'create_account.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CheckOut extends StatefulWidget {
 
@@ -72,15 +73,8 @@ class _CheckOut extends State<CheckOut> {
               child: Scrollbar(
                 child: ListView(
                     children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(15.0, 1.0,  0.0, 1.0),
-                        child:Text('Delivery Address',
-                          style: GoogleFonts.openSans(
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                              fontStyle: FontStyle.normal,
-                              fontSize: MediaQuery.of(context).size.width / 28.0),
-                        ),
+                      SizedBox(
+                        height: 4.0,
                       ),
                       InkWell(
                         onTap: () {
@@ -92,36 +86,84 @@ class _CheckOut extends State<CheckOut> {
                           child:Card(
                             elevation: 0.0,
                             color: Colors.white,
-                            child: Row(
+                            child:Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
+//                                Padding(
+//                                  padding: EdgeInsets.fromLTRB(10.0, 1.0,  0.0, 1.0),
+//                                  child:Text('Delivery Address',
+//                                    style: GoogleFonts.openSans(
+//                                        color: Colors.black54,
+//                                        fontWeight: FontWeight.bold,
+//                                        fontStyle: FontStyle.normal,
+//                                        fontSize: MediaQuery.of(context).size.width / 28.0),
+//                                  ),
+//                                ),
                                 Expanded(
                                   child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
+                                    // crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
-
-
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.fromLTRB(15.0, 1.0,  0.0, 1.0),
+                                            child:  Container(
+                                              height: 25.0,
+                                              width: 25.0,
+                                              child:SvgPicture.asset('assets/svg/house.svg'),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.fromLTRB(10.0, 1.0,  0.0, 1.0),
+                                            child:Text('Delivery Address',
+                                              style: GoogleFonts.openSans(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle: FontStyle.normal,
+                                                  fontSize: MediaQuery.of(context).size.width / 28.0),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Expanded(
+                                        child:  Padding(
+                                          padding: EdgeInsets.fromLTRB(15.0, 1.0,  5.0, 10.0),
+                                          child:Text('Del Carmen Del Carmen  Del Carmen  Del Carmen  Del Carmen  Del Carmen   Del Carmen  Del Carmen Del Carmen Este, Balilihan,Bahol ', overflow: TextOverflow.fade,
+                                            style: GoogleFonts.openSans(
+                                                color: Colors.black54,
+                                                fontStyle: FontStyle.normal,
+                                                fontSize: MediaQuery.of(context).size.width / 30.0),
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Icon(Icons.arrow_forward_ios, color: Colors.black26),
+
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.fromLTRB(0.0, 0.0,  15.0, 1.0),
+                                      child: Icon(Icons.arrow_forward_ios, color: Colors.black26,size: 18.0,),
+                                    ),
+                                  ],
                                 ),
+
+
                               ],
                             ),
+
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(15.0, 1.0,  0.0, 1.0),
-                        child:Text('Payment Method',
-                          style: GoogleFonts.openSans(
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                              fontStyle: FontStyle.normal,
-                              fontSize: MediaQuery.of(context).size.width / 28.0),
-                        ),
-                      ),
+
                       InkWell(
                         onTap:(){
 
@@ -133,19 +175,37 @@ class _CheckOut extends State<CheckOut> {
                             elevation: 0.0,
                             color: Colors.white,
                             child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(10.0, 1.0,  0.0, 1.0),
+                                  child:Text('Payment Method',
+                                    style: GoogleFonts.openSans(
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.normal,
+                                        fontSize: MediaQuery.of(context).size.width / 28.0),
+                                  ),
+                                ),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: <Widget>[
 
 
                                     ],
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Icon(Icons.arrow_forward_ios, color: Colors.black26),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.fromLTRB(0.0, 0.0,  15.0, 1.0),
+                                      child: Icon(Icons.arrow_forward_ios, color: Colors.black26,size: 18.0,),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -163,7 +223,19 @@ class _CheckOut extends State<CheckOut> {
                             elevation: 0.0,
                             color: Colors.white,
                             child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(10.0, 1.0,  0.0, 1.0),
+                                  child:Text('Phone Number',
+                                    style: GoogleFonts.openSans(
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.normal,
+                                        fontSize: MediaQuery.of(context).size.width / 28.0),
+                                  ),
+                                ),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,10 +245,65 @@ class _CheckOut extends State<CheckOut> {
                                     ],
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Icon(Icons.arrow_forward_ios, color: Colors.black26),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.fromLTRB(0.0, 0.0,  15.0, 1.0),
+                                      child: Icon(Icons.arrow_forward_ios, color: Colors.black26,size: 18.0,),
+                                    ),
+                                  ],
                                 ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.height / 7.0,
+                          width: MediaQuery.of(context).size.width / 10.0,
+                          child:Card(
+                            elevation: 0.0,
+                            color: Colors.white,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(10.0, 1.0,  0.0, 1.0),
+                                  child:Text('Special Instructions',
+                                    style: GoogleFonts.openSans(
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.normal,
+                                        fontSize: MediaQuery.of(context).size.width / 28.0),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+
+
+                                    ],
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.fromLTRB(0.0, 0.0,  15.0, 1.0),
+                                      child: Icon(Icons.arrow_forward_ios, color: Colors.black26,size: 18.0,),
+                                    ),
+                                  ],
+                                ),
+
                               ],
                             ),
                           ),

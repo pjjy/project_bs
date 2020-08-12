@@ -127,6 +127,9 @@ class ProjectBs {
   Future signIpWithEmailPassword(_emailLogIn,_passwordLogIn) async{
     try{
       final FirebaseAuth _auth = FirebaseAuth.instance;
+
+      await _auth.signOut();
+
       final newUser = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailLogIn, password: _passwordLogIn);
       if (newUser != null) {
         final FirebaseUser user = await _auth.currentUser();
