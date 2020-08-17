@@ -366,7 +366,6 @@ class _CreateAccount extends State<CreateAccount> {
                                       },
                                       decoration: InputDecoration(
                                         hintText: 'Juan Dela Cruz',
-
                                         hintStyle:  GoogleFonts.openSans(color: Colors.grey,fontStyle: FontStyle.normal, fontSize: 15.0),
                                         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 25.0),
                                         focusedBorder: OutlineInputBorder(
@@ -586,7 +585,7 @@ class _CreateAccount extends State<CreateAccount> {
                                 controller: _emailLogIn,
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return 'Please enter phone number';
+                                    return 'Please enter email';
                                   }
                                   return null;
                                 },

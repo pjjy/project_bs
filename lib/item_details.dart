@@ -40,7 +40,7 @@ class _ItemDetail extends State<ItemDetail>{
       builder: (BuildContext context) {
         return  AlertDialog (
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8.0))
+              borderRadius: BorderRadius.all(Radius.circular(5.0))
           ),
           contentPadding: EdgeInsets.symmetric(horizontal:1.0, vertical: 20.0),
           title:Row(
