@@ -81,9 +81,9 @@ class _MyHomePageState extends State<MyHomePage> {
               return !snapshot.hasData ?
               Center(
                 child: Badge(
-                  position: BadgePosition.topRight(top: 5, right: 5),
+                  position: BadgePosition.topRight(top: 5.0, right: 1.0),
                   badgeColor: color,
-                  badgeContent: Text('0',style: TextStyle(color: Colors.white,),),
+                  badgeContent: Text('0',style: TextStyle(color: Colors.white , fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 15.0),),
                   child:  IconButton(
                       icon: Icon(SimpleLineIcons.bag,),
                       onPressed: () {
@@ -93,9 +93,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ):
               Badge(
-                position: BadgePosition.topRight(top: 5, right: 5),
+                position: BadgePosition.topRight(top: 5.0, right: 1.0),
                 badgeColor: color,
-                badgeContent: Text('${snapshot.data.documents.length}',style: TextStyle(color: Colors.white,),),
+                badgeContent: Text('${snapshot.data.documents.length}',style: TextStyle(color: Colors.white , fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 15.0),),
                 child:  IconButton(
                     icon: Icon(SimpleLineIcons.bag,),
                     onPressed: () {
