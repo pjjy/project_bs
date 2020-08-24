@@ -175,7 +175,7 @@ class ProjectBs {
     );
   }
 
-  Future addToCart(deviceId,documentID,itemCount,pricing,title,description,imgSrc) async {
+  Future addToCart(deviceId,documentID,itemCount,pricing,priceCompare,title,description,imgSrc) async {
        fireStoreInstance.document("user_cart/$deviceId").setData(
         {
           //date here
@@ -185,7 +185,8 @@ class ProjectBs {
                   'imgPath':imgSrc,
                   'title':title,
                   'description':description,
-                  'price':pricing
+                  'price':pricing,
+                  'priceCompare':priceCompare
               },merge: true);
 //              .add({
 //                  "device_id" : deviceId,

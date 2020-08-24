@@ -32,9 +32,9 @@ class _ItemDetail extends State<ItemDetail>{
 
 
 
-  addToCart(deviceId,documentID,itemCount,pricing,title,description,imgSrc)
+  addToCart(deviceId,documentID,itemCount,pricing,priceCompare,title,description,imgSrc)
   {
-    db.addToCart(deviceId,documentID,itemCount,pricing,title,description,imgSrc);
+    db.addToCart(deviceId,documentID,itemCount,pricing,priceCompare,title,description,imgSrc);
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -279,7 +279,7 @@ class _ItemDetail extends State<ItemDetail>{
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          addToCart(widget.deviceId,widget.documentID,int.parse(itemCount.text),widget.pricing,widget.title,widget.description,widget.imgSrc);
+          addToCart(widget.deviceId,widget.documentID,int.parse(itemCount.text),widget.pricing,widget.priceCompare,widget.title,widget.description,widget.imgSrc);
         },
         tooltip: "Add to cart",
         backgroundColor: color,

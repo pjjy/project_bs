@@ -10,6 +10,7 @@ import 'global_vars.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'check_out.dart';
+import 'item_details.dart';
 
 class UserCart extends StatefulWidget {
 
@@ -128,10 +129,10 @@ class _UserCart extends State<UserCart> {
                           DocumentSnapshot data = snapshot.data.documents[index];
                           return InkWell(
                             onTap: () {
-
+                              Navigator.of(context).push(_itemDetails(globalDeviceId,data.documentID,data['imgPath'],data['title'],data['price'],data['priceCompare'],data['description']));
                             },
                             child: Container(
-                              height: MediaQuery.of(context).size.height / 7.0,
+                              height: MediaQuery.of(context).size.height / 5.0,
                               width: MediaQuery.of(context).size.width / 10.0,
                               child: Card(
                                 color: Colors.white,
@@ -196,6 +197,79 @@ class _UserCart extends State<UserCart> {
                                                 ],
                                               ),
 
+                                              Row(
+                                                children: [
+                                                  Padding(
+                                                    padding:EdgeInsets.fromLTRB(4.0, 0, 0, 0),
+                                                    child:FlatButton(
+                                                      disabledColor: Colors.grey,
+                                                      child: Text('Remove',style: GoogleFonts.openSans(color: Colors.black45,fontSize: 14.0),),
+//                                                          color: Colors.deepOrange,
+                                                      shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                                                      onPressed: (){
+//                                                        removeFromCart(loadCartData[index]['d_id']);
+                                                      },
+                                                    ),
+                                                  ),
+
+                                                  Padding(
+                                                    padding:EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                    child:Container(
+                                                      width: 50.0,
+                                                      child: FlatButton(
+                                                        disabledColor: Colors.grey,
+                                                        child: Text('-',style: GoogleFonts.openSans(color: Colors.black45,fontSize: 14.0),),
+//                                                          color: Colors.deepOrange,
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                                                        onPressed: (){
+                                                          setState(() {
+//                                                            var x = loadCartData[index]['d_quantity'];
+//                                                            int d = int.parse(x.toString());
+//                                                            loadCartData[index]['d_quantity'] = d-=1;  //code ni boss rene
+//                                                            if(d<1){
+//                                                              loadCartData[index]['d_quantity']=1;
+//                                                            }
+//                                                            updateCartQty(loadCartData[index]['d_id'].toString(),loadCartData[index]['d_quantity'].toString());
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+
+                                                  Padding(
+                                                    padding:EdgeInsets.fromLTRB(1, 5, 5, 5),
+                                                    child:Text('2',style: GoogleFonts.openSans(color: Colors.black45,fontSize: 14.0),),
+                                                  ),
+
+                                                  Padding(
+                                                    padding:EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                    child:Container(
+                                                      width: 50.0,
+                                                      child: FlatButton(
+                                                        disabledColor: Colors.grey,
+                                                        child: Text('+',style: GoogleFonts.openSans(color: Colors.black45,fontSize: 14.0),),
+//                                                          color: Colors.deepOrange,
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                                                        onPressed: (){
+                                                          setState(() {
+//                                                            var x = loadCartData[index]['d_quantity'];
+//                                                            int d = int.parse(x.toString());
+//                                                            loadCartData[index]['d_quantity'] = d+=1;   //code ni boss rene
+//                                                            updateCartQty(loadCartData[index]['d_id'].toString(),loadCartData[index]['d_quantity'].toString());
+                                                          });
+//                                                              removeFromCart(loadCartData[index]['d_id']);
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+
+
+                                                ],
+                                              )
+
                                             ],
                                           ),
                                         ),
@@ -237,7 +311,7 @@ class _UserCart extends State<UserCart> {
                   ),
                   child: Center(
                     child: Text(
-                      "Total: \₱2,220.00",
+                      "Total: \₱ 2,220.00",
                       style: TextStyle(
                           color: Colors.black,
                           fontStyle: FontStyle.normal,
@@ -284,6 +358,22 @@ class _UserCart extends State<UserCart> {
       ),
     );
   }
+}
+
+Route _itemDetails(deviceId,documentID,imgSrc,title,pricing,priceCompare,description) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => ItemDetail(deviceId:deviceId,documentID:documentID,imgSrc:imgSrc,title:title,pricing:pricing,priceCompare:priceCompare,description:description),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(0.0, 1.0);
+      var end = Offset.zero;
+      var curve = Curves.decelerate;
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }
 
 Route _checkOut() {
