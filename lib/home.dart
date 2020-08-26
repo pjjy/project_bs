@@ -11,6 +11,9 @@ import 'package:device_info/device_info.dart';
 import 'user_cart.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'global_vars.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 class MyHomePage extends StatefulWidget {
 
@@ -112,11 +115,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
         title: Text(
-          "Alturush",
-          style: GoogleFonts.fasterOne(
-              color: color,
+          "Home",
+          style: GoogleFonts.openSans(
+              fontWeight: FontWeight.bold,
+              color: Colors.black54,
               fontStyle: FontStyle.normal,
-              fontSize: 18.0),
+              fontSize: 22.0),
         ),
       ),
       drawer:Container(
@@ -357,7 +361,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   future: Firestore.instance.collection("products").getDocuments(),
                   builder: (context, snapshot) {
                     return !snapshot.hasData ?
-                        Center(child: CircularProgressIndicator()):
+                        Center(child:  SpinKitRing(
+                          color: color,
+                          lineWidth: 5.0,
+                          size: 40,
+                        ),):
                         GridView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
@@ -386,11 +394,27 @@ class _MyHomePageState extends State<MyHomePage> {
                                             height: 20,
                                           ),
                                           Expanded(
-                                            child: Image.network(
-                                              data['images'][0]['imgSrc'],
+                                            child: CachedNetworkImage(
+                                              imageUrl: data['images'][0]['imgSrc'],
+                                              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                                  Shimmer(
+//                                                    duration: Duration(seconds: 3), //Default value
+                                                    color: Colors.white, //Default value
+                                                    enabled: true, //Default value
+                                                    direction: ShimmerDirection.fromLTRB(),  //Default Value
+                                                    child: Container(
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                              errorWidget: (context, url, error) => Icon(Icons.error),
                                               fit: BoxFit.scaleDown,
                                               alignment: Alignment.center,
                                             ),
+//                                            child: Image.network(
+//                                              data['images'][0]['imgSrc'],
+//                                              fit: BoxFit.scaleDown,
+//                                              alignment: Alignment.center,
+//                                            ),
                                           ),
                                           SizedBox(
                                             height: 15,

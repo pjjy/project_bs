@@ -11,6 +11,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'check_out.dart';
 import 'item_details.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class UserCart extends StatefulWidget {
 
@@ -78,9 +80,9 @@ class _UserCart extends State<UserCart> {
             "My cart",
             style: GoogleFonts.openSans(
                 fontWeight: FontWeight.bold,
-                color: color,
+                color: Colors.black54,
                 fontStyle: FontStyle.normal,
-                fontSize: 18.0),
+                fontSize: 22.0),
           ),
         ),
         body: isLoading ? Center(child:SpinKitRing(
@@ -137,26 +139,24 @@ class _UserCart extends State<UserCart> {
                               child: Card(
                                 color: Colors.white,
                                 child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
                                     Row(
                                       children: <Widget>[
                                         Padding(
                                           padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
                                           child: Container(
-                                              width: MediaQuery.of(context).size.width / 7.0,
-                                              height: MediaQuery.of(context).size.height / 10.0,
-                                              decoration: new BoxDecoration(
-                                                color: Colors.transparent,
-                                                shape: BoxShape.rectangle,
-                                                image: new DecorationImage(
-                                                  image: new NetworkImage(data['imgPath']),
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              )),
+                                            width: MediaQuery.of(context).size.width / 7.0,
+                                            height: MediaQuery.of(context).size.height / 6.0,
+                                              child: CachedNetworkImage(
+                                                height: 60.0,
+                                                imageUrl: data['imgPath'],
+                                                errorWidget: (context, url, error) => Icon(Icons.error),
+                                                fit: BoxFit.scaleDown,
+                                                alignment: Alignment.center,
+                                               ),
+                                          ),
                                         ),
                                         Expanded(
                                           child:Column(

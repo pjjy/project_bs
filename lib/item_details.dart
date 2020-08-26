@@ -9,6 +9,8 @@ import 'package:intl/intl.dart';
 import 'db_helper.dart';
 import 'user_cart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ItemDetail extends StatefulWidget {
   final String deviceId;
@@ -45,7 +47,7 @@ class _ItemDetail extends State<ItemDetail>{
           contentPadding: EdgeInsets.symmetric(horizontal:1.0, vertical: 20.0),
           title:Row(
             children: <Widget>[
-              Text('Success!',style:TextStyle(fontSize: 18.0),),
+              Text('Good!',style:TextStyle(fontSize: 18.0),),
             ],
           ),
           content: SingleChildScrollView(
@@ -53,14 +55,14 @@ class _ItemDetail extends State<ItemDetail>{
               children: <Widget>[
                 Padding(
                   padding:EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                  child:Center(child:Text("Successfully added to cart")),
+                  child:Center(child:Text("Successfully added to your cart")),
                 ),
               ],
             ),
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Done',style: TextStyle(color:color.withOpacity(0.8),),),
+              child: Text('Done',style:TextStyle(fontSize: 16.0,color:color,)),
               onPressed: () async{
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
@@ -144,8 +146,23 @@ class _ItemDetail extends State<ItemDetail>{
             backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
-                background: Image.network(widget.imgSrc,fit: BoxFit.scaleDown,
-                )
+//                background: Image.network(widget.imgSrc,fit: BoxFit.scaleDown,)
+            background: CachedNetworkImage(
+              imageUrl: widget.imgSrc,
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  Shimmer(
+//                  duration: Duration(seconds: 3), //Default value
+                    color: Colors.white, //Default value
+                    enabled: true, //Default value
+                    direction: ShimmerDirection.fromLTRB(),  //Default Value
+                    child: Container(
+                      color: Colors.grey,
+                    ),
+                  ),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.center,
+             ),
             ),
           ),
           SliverList(

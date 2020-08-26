@@ -48,7 +48,8 @@ dependencies:
   flutter_svg: ^0.18.0
   responsive_text_field: ^0.1.4
   #flutter_slidable: ^0.5.5
-
+  cached_network_image: ^2.3.0
+  shimmer_animation: ^0.1.1
 
 dev_dependencies:
   flutter_test:

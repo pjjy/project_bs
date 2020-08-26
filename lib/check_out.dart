@@ -62,9 +62,9 @@ class _CheckOut extends State<CheckOut> {
             "Check out",
             style: GoogleFonts.openSans(
                 fontWeight: FontWeight.bold,
-                color: color,
+                color: Colors.black54,
                 fontStyle: FontStyle.normal,
-                fontSize: 18.0),
+                fontSize: 22.0),
           ),
         ),
         body: Column(
@@ -111,13 +111,13 @@ class _CheckOut extends State<CheckOut> {
                                 ),
                                 actions: <Widget>[
                                   FlatButton(
-                                    child: Text('Cancel',style: TextStyle(color:color,)),
+                                    child: Text('Cancel',style: TextStyle(fontSize: 16.0,color:color,)),
                                     onPressed: () async{
                                       Navigator.of(context).pop();
                                     },
                                   ),
                                   FlatButton(
-                                    child: Text('Done',style: TextStyle(color:color,)),
+                                    child: Text('Done',style: TextStyle(fontSize: 16.0,color:color,)),
                                     onPressed: () async{
                                       Navigator.of(context).pop();
                                     },
@@ -334,13 +334,13 @@ class _CheckOut extends State<CheckOut> {
                                 ),
                                 actions: <Widget>[
                                   FlatButton(
-                                    child: Text('Cancel',style: TextStyle(color:color,)),
+                                    child: Text('Cancel',style: TextStyle(fontSize: 16.0,color:color,)),
                                     onPressed: () async{
                                       Navigator.of(context).pop();
                                     },
                                   ),
                                   FlatButton(
-                                    child: Text('Done',style: TextStyle(color:color,)),
+                                    child: Text('Done',style: TextStyle(fontSize: 16.0,color:color,)),
                                     onPressed: () async{
                                       Navigator.of(context).pop();
                                     },
@@ -472,13 +472,13 @@ class _CheckOut extends State<CheckOut> {
                                 ),
                                 actions: <Widget>[
                                   FlatButton(
-                                    child: Text('Cancel',style: TextStyle(color:color,)),
+                                    child: Text('Cancel',style: TextStyle(fontSize: 16.0,color:color,)),
                                     onPressed: () async{
                                       Navigator.of(context).pop();
                                     },
                                   ),
                                   FlatButton(
-                                    child: Text('Done',style: TextStyle(color:color,)),
+                                    child: Text('Done',style: TextStyle(fontSize: 16.0,color:color,)),
                                     onPressed: () async{
                                       Navigator.of(context).pop();
                                     },
@@ -519,7 +519,7 @@ class _CheckOut extends State<CheckOut> {
                                             child:  Container(
                                               height: 25.0,
                                               width: 25.0,
-                                              child:SvgPicture.asset('assets/svg/contact.svg'),
+                                              child:SvgPicture.asset('assets/svg/strategy.svg'),
                                             ),
                                           ),
                                           Padding(
@@ -584,7 +584,7 @@ class _CheckOut extends State<CheckOut> {
                       ),
 
                       Container(
-                        height: MediaQuery.of(context).size.height / 6.0,
+                        height: MediaQuery.of(context).size.height / 4.0,
                         width: MediaQuery.of(context).size.width / 10.0,
                         child:Card(
                           elevation: 0.0,
@@ -625,7 +625,7 @@ class _CheckOut extends State<CheckOut> {
                                           Row(
                                             children: [
                                               Padding(
-                                                padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 0.0),
+                                                padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 10.0),
                                                 child:Text('Sub total',
                                                   style: GoogleFonts.openSans(
 
@@ -636,7 +636,7 @@ class _CheckOut extends State<CheckOut> {
                                               ),
                                               Spacer(), //
                                               Padding(
-                                                padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 0.0),
+                                                padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 10.0),
                                                 child:Text('2000.00', overflow: TextOverflow.fade,
                                                   style: GoogleFonts.openSans(
 
@@ -651,7 +651,7 @@ class _CheckOut extends State<CheckOut> {
                                           Row(
                                             children: [
                                               Padding(
-                                                padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 0.0),
+                                                padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 10.0),
                                                 child:Text('Discount',
                                                   style: GoogleFonts.openSans(
 
@@ -662,7 +662,7 @@ class _CheckOut extends State<CheckOut> {
                                               ),
                                               Spacer(), //
                                               Padding(
-                                                padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 0.0),
+                                                padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 10.0),
                                                 child:Text('10%', overflow: TextOverflow.fade,
                                                   style: GoogleFonts.openSans(
 
@@ -677,7 +677,7 @@ class _CheckOut extends State<CheckOut> {
                                           Row(
                                             children: [
                                               Padding(
-                                                padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 0.0),
+                                                padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 10.0),
                                                 child:Text('Delivery fee',
                                                   style: GoogleFonts.openSans(
 
@@ -688,7 +688,7 @@ class _CheckOut extends State<CheckOut> {
                                               ),
                                               Spacer(), //
                                               Padding(
-                                                padding: EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 0.0),
+                                                padding: EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 10.0),
                                                 child:Text('Free', overflow: TextOverflow.fade,
                                                   style: GoogleFonts.openSans(
                                                       fontWeight: FontWeight.bold,
@@ -698,7 +698,7 @@ class _CheckOut extends State<CheckOut> {
                                                 ),
                                               ),
                                               Padding(
-                                                padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 0.0),
+                                                padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 10.0),
                                                 child:Text('30.00', overflow: TextOverflow.fade,
                                                   style: GoogleFonts.openSans(
                                                       decoration: TextDecoration.lineThrough,

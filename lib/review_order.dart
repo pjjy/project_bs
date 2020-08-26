@@ -56,9 +56,9 @@ class _ReviewOrder extends State<ReviewOrder> {
             "Review order",
             style: GoogleFonts.openSans(
                 fontWeight: FontWeight.bold,
-                color: color,
+                color: Colors.black54,
                 fontStyle: FontStyle.normal,
-                fontSize: 18.0),
+                fontSize: 22.0),
           ),
         ),
         body: Column(
@@ -295,7 +295,7 @@ class _ReviewOrder extends State<ReviewOrder> {
                                         child:  Container(
                                           height: 25.0,
                                           width: 25.0,
-                                          child:SvgPicture.asset('assets/svg/contact.svg'),
+                                          child:SvgPicture.asset('assets/svg/strategy.svg'),
                                         ),
                                       ),
                                       Padding(
@@ -341,7 +341,7 @@ class _ReviewOrder extends State<ReviewOrder> {
                     ),
 
                     Container(
-                      height: MediaQuery.of(context).size.height / 3.0,
+                      height: MediaQuery.of(context).size.height / 2.0,
                       width: MediaQuery.of(context).size.width / 10.0,
                       child:Card(
                         elevation: 0.0,
@@ -382,10 +382,9 @@ class _ReviewOrder extends State<ReviewOrder> {
                                         Row(
                                           children: [
                                             Padding(
-                                              padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 0.0),
+                                              padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 10.0),
                                               child:Text('Expected Date',
                                                 style: GoogleFonts.openSans(
-
                                                     color: Colors.black54,
                                                     fontStyle: FontStyle.normal,
                                                     fontSize: MediaQuery.of(context).size.width / 27.0),
@@ -393,10 +392,9 @@ class _ReviewOrder extends State<ReviewOrder> {
                                             ),
                                             Spacer(),
                                             Padding(
-                                              padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 0.0),
+                                              padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 10.0),
                                               child:Text('Dec 31,2020', overflow: TextOverflow.fade,
                                                 style: GoogleFonts.openSans(
-
                                                     color: Colors.black54,
                                                     fontStyle: FontStyle.normal,
                                                     fontSize: MediaQuery.of(context).size.width / 27.0),
@@ -408,7 +406,7 @@ class _ReviewOrder extends State<ReviewOrder> {
                                         Row(
                                           children: [
                                             Padding(
-                                              padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 0.0),
+                                              padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 10.0),
                                               child:Text('Expected Time',
                                                 style: GoogleFonts.openSans(
                                                     color: Colors.black54,
@@ -418,7 +416,7 @@ class _ReviewOrder extends State<ReviewOrder> {
                                             ),
                                             Spacer(),
                                             Padding(
-                                              padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 0.0),
+                                              padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 10.0),
                                               child:Text('11:00 AM - 12:00 PM', overflow: TextOverflow.fade,
                                                 style: GoogleFonts.openSans(
 
@@ -433,7 +431,7 @@ class _ReviewOrder extends State<ReviewOrder> {
                                         Row(
                                           children: [
                                             Padding(
-                                              padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 0.0),
+                                              padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 10.0),
                                               child:Text('Sub total',
                                                 style: GoogleFonts.openSans(
 
@@ -444,7 +442,7 @@ class _ReviewOrder extends State<ReviewOrder> {
                                             ),
                                             Spacer(), //
                                             Padding(
-                                              padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 0.0),
+                                              padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 10.0),
                                               child:Text('2000.00', overflow: TextOverflow.fade,
                                                 style: GoogleFonts.openSans(
 
@@ -459,7 +457,7 @@ class _ReviewOrder extends State<ReviewOrder> {
                                         Row(
                                           children: [
                                             Padding(
-                                              padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 0.0),
+                                              padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 10.0),
                                               child:Text('Discount',
                                                 style: GoogleFonts.openSans(
 
@@ -471,7 +469,7 @@ class _ReviewOrder extends State<ReviewOrder> {
                                             Spacer(), //
 
                                             Padding(
-                                              padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 0.0),
+                                              padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 10.0),
                                               child:Text('10%', overflow: TextOverflow.fade,
                                                 style: GoogleFonts.openSans(
                                                     color: Colors.black54,
@@ -485,7 +483,7 @@ class _ReviewOrder extends State<ReviewOrder> {
                                         Row(
                                           children: [
                                             Padding(
-                                              padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 0.0),
+                                              padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 10.0),
                                               child:Text('Delivery fee',
                                                 style: GoogleFonts.openSans(
 
@@ -496,7 +494,7 @@ class _ReviewOrder extends State<ReviewOrder> {
                                             ),
                                             Spacer(), //
                                             Padding(
-                                              padding: EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 0.0),
+                                              padding: EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 10.0),
                                               child:Text('Free', overflow: TextOverflow.fade,
                                                 style: GoogleFonts.openSans(
                                                     fontWeight: FontWeight.bold,
@@ -506,7 +504,7 @@ class _ReviewOrder extends State<ReviewOrder> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 0.0),
+                                              padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 10.0),
                                               child:Text('30.00', overflow: TextOverflow.fade,
                                                 style: GoogleFonts.openSans(
                                                     decoration: TextDecoration.lineThrough,
@@ -522,7 +520,7 @@ class _ReviewOrder extends State<ReviewOrder> {
                                         Row(
                                           children: [
                                             Padding(
-                                              padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 0.0),
+                                              padding: EdgeInsets.fromLTRB(20.0, 0.0,  0.0, 10.0),
                                               child:Text('Total',
                                                 style: GoogleFonts.openSans(
                                                     fontWeight: FontWeight.bold,
@@ -533,7 +531,7 @@ class _ReviewOrder extends State<ReviewOrder> {
                                             ),
                                             Spacer(),
                                             Padding(
-                                              padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 0.0),
+                                              padding: EdgeInsets.fromLTRB(0.0, 0.0,  20.0, 10.0),
                                               child:Text('12,202.00', overflow: TextOverflow.fade,
                                                 style: GoogleFonts.openSans(
                                                     fontWeight: FontWeight.bold,
