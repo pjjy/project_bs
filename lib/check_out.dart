@@ -16,20 +16,27 @@ class CheckOut extends StatefulWidget {
 }
 
 class _CheckOut extends State<CheckOut> {
-
+  final _deliveryAddressText = TextEditingController();
+  final _phoneNumberText = TextEditingController();
+  final _specialInstructionText = TextEditingController();
+  var _formKeyDeliveryAddressText = GlobalKey<FormState>();
+  var _formKeyPhoneNumberText = GlobalKey<FormState>();
+  var _formKeySpecialInstructionText = GlobalKey<FormState>();
   Color color = const Color(0xff0084ff);
-
-
-
+  String deliveryAddress = "i.e Old Capitol Complex, Carlos P. Garcia Avenue corner JS Torralba Street, Poblacion, Tagbilaran City, Bohol";
+  String phoneNumber = "9107961118";
+  String specialInstruction = "i.e Don't get items with dents thank but if no choice the get it";
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
   void dispose() {
     super.dispose();
+    _deliveryAddressText.dispose();
+    _phoneNumberText.dispose();
+    _specialInstructionText.dispose();
   }
 
   @override
@@ -94,17 +101,27 @@ class _CheckOut extends State<CheckOut> {
                                     child: Padding(
                                       padding:EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
                                       child:Center(
-                                          child:TextFormField(
-                                            decoration: InputDecoration(
-                                              contentPadding: EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 0.0),
-                                            ),
-                                            autofocus: true,
-                                            minLines: 1,
-                                            maxLines: 5,
-                                            style: TextStyle(
-                                                fontSize: 15
-                                            ),
-                                          ),
+                                         child: Form(
+                                           key: _formKeyDeliveryAddressText,
+                                           child:TextFormField(
+                                             controller: _deliveryAddressText,
+                                             validator: (value) {
+                                               if (value.isEmpty) {
+                                                 return 'Please enter delivery address';
+                                               }
+                                               return null;
+                                             },
+                                             decoration: InputDecoration(
+                                               contentPadding: EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 0.0),
+                                             ),
+                                             autofocus: true,
+                                             minLines: 1,
+                                             maxLines: 5,
+                                             style: TextStyle(
+                                                 fontSize: 15
+                                             ),
+                                           ),
+                                         ),
                                       ),
                                     ),
                                   ),
@@ -119,7 +136,12 @@ class _CheckOut extends State<CheckOut> {
                                   FlatButton(
                                     child: Text('Done',style: TextStyle(fontSize: 16.0,color:color,)),
                                     onPressed: () async{
-                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        if(_formKeyDeliveryAddressText.currentState.validate()){
+                                          deliveryAddress = _deliveryAddressText.text;
+                                          Navigator.of(context).pop();
+                                        }
+                                      });
                                     },
                                   ),
                                 ],
@@ -177,7 +199,7 @@ class _CheckOut extends State<CheckOut> {
                                       Expanded(
                                         child:  Padding(
                                           padding: EdgeInsets.fromLTRB(45.0, 1.0,  5.0, 10.0),
-                                          child:Text('Del Carmen Del Carmen  Del Carmen  Del Carmen  Del Carmen  Del Carmen   Del Carmen  Del Carmen Del Carmen Este, Balilihan,Bahol ', overflow: TextOverflow.fade,
+                                          child:Text(deliveryAddress, overflow: TextOverflow.fade,
                                             style: GoogleFonts.openSans(
                                                 color: Colors.black54,
                                                 fontStyle: FontStyle.normal,
@@ -316,18 +338,36 @@ class _CheckOut extends State<CheckOut> {
                                     child: Padding(
                                       padding:EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
                                       child:Center(
-                                        child:TextFormField(
-                                          keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(
-                                            prefixText: "+63",prefixStyle:TextStyle(color: Colors.black,fontStyle: FontStyle.normal, fontSize: 15.0),
-                                          ),
-                                          autofocus: true,
-                                          minLines: 1,
-                                          maxLines: 5,
-                                          style: TextStyle(
-                                              fontSize: 15
+                                        child:Form(
+                                          key: _formKeyPhoneNumberText,
+                                          child:TextFormField(
+                                            maxLength: 10,
+                                            controller: _phoneNumberText,
+                                            keyboardType: TextInputType.number,
+                                            validator: (value) {
+                                              if (value.isEmpty) {
+                                                return 'Please enter your active phone number';
+                                              }
+                                              if (value.length < 10) {
+                                                return 'Please enter your active phone number';
+                                              }
+                                              if (value.substring(0,1) != '9') {
+                                                return 'Please enter a valid phone number';
+                                              }
+                                              return null;
+                                            },
+                                            decoration: InputDecoration(
+                                              prefixText: "+63",prefixStyle:TextStyle(color: Colors.black,fontStyle: FontStyle.normal, fontSize: 15.0),
+                                            ),
+                                            autofocus: true,
+                                            minLines: 1,
+                                            maxLines: 5,
+                                            style: TextStyle(
+                                                fontSize: 15
+                                            ),
                                           ),
                                         ),
+
                                       ),
                                     ),
                                   ),
@@ -342,7 +382,12 @@ class _CheckOut extends State<CheckOut> {
                                   FlatButton(
                                     child: Text('Done',style: TextStyle(fontSize: 16.0,color:color,)),
                                     onPressed: () async{
-                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        if(_formKeyPhoneNumberText.currentState.validate()){
+                                          phoneNumber = _phoneNumberText.text;
+                                          Navigator.of(context).pop();
+                                        }
+                                      });
                                     },
                                   ),
                                 ],
@@ -403,7 +448,7 @@ class _CheckOut extends State<CheckOut> {
                                           children: [
                                             Padding(
                                               padding: EdgeInsets.fromLTRB(45.0, 1.0,  5.0, 10.0),
-                                              child:Text('+639107961119', overflow: TextOverflow.fade,
+                                              child:Text('+63$phoneNumber', overflow: TextOverflow.fade,
                                                 style: GoogleFonts.openSans(
                                                     color: Colors.black54,
                                                     fontStyle: FontStyle.normal,
@@ -454,16 +499,26 @@ class _CheckOut extends State<CheckOut> {
                                     child: Padding(
                                       padding:EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
                                       child:Center(
-                                        child:TextFormField(
-                                          decoration: InputDecoration(
-                                            hintText: 'i.e. please don\'t get item with dents',
-                                            contentPadding: EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 0.0),
-                                          ),
-                                          autofocus: true,
-                                          minLines: 1,
-                                          maxLines: 5,
-                                          style: TextStyle(
-                                              fontSize: 15
+                                        child:Form(
+                                          key:_formKeySpecialInstructionText,
+                                          child:TextFormField(
+                                            controller: _specialInstructionText,
+                                            validator: (value) {
+                                              if (value.isEmpty) {
+                                                return 'Please enter special instructions';
+                                              }
+                                              return null;
+                                            },
+                                            decoration: InputDecoration(
+                                              hintText: 'i.e. please don\'t get item with dents',
+                                              contentPadding: EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 0.0),
+                                            ),
+                                            autofocus: true,
+                                            minLines: 1,
+                                            maxLines: 5,
+                                            style: TextStyle(
+                                                fontSize: 15
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -471,6 +526,13 @@ class _CheckOut extends State<CheckOut> {
                                   ),
                                 ),
                                 actions: <Widget>[
+                                  FlatButton(
+                                    child: Text('Clear',style: TextStyle(fontSize: 16.0,color:color,)),
+                                    onPressed: () async{
+                                      specialInstruction = "";
+                                      _specialInstructionText.clear();                                      Navigator.of(context).pop();
+                                    },
+                                  ),
                                   FlatButton(
                                     child: Text('Cancel',style: TextStyle(fontSize: 16.0,color:color,)),
                                     onPressed: () async{
@@ -480,7 +542,16 @@ class _CheckOut extends State<CheckOut> {
                                   FlatButton(
                                     child: Text('Done',style: TextStyle(fontSize: 16.0,color:color,)),
                                     onPressed: () async{
-                                      Navigator.of(context).pop();
+//                                      setState(() {
+//                                        specialInstruction = _specialInstructionText.text;
+//                                      });
+//                                        Navigator.of(context).pop();
+                                      setState(() {
+                                        if(_formKeySpecialInstructionText.currentState.validate()){
+                                          specialInstruction = _specialInstructionText.text;
+                                          Navigator.of(context).pop();
+                                        }
+                                      });
                                     },
                                   ),
                                 ],
@@ -550,7 +621,7 @@ class _CheckOut extends State<CheckOut> {
                                           children: [
                                             Padding(
                                               padding: EdgeInsets.fromLTRB(45.0, 1.0,  5.0, 10.0),
-                                              child:Text('Dont get items with dents thank but if no choice the get it  paul jearic nones 1111', overflow: TextOverflow.fade,
+                                              child:Text(specialInstruction, overflow: TextOverflow.fade,
                                                 style: GoogleFonts.openSans(
                                                     color: Colors.black54,
                                                     fontStyle: FontStyle.normal,

@@ -203,7 +203,7 @@ class _UserCart extends State<UserCart> {
                                                     padding:EdgeInsets.fromLTRB(4.0, 0, 0, 0),
                                                     child:FlatButton(
                                                       disabledColor: Colors.grey,
-                                                      child: Text('Remove',style: GoogleFonts.openSans(color: Colors.black45,fontSize: 14.0),),
+                                                      child: Text('Remove',style: GoogleFonts.openSans(color: Colors.black,fontSize: 14.0),),
 //                                                          color: Colors.deepOrange,
                                                       shape: RoundedRectangleBorder(
                                                           borderRadius: BorderRadius.all(Radius.circular(5.0))),
@@ -219,7 +219,7 @@ class _UserCart extends State<UserCart> {
                                                       width: 50.0,
                                                       child: FlatButton(
                                                         disabledColor: Colors.grey,
-                                                        child: Text('-',style: GoogleFonts.openSans(color: Colors.black45,fontSize: 14.0),),
+                                                        child: Text('-',style: GoogleFonts.openSans(color: Colors.black,fontSize: 14.0),),
 //                                                          color: Colors.deepOrange,
                                                         shape: RoundedRectangleBorder(
                                                             borderRadius: BorderRadius.all(Radius.circular(5.0))),
@@ -240,7 +240,7 @@ class _UserCart extends State<UserCart> {
 
                                                   Padding(
                                                     padding:EdgeInsets.fromLTRB(1, 5, 5, 5),
-                                                    child:Text('2',style: GoogleFonts.openSans(color: Colors.black45,fontSize: 14.0),),
+                                                    child:Text('2',style: GoogleFonts.openSans(color: Colors.black,fontSize: 14.0),),
                                                   ),
 
                                                   Padding(
@@ -249,7 +249,7 @@ class _UserCart extends State<UserCart> {
                                                       width: 50.0,
                                                       child: FlatButton(
                                                         disabledColor: Colors.grey,
-                                                        child: Text('+',style: GoogleFonts.openSans(color: Colors.black45,fontSize: 14.0),),
+                                                        child: Text('+',style: GoogleFonts.openSans(color: Colors.black,fontSize: 14.0),),
 //                                                          color: Colors.deepOrange,
                                                         shape: RoundedRectangleBorder(
                                                             borderRadius: BorderRadius.all(Radius.circular(5.0))),
