@@ -254,9 +254,9 @@ class _CreateAccount extends State<CreateAccount> {
               "Account",
               style: GoogleFonts.openSans(
                   fontWeight: FontWeight.bold,
-                  color: color,
+                  color: Colors.black54,
                   fontStyle: FontStyle.normal,
-                  fontSize: 18.0),
+                  fontSize: 22.0),
             ),
           ),
           body: TabBarView(
@@ -532,8 +532,7 @@ class _CreateAccount extends State<CreateAccount> {
                         child: ListView(
                           padding: EdgeInsets.zero,
                           children: <Widget>[
-                            Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                            Padding(padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
                                 child: SleekButton(
                                   onTap: (){
                                   },
