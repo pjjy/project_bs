@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'create_account.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'review_order.dart';
+import 'functions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CheckOut extends StatefulWidget {
 
@@ -16,6 +18,7 @@ class CheckOut extends StatefulWidget {
 }
 
 class _CheckOut extends State<CheckOut> {
+  final functions = Functions();
   final _deliveryAddressText = TextEditingController();
   final _phoneNumberText = TextEditingController();
   final _specialInstructionText = TextEditingController();
@@ -24,11 +27,39 @@ class _CheckOut extends State<CheckOut> {
   var _formKeySpecialInstructionText = GlobalKey<FormState>();
   Color color = const Color(0xff0084ff);
   String deliveryAddress = "i.e Old Capitol Complex, Carlos P. Garcia Avenue corner JS Torralba Street, Poblacion, Tagbilaran City, Bohol";
-  String phoneNumber = "9107961118";
-  String specialInstruction = "i.e Don't get items with dents thank but if no choice the get it";
+  String phoneNumberTemp="";
+  String phoneNumber="";
+  String specialInstruction = "";
+  
+  
+  void detectLastDetails() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(prefs.getString('phoneNumber') != null){
+      setState(() {
+        phoneNumber = prefs.getString('phoneNumber');
+      });
+
+    }else{
+      setState(() {
+        phoneNumber = "+639107961118";
+      });
+    }
+    //
+    if(prefs.getString('specialInstruction') != null){
+      setState(() {
+        specialInstruction =  prefs.getString('specialInstruction');
+      });
+    }else{
+      setState(() {
+        specialInstruction = "i.e Don't get items with dents thank but if no choice the get it";
+      });
+    }
+  }
+  
   @override
   void initState() {
     super.initState();
+    detectLastDetails();
   }
 
   @override
@@ -384,7 +415,8 @@ class _CheckOut extends State<CheckOut> {
                                     onPressed: () async{
                                       setState(() {
                                         if(_formKeyPhoneNumberText.currentState.validate()){
-                                          phoneNumber = _phoneNumberText.text;
+                                          phoneNumberTemp = _phoneNumberText.text;
+                                          phoneNumber = '+63$phoneNumberTemp';
                                           Navigator.of(context).pop();
                                         }
                                       });
@@ -448,7 +480,7 @@ class _CheckOut extends State<CheckOut> {
                                           children: [
                                             Padding(
                                               padding: EdgeInsets.fromLTRB(45.0, 1.0,  5.0, 10.0),
-                                              child:Text('+63$phoneNumber', overflow: TextOverflow.fade,
+                                              child:Text(phoneNumber, overflow: TextOverflow.fade,
                                                 style: GoogleFonts.openSans(
                                                     color: Colors.black54,
                                                     fontStyle: FontStyle.normal,
@@ -529,6 +561,8 @@ class _CheckOut extends State<CheckOut> {
                                   FlatButton(
                                     child: Text('Clear',style: TextStyle(fontSize: 16.0,color:color,)),
                                     onPressed: () async{
+                                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                                      prefs.remove("specialInstruction");
                                       specialInstruction = "";
                                       _specialInstructionText.clear();                                      Navigator.of(context).pop();
                                     },
@@ -828,6 +862,7 @@ class _CheckOut extends State<CheckOut> {
                   Container(
                     child: SleekButton(
                       onTap: () async {
+                        functions.saveCheckOut(deliveryAddress,phoneNumber,specialInstruction);
                         Navigator.of(context).push(_reviewOrder());
                       },
                       style: SleekButtonStyle.flat(

@@ -7,6 +7,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'create_account.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ReviewOrder extends StatefulWidget {
   @override
@@ -15,10 +16,20 @@ class ReviewOrder extends StatefulWidget {
 
 class _ReviewOrder extends State<ReviewOrder> {
   Color color = const Color(0xff0084ff);
+  String phoneNumber="";
+  String specialInstruction = "";
+  void detectLastDetails() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      phoneNumber = prefs.getString('phoneNumber');
+      specialInstruction = prefs.getString('specialInstruction');
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-
+    detectLastDetails();
   }
 
   @override
@@ -41,7 +52,7 @@ class _ReviewOrder extends State<ReviewOrder> {
           elevation: 0.0,
           iconTheme: new IconThemeData(color: Colors.black),
           leading: IconButton(
-            icon: Icon(Ionicons.md_arrow_back, color: Colors.black),
+            icon: Icon(Ionicons.md_close, color: Colors.black),
             onPressed: () => Navigator.of(context).pop(),
           ),
           actions: <Widget>[
@@ -251,7 +262,7 @@ class _ReviewOrder extends State<ReviewOrder> {
                                       children: [
                                         Padding(
                                           padding: EdgeInsets.fromLTRB(45.0, 1.0,  5.0, 10.0),
-                                          child:Text('+639107961119', overflow: TextOverflow.fade,
+                                          child:Text(phoneNumber, overflow: TextOverflow.fade,
                                             style: GoogleFonts.openSans(
                                                 color: Colors.black54,
                                                 fontStyle: FontStyle.normal,
@@ -317,7 +328,7 @@ class _ReviewOrder extends State<ReviewOrder> {
                                       children: [
                                         Padding(
                                           padding: EdgeInsets.fromLTRB(45.0, 1.0,  5.0, 10.0),
-                                          child:Text('Dont get items with dents thank but if no choice the get it  paul jearic nones 1111', overflow: TextOverflow.fade,
+                                          child:Text(specialInstruction, overflow: TextOverflow.fade,
                                             style: GoogleFonts.openSans(
                                                 color: Colors.black54,
                                                 fontStyle: FontStyle.normal,
