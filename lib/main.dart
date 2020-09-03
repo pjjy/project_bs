@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter/services.dart';
 import 'home.dart';
 import 'verify_phone.dart';
@@ -7,6 +6,8 @@ import 'create_account.dart';
 import 'user_cart.dart';
 import 'test.dart';
 import 'check_out.dart';
+import 'package:get/get.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
       statusBarColor: Colors.transparent,
     ));
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Boy sugo',
       theme: ThemeData(
         primarySwatch: Colors.blue,

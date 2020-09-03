@@ -128,7 +128,7 @@ class _CreateAccount extends State<CreateAccount> {
     signInErrorText = null;
     signInErrorTextPass = null;
     _isSigInLoading = true;
-
+    FocusScope.of(context).requestFocus(FocusNode());
     signInMessage = await db.signIpWithEmailPassword(_emailLogIn.text,_passwordLogIn.text);
     print(signInMessage);
     if(signInMessage == true){

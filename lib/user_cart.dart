@@ -14,6 +14,7 @@ import 'item_details.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+
 class UserCart extends StatefulWidget {
 
   @override
@@ -196,17 +197,18 @@ class _UserCart extends State<UserCart> {
                                                   ),
                                                 ],
                                               ),
-
+                                              SizedBox(height: 10.0,),
                                               Row(
                                                 children: [
                                                   Padding(
-                                                    padding:EdgeInsets.fromLTRB(4.0, 0, 0, 0),
-                                                    child:FlatButton(
-                                                      disabledColor: Colors.grey,
+                                                    padding:EdgeInsets.fromLTRB(17.0, 0, 0, 0),
+                                                    child:OutlineButton(
+                                                      highlightedBorderColor: color,
+                                                      color: color,
                                                       child: Text('Remove',style: GoogleFonts.openSans(color: Colors.black,fontSize: 14.0),),
 //                                                          color: Colors.deepOrange,
                                                       shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                                                          borderRadius: BorderRadius.all(Radius.circular(20.0))),
                                                       onPressed: (){
 //                                                        removeFromCart(loadCartData[index]['d_id']);
                                                       },
@@ -364,7 +366,7 @@ Route _itemDetails(deviceId,documentID,imgSrc,title,pricing,priceCompare,descrip
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => ItemDetail(deviceId:deviceId,documentID:documentID,imgSrc:imgSrc,title:title,pricing:pricing,priceCompare:priceCompare,description:description),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(0.0, 1.0);
+      var begin = Offset(1.0, 0.0);
       var end = Offset.zero;
       var curve = Curves.decelerate;
       var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
@@ -380,7 +382,7 @@ Route _checkOut() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => CheckOut(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(0.0, 1.0);
+      var begin = Offset(1.0, 0.0);
       var end = Offset.zero;
       var curve = Curves.decelerate;
       var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));

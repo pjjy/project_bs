@@ -50,6 +50,8 @@ dependencies:
   #flutter_slidable: ^0.5.5
   cached_network_image: ^2.3.0
   shimmer_animation: ^0.1.1
+  get: ^3.8.0
+  settings_ui: ^0.4.0
 
 dev_dependencies:
   flutter_test:

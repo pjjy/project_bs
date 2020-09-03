@@ -14,7 +14,7 @@ import 'global_vars.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
-
+import 'settings.dart';
 class MyHomePage extends StatefulWidget {
 
   @override
@@ -77,6 +77,13 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.white,
         elevation: 0.0,
         iconTheme: new IconThemeData(color: Colors.black),
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+            onPressed: () {
+              Navigator.of(context).push(_settings());
+            },
+            tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+        ),
         actions: <Widget>[
           StreamBuilder<QuerySnapshot>(
             stream: Firestore.instance.collection("user_cart").document(deviceId).collection('cart_items').snapshots(),
@@ -123,56 +130,56 @@ class _MyHomePageState extends State<MyHomePage> {
               fontSize: 22.0),
         ),
       ),
-      drawer:Container(
-        color: Colors.red,
-        width: 280,
-        child: Drawer(
-          child: Container(
-            color: Colors.white,
-            child:ListView(
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                Container(
-                  child:Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 70.0,
-                      ),
-                      SizedBox(
-                        height: 30.0,
-                      ),
-                      Center(
-                        child: Text("Sign up/Log in",style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 23.0),),
-                      ),
-                      SizedBox(
-                        height: 50.0,
-                      ),
-
-                      ListTile(
-                          leading: Icon(Icons.person,size: 30.0,color:color,),
-                          title: Text('Profile',style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 16.0),),
-                          onTap: () async{
-                          }
-                      ),
-                      ListTile(
-                        leading: Icon(Icons.info_outline,size: 30.0,color: color,),
-                        title: Text('About',style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 16.0),),
-                      ),
-                      ListTile(
-                          leading: Icon(Icons.help_outline,size: 30.0,color: color,),
-                          title: Text('Log out',style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 16.0),),
-                          onTap: () async{
-                          }
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+//      drawer:Container(
+//        color: Colors.red,
+//        width: 280,
+//        child: Drawer(
+//          child: Container(
+//            color: Colors.white,
+//            child:ListView(
+//              physics: BouncingScrollPhysics(),
+//              padding: EdgeInsets.zero,
+//              children: <Widget>[
+//                Container(
+//                  child:Column(
+//                    children: <Widget>[
+//                      SizedBox(
+//                        height: 70.0,
+//                      ),
+//                      SizedBox(
+//                        height: 30.0,
+//                      ),
+//                      Center(
+//                        child: Text("Sign up/Log in",style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 23.0),),
+//                      ),
+//                      SizedBox(
+//                        height: 50.0,
+//                      ),
+//
+//                      ListTile(
+//                          leading: Icon(Icons.person,size: 30.0,color:color,),
+//                          title: Text('Profile',style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+//                          onTap: () async{
+//                          }
+//                      ),
+//                      ListTile(
+//                        leading: Icon(Icons.info_outline,size: 30.0,color: color,),
+//                        title: Text('About',style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+//                      ),
+//                      ListTile(
+//                          leading: Icon(Icons.help_outline,size: 30.0,color: color,),
+//                          title: Text('Log out',style: GoogleFonts.openSans(fontStyle: FontStyle.normal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+//                          onTap: () async{
+//                          }
+//                      ),
+//                    ],
+//                  ),
+//                ),
+//              ],
+//            ),
+//          ),
+//        ),
+//      ),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -485,6 +492,22 @@ Route _viewCart() {
     pageBuilder: (context, animation, secondaryAnimation) => UserCart(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var begin = Offset(0.0, 1.0);
+      var end = Offset.zero;
+      var curve = Curves.decelerate;
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
+
+Route _settings() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => Settings(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(1.0, 0.0);
       var end = Offset.zero;
       var curve = Curves.decelerate;
       var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
